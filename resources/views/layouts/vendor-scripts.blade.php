@@ -4,6 +4,8 @@
 <script src="{{ URL::asset('build/libs/metismenu/metisMenu.min.js')}}"></script>
 <script src="{{ URL::asset('build/libs/simplebar/simplebar.min.js')}}"></script>
 <script src="{{ URL::asset('build/libs/node-waves/waves.min.js')}}"></script>
+<script src="{{ URL::asset('build/libs/tinymce/tinymce.min.js')}}"></script>
+
 <script src="{{ URL::asset('build/js/app.js') }}"></script>
 <script>
     $('#change-password').on('submit',function(event){

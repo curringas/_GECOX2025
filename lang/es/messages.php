@@ -14,6 +14,9 @@ return [
     */
 
     'user_created' => 'Usuario creado correctamente.',
+    'categoria_updated' => 'Categoría actualizada correctamente.',
+    'categoria_created' => 'Categoría creada correctamente.',
+    'categoria_deleted' => 'Categoría eliminada correctamente.',
     'user_updated' => 'Usuario actualizado correctamente.',
     'user_deleted' => 'Usuario eliminado correctamente.',
     'creado' => ' creado correctamente.',

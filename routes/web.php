@@ -24,6 +24,16 @@ Route::middleware(['auth','active'])->group(function () {
     // customers route
     Route::get('/customers', [App\Http\Controllers\CustomerController::class, 'index'])->name('customers.list');
 
+    //--- BACKEND ------------------------------
+    Route::resource('categorias', App\Http\Controllers\CategoriaController::class);
+    Route::post('/categorias/reorder', [App\Http\Controllers\CategoriaController::class, 'reorder'])
+    ->name('categorias.reorder');
+    /*Route::post('/categoria/store', [App\Http\Controllers\CategoriaController::class, 'store'])
+    ->name('categoria.store');*/
+    Route::get('/categoria/{id}', [App\Http\Controllers\CategoriaController::class, 'edit'])
+    ->name('categorias.edit');
+
+
     //--- ADMIN ------------------------------
     // Todas las rutas de usuarios estan en esta sola linea si se respetan los estándares de Laravel 
     Route::get('users/export', [App\Http\Controllers\UserController::class, 'export'])->name('users.export');

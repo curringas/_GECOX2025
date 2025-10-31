@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->date('dob');
             $table->text('avatar');
-            $table->tinyint('activo')->default(1);
+            $table->boolean('activo')->default(true);
             $table->rememberToken();
             $table->timestamps();
         });

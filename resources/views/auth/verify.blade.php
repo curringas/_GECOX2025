@@ -89,9 +89,9 @@
                                     <div class="mb-4 mb-md-5">
                                         <a href="index" class="d-block auth-logo">
                                             <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt=""
-                                                height="18" class="auth-logo-dark">
+                                                height="45" class="auth-logo-dark">
                                             <img src="{{ URL::asset('build/images/logo-light.png') }}" alt=""
-                                                height="18" class="auth-logo-light">
+                                                height="45" class="auth-logo-light">
                                         </a>
                                     </div>
                                     <div class="my-auto">

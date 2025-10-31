@@ -35,12 +35,28 @@
                     </ul>
                 </li>
 
+
+                <li>
+                    <a href="/publicaciones" class="waves-effect">
+                        <i class="bx bx-file"></i>
+                        <span key="t-publicaciones">@lang('titulos.Publicaciones')</span>
+                    </a>
+                    
+                </li>
+
                 <li class="menu-title" key="t-backend">@lang('translation.backend')</li>
                 <li>
                     <a href="/customers" class="waves-effect">
                         <i class="bx bx-list-ul"></i>
                         <span key="t-yajra-datatable">@lang('translation.yajra-datatable')</span>
                     </a>
+                </li>
+                <li>
+                    <a href="/categorias" class="waves-effect">
+                        <i class="bx bx-file"></i>
+                        <span key="t-publicaciones">@lang('titulos.Categorias')</span>
+                    </a>
+                    
                 </li>
 
                 <li class="menu-title" key="t-pages">@lang('translation.Administration')</li>

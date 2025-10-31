@@ -9,29 +9,8 @@
         <link rel="stylesheet" href="{{ URL::asset('build/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}" />
         <link rel="stylesheet" href="{{ URL::asset('build/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('build/libs/daterangepicker/daterangepicker.css') }}" />
-    <style>
-        .datatable-filtros {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .datatable-filtros .form-control,
-        .datatable-filtros .toggle,
-        .datatable-filtros label {
-            margin-bottom: 0;
-        }
-
-        .datatable-filtros .btn {
-            margin-left: auto;
-        }
-
-        /* Oculta el buscador por defecto de DataTables */
-        div.dataTables_filter {
-            display: none;
-        }
-    </style>
+        
+        <link rel="stylesheet" href="{{ URL::asset('build/libs/datatable-filtros/css/filtros.css') }}" />
 @endsection
 
 @section('content')
@@ -64,14 +43,14 @@
     <input class="form-check-input" type="checkbox" id="active-switch" checked>
     <label class="form-check-label ms-2 mb-0" for="active-switch">@lang('Activo')</label>
 </div>
-        <a href="{{ route('users.create') }}" class="btn btn-primary ms-2">
-            <i class="bx bx-smile font-size-16 align-middle me-2"></i>
-            @lang('titulos.Crear_Usuario')
-        </a>
         <!-- Botón Exportar Excel -->
-        <a href="#" onclick="exportExcel(); return false;" class="btn btn-success ms-2">
+        <a href="#" onclick="exportExcel(); return false;" class="btn btn-success end-0">
             <i class="bx bx-download font-size-16 align-middle me-2"></i>
             Exportar Excel
+        </a>
+        <a href="{{ route('users.create') }}" class="btn btn-primary end-0 ms-0">
+            <i class="bx bx-smile font-size-16 align-middle me-2"></i>
+            @lang('titulos.Crear_Usuario')
         </a>
     </div>
 

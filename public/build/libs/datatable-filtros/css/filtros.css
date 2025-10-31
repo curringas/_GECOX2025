@@ -1,0 +1,21 @@
+.datatable-filtros {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .datatable-filtros .form-control,
+        .datatable-filtros .toggle,
+        .datatable-filtros label {
+            margin-bottom: 0;
+        }
+
+        .datatable-filtros .btn {
+            margin-left: auto;
+        }
+
+        /* Oculta el buscador por defecto de DataTables */
+        div.dataTables_filter {
+            display: none;
+        }

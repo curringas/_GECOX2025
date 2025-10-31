@@ -792,9 +792,10 @@
 
 @endsection
 @section('script')
-<!-- apexcharts -->
-<script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/jquery/jquery.min.js') }}"></script>
+    <!-- apexcharts -->
+    <script src="{{ URL::asset('build/libs/apexcharts/apexcharts.min.js') }}"></script>
 
-<!-- dashboard init -->
-<script src="{{ URL::asset('build/js/pages/dashboard.init.js') }}"></script>
+    <!-- dashboard init -->
+    <script src="{{ URL::asset('build/js/pages/dashboard.init.js') }}"></script>
 @endsection

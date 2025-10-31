@@ -38,8 +38,8 @@
                             <div class="d-flex flex-column h-100">
                                 <div class="mb-4 mb-md-5">
                                     <a href="index" class="d-block auth-logo">
-                                        <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="18" class="auth-logo-dark">
-                                        <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="18" class="auth-logo-light">
+                                        <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="45" class="auth-logo-dark">
+                                        <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="45" class="auth-logo-light">
                                     </a>
                                 </div>
                                 <div class="my-auto">
@@ -54,7 +54,7 @@
                                             @csrf
                                             <div class="mb-3">
                                                 <label for="username" class="form-label">Email <span class="text-danger">*</span></label>
-                                                <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', 'admin@themesbrand.com') }}" id="username" placeholder="Enter Email" autocomplete="email" autofocus>
+                                                <input name="email" type="email" class="form-control @error('email') is-invalid @enderror" value="{{ old('email', '') }}" id="username" placeholder="Enter Email" autocomplete="email" autofocus>
                                                 @error('email')
                                                 <span class="invalid-feedback" role="alert">
                                                     <strong>{{ $message }}</strong>

@@ -28,4 +28,14 @@ return [
     'Usuario' => 'Usuario',
     'Usuarios' => 'Usuarios',
 
+    'Publicaciones' => 'Publicaciones',
+    'Publicacion' => 'Publicación',
+    'Crear_Publicacion' => 'Crear Publicación',
+    'Editar_Publicacion' => 'Editar Publicación',
+
+    'Categorias' => 'Categorias',
+    'Categorias' => 'Categorias',
+    'Crear_Categoria' => 'Crear Categoría',
+    'Editar_Categoria' => 'Editar Categoría',
+
 ];

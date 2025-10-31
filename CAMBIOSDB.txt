@@ -1,0 +1,11 @@
++++++++++ CAMBIAR ORDEN EN CATEGORIAS ++++++++++++++++++++++++++
+SET @rownum = 0;
+UPDATE P0114_pagina
+SET Orden = (@rownum := @rownum + 1)
+ORDER BY Padre, Orden DESC;
+
+***
+ALTER TABLE `P0114_pagina` ADD `MetaTitle` VARCHAR(255) NULL AFTER `Url`, ADD `MetaDescription` VARCHAR(255) NULL AFTER `MetaTitle`;
+ALTER TABLE `P0114_pagina` CHANGE `Url` `Url` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+
+
