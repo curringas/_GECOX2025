@@ -1,6 +1,21 @@
 <form method="POST" id="formCategoria" action="{{  route('categorias.store') }}"  role="form" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="Identificador" value="{{ isset($amodificar) ? $amodificar->Identificador : '' }}">
+    
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="etiqueta" class="form-label">Etiqueta* <span class="text-muted">(Nombre en el menú)</span></label>
+            <input type="text" name="Etiqueta" class="form-control bg-warning-subtle" value="{{ old('Etiqueta', $amodificar->Etiqueta ?? '') }}" id="Etiqueta" placeholder="Etiqueta" required>
+            
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="visible" class="form-label">Mostrar en el menú</label>
+            <div class="form-check form-switch form-switch-lg mb-0" dir="ltr">
+                <input class="form-check-input" type="checkbox" id="active-switch" name="Menu" value="0" {{ old('Menu', $amodificar->Menu ?? 0) == 0 ? 'checked="checked"' : '' }}>
+                <label class="form-check-label ms-2 mb-0" for="active-switch">Visible</label>
+            </div>
+        </div>
+    </div>
     <div class="mb-3">
         <label for="tipo" class="form-label">Tipo</label>
         @php
@@ -81,17 +96,6 @@
             </select>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label for="etiqueta" class="form-label">Etiqueta* <span class="text-muted">(Nombre en el menú)</span></label>
-            <input type="text" name="Etiqueta" class="form-control bg-warning-subtle" value="{{ old('Etiqueta', $amodificar->Etiqueta ?? '') }}" id="etiqueta" placeholder="Etiqueta" required>
-            
-        </div>
-        <div class="col-md-6 mb-3 hideable-solo-etiqueta">
-            <label for="url" class="form-label">Slug <span class="text-muted">(url amigable)</span></label>
-            <input type="text" name="Url" class="form-control" value="{{ old('Url', $amodificar->Url ?? '') }}" id="url" placeholder="Slug">
-        </div>
-    </div>
     <div class="mb-3 hideable-solo-etiqueta">
         <label for="titulo" class="form-label">Título <span class="text-muted">(Titulo h1 de la página obligatorio para publicaciones o estática)</span></label>
         <input type="text" name="Titulo" class="form-control " value="{{ old('Titulo', $amodificar->Titulo ?? '') }}" id="titulo" placeholder="Titulo">
@@ -132,14 +136,13 @@
         <label for="estatico" class="form-label">Archivo estático</label>
         <input type="text" name="Estatico" class="form-control " value="{{ old('Estatico', $amodificar->Estatico ?? '') }}" id="estatico" placeholder="archivo.html">
     </div>
-    <div class="mb-3">
-        <div class="form-check form-switch form-switch-lg mb-0" dir="ltr">
-            <input class="form-check-input" type="checkbox" id="active-switch" name="Menu" value="0" {{ old('Menu', $amodificar->Menu ?? 0) == 0 ? 'checked="checked"' : '' }}>
-            <label class="form-check-label ms-2 mb-0" for="active-switch">Visible</label>
-        </div>
-    </div>
+    
     <div class="p-3 mb-3 background-seo hideable-solo-etiqueta">
         <h4 class="font-size-16 mb-3">Opciones posicionamiento SEO</h4>
+        <div class="mb-3">
+            <label for="Url" class="form-label">Slug <span class="text-muted">(url de la noticia,parecida al titulo. Usa - en lugar de espacios)</span></label>
+            <input type="text" id="Url" class="form-control" value="{{ old('Url', $amodificar->Url ?? '') }}" placeholder="Url de la noticia" name="Url">
+        </div>
         <div class="mb-3">
             <label for="title" class="form-label">Title <span class="text-muted">(60 carateres aprox.)</span></label>
             <input type="text" id="MetaTitle" class="form-control" maxlength="70" value=" {{ $amodificar->MetaTitle ?? '' }}" placeholder="Introduce un titulo similar diferente" name="MetaTitle">
@@ -166,6 +169,12 @@
 
     
 $(document).ready(function() {
+
+    
+    // SEO - Usamos selectores de ID: #Etiqueta y #Url para el SLUG de la publicación
+    //console.log("Iniciando setupSlugGenerator para categoría..." + $('#Etiqueta').val() + $('#Url').val());
+    setupSlugGenerator('#Etiqueta', '#Url');
+
     function actualizarCamposPorTipo() {
         const tipo = parseInt($('#tipo').val());
 

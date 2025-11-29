@@ -75,6 +75,8 @@
     <script src="{{ URL::asset('build/libs/jquery/jquery.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ URL::asset('build/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/moment/min/moment.min.js') }}"></script>
     <script src="{{ URL::asset('build/libs/daterangepicker/daterangepicker.min.js') }}"></script>
     <script type="text/javascript">
@@ -105,6 +107,8 @@
             var table = $('.yajra-datatable').DataTable({
                 processing: true,
                 serverSide: true,
+                responsive: true,  // ✅ importante
+                autoWidth: false,
                 ajax: {
                     url: "{{ route('users.index') }}",
                     data: function(d) {

@@ -23,6 +23,11 @@ return [
     'Permiso' => 'Permission',
     'Permisos' => 'Permissions',
 
+    'Publicaciones' => 'Posts',
+    'Publicacion' => 'Post',
+    'Crear_Publicacion' => 'Create Post',
+    'Editar_Publicacion' => 'Edit Post',
+
     'Crear_Usuario' => 'Create User',
     'Editar_Usuario' => 'Edit User',
     'Usuario' => 'User',

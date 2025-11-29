@@ -71,4 +71,14 @@ class Categoria extends Model
     {
         return $this->belongsTo(self::class, 'Padre', 'Identificador');
     }
+
+    public function publicaciones()
+    {
+        return $this->belongsToMany(
+            Publicacion::class,           // Modelo relacionado
+            'P0114_publicacionpagina',      // Nombre de la tabla pivote
+            'Pagina',            // Clave foránea de este modelo
+            'Publicacion'              // Clave foránea del otro modelo
+        )->withPivot('Orden','Ultima');
+    }
 }

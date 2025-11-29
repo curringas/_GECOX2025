@@ -78,6 +78,7 @@ return [
   "Authentication" =>"Autenticación",
   "Login" =>"Iniciar sesión",
   "Register" =>"Registrarse",
+  "Password" =>"Contraseña",
   "Recover_Password" =>"Recuperar contraseña",
   "Lock_Screen" =>"Bloquear pantalla",
   "Confirm_Mail" =>"Confirmar correo",

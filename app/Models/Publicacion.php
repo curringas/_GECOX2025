@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Categoria;
+use App\Models\ImagenEnPublicacion;
+use App\Models\DocumentoEnPublicacion;
 
 class Publicacion extends Model
 {
@@ -10,7 +13,14 @@ class Publicacion extends Model
 
     protected $primaryKey = 'Identificador';
     public $incrementing = true;
+    protected $keyType = 'int';
     public $timestamps = false;
+
+    protected $guarded = [
+        'Identificador',
+        'Visitas', 
+        'Creador',
+    ];
 
     protected $fillable = [
         'Creador', 'Fecha', 'Privacidad', 'Activa', 'Pendiente', 'Url', 'Email', 'Titulo',
@@ -18,6 +28,31 @@ class Publicacion extends Model
         'IconoEnviar', 'IconoRelacionados', 'IconoValorar', 'Activacion', 'Desactivacion',
         'Notas', 'Introduccion', 'FechaInicio', 'FechaFin', 'FechaSalida', 'Autor', 'Lugar',
         'Logotipo', 'LugarTipo', 'Video', 'LlevaComentarios', 'GaleriaURL', 'Keywords',
-        'Visitas', 'AutorTwitter', 'AutorEmail',
+        'Visitas', 'AutorTwitter', 'AutorEmail','MetaTitle', 'MetaDescription',
     ];
+
+    protected $casts = [
+        'Fecha' => 'datetime',
+    ];
+
+    public function categorias()
+    {
+        return $this->belongsToMany(
+            Categoria::class,           // Modelo relacionado
+            'P0114_publicacionpagina',      // Nombre de la tabla pivote
+            'Publicacion',            // Clave foránea de este modelo
+            'Pagina'              // Clave foránea del otro modelo
+        )->withPivot('Orden','Ultima');
+    }
+
+    public function imagenes()
+    {
+        return $this->hasMany(ImagenEnPublicacion::class, 'Publicacion', 'Identificador')->orderBy('Orden');
+    }
+
+    public function documentos()
+    {
+        return $this->hasMany(DocumentoEnPublicacion::class, 'Publicacion', 'Identificador')->orderBy('Orden');
+    }
+
 }

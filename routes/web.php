@@ -21,8 +21,14 @@ Route::middleware(['auth','active'])->group(function () {
 
     // Ruta principal
     Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
-    // customers route
-    Route::get('/customers', [App\Http\Controllers\CustomerController::class, 'index'])->name('customers.list');
+    
+    //Route::resource('publicaciones', App\Http\Controllers\PublicacionController::class);
+    Route::get('/publicacion/{id}/edit', [App\Http\Controllers\PublicacionController::class, 'edit'])->name('publicacion.edit');
+    Route::patch('/publicacion', [App\Http\Controllers\PublicacionController::class, 'store'])->name('publicacion.store');
+    Route::put('/publicacion/{id}', [App\Http\Controllers\PublicacionController::class, 'update'])->name('publicacion.update');
+    Route::get('/publicaciones/create', [App\Http\Controllers\PublicacionController::class, 'create'])->name('publicacion.create');
+    Route::delete('/publicacion/{id}', [App\Http\Controllers\PublicacionController::class, 'destroy'])->name('publicacion.destroy');
+    Route::get('/publicaciones', [App\Http\Controllers\PublicacionController::class, 'index'])->name('publicaciones.index');
 
     //--- BACKEND ------------------------------
     Route::resource('categorias', App\Http\Controllers\CategoriaController::class);

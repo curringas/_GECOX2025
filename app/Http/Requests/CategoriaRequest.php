@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use App\Models\Categoria;
 
 
 class CategoriaRequest extends FormRequest
@@ -23,10 +24,44 @@ class CategoriaRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
 
+    private function comprobarSiExisteSlug($text, $id = null)
+    {
+        $url = $originalUrl;
+        $suffix = '';
+        $count = 1;
+
+        // 2. Lógica del Slug-Sufijo
+        do {
+            $finalUrl = $url . $suffix;
+
+            // Comprobamos si la URL final YA existe en la base de datos
+            $query = Categoria::where('Url', $finalUrl);
+            
+            // Si estamos en edición ($id no es null), excluimos el registro actual.
+            if ($id) {
+                $query->where('Identificador', '!=', $id); 
+            }
+
+            $exists = $query->exists();
+
+            // Si existe, incrementamos el sufijo.
+            if ($exists) {
+                $suffix = '-' . $count++;
+            }
+        } while ($exists);
+        return $finalUrl;
+    }
      
     public function prepareForValidation()
     {
+        $originalUrl = $this->input('Url');
+        $id = $this->input('Identificador'); // Será null en creación, ID en edición.
+        $finalUrl=comprobarSiExisteSlug($originalUrl,$id)
+        
+        
+
         $this->merge([
+            'Url' => $finalUrl,
             'Etiqueta' => trim($this->Etiqueta),
             'Menu' => $this->has('Menu') ? $this->Menu : -1,
             'Padre' => $this->Padre=="---" ? null : $this->Padre,
@@ -75,7 +110,7 @@ class CategoriaRequest extends FormRequest
         }
         return [
             'Etiqueta' => 'required|string',
-            'Url' => 'nullable|string|unique:P0114_pagina,Url',
+            'Url' => 'required|string',
             'Titulo' => 'required|string',
             'Padre' => 'nullable|integer',
             'Privacidad' => 'required|integer',

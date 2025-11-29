@@ -64,7 +64,9 @@ File: Main Js File
             } else {
                 $('body').removeClass('vertical-collpsed');
             }
+
         });
+
     }
 
     function initActiveMenu() {
@@ -190,7 +192,10 @@ File: Main Js File
     function initComponents() {
         var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
+            //return new bootstrap.Tooltip(tooltipTriggerEl)
+            return new bootstrap.Tooltip(tooltipTriggerEl, {
+                html: true // 👈 permite HTML dentro del tooltip
+            });
         });
 
         var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))

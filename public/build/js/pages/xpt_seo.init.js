@@ -2,65 +2,99 @@
 CURRO / XPERIMENTA - GECOX 2025 / PALABREA
 */
 
+function cleanInputSlug(text) {
+    if (!text) {
+        return '';
+    }
+
+    return text.toString().toLowerCase()
+        // 1. Normalizar y quitar acentos
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, "") 
+        // 2. Reemplazar no-alfanuméricos/espacios por guiones
+        .replace(/[^a-z0-9\s-]/g, "") 
+        // 3. Reemplazar espacios y guiones múltiples por un solo guion
+        .trim()
+        .replace(/[\s-]+/g, '-'); 
+        // *** IMPORTANTE: NO SE ELIMINAN LOS GUIONES EN LOS EXTREMOS ***
+}
+
+// Limpieza 'Final' para la AUTOGENERACIÓN
+// (Es la que usarás para el Título -> Slug)
+function finalizeSlug(text) {
+    // Usa la función suave, y luego remueve los guiones de los extremos
+    return cleanInputSlug(text).replace(/^-+|-+$/g, '');
+}
+// ----------------------------------------------------
+
 (function () {
     'use strict';
 
-    function actualizarCamposPorTipo() {
-        const tipo = parseInt($('#tipo').val());
+    // ++++++++++++++++++ MENEJO DEL SLUG +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    /**
+     * Convierte una cadena de texto a un formato 'slug' limpio y URL-friendly.
+     * (Misma lógica pura de JS, no necesita jQuery)
+     */
+    
 
-        // Ocultar todos los grupos dependientes
-       // Primero mostrar todo por defecto
-        $('.hideable-link-external').hide();
-        $('.hideable-estatico').hide();
-        $('.hideable-solo-etiqueta').show();
+    /**
+     * Configura la lógica de autogeneración y validación del slug usando jQuery.
+     * @param {string} sourceSelector - Selector de origen (e.g., '#Titulo', '#Etiqueta').
+     * @param {string} targetSelector - Selector de destino (el slug, e.g., '#Url', '#UrlCategoria').
+     */
+    window.setupSlugGenerator = function(sourceSelector, targetSelector) {
+    const $sourceInput = $(sourceSelector); 
+    const $targetInput = $(targetSelector); 
 
-        // Mostrar según tipo
-        if (tipo === 1) {
-            $('.hideable-estatico').show();
-        } else if (tipo === 3) {
-            $('.hideable-solo-etiqueta').hide();
-            $('.hideable-link-external').show();
-        } else if (tipo === 2) {
-            $('.hideable-solo-etiqueta').hide(); // Si más adelante hay secciones especiales para etiquetas
-        }
-        // tipo 0 → no se hace nada
+    if ($sourceInput.length === 0 || $targetInput.length === 0) {
+        console.warn(`Inputs no encontrados para la configuración del slug: Origen='${sourceSelector}', Destino='${targetSelector}'`);
+        return;
     }
 
-    // Llamar al cargar (para mantener coherencia al editar)
-    actualizarCamposPorTipo();
+    // Bandera: TRUE si el campo de SLUG ya tiene contenido (caso de edición con slug existente)
+    let initialUrlValue = $targetInput.attr('value'); 
+    //console.log("setupSlugGenerator inicializado. initialUrlValue='" + initialUrlValue + "'");
 
-    // Llamar cada vez que se cambia el tipo
-    $('#tipo').on('change', function() {
-        actualizarCamposPorTipo();
+    // Utilizamos el valor del atributo para la bandera.
+    let isSlugManuallyEdited = initialUrlValue && initialUrlValue.length > 0;
+
+    // --- 1. Generación Automática (Input en Título) ---
+    // Usamos 'input' para que se haga en tiempo real
+    $sourceInput.on('input', function() {
+        if (!isSlugManuallyEdited) {
+            // Usamos la limpieza FINAL (finalizeSlug) para la autogeneración.
+            const slug = finalizeSlug($(this).val()); 
+            $targetInput.val(slug);
+        }
     });
 
-    $('#formCategoria').on('submit', function() {
-        // Antes de enviar el formulario, asegurarse de que los campos ocultos no se envían
-        $('.hideable-link-external input, .hideable-estatico input').each(function() {
-            if ($(this).closest('.hideable-link-external, .hideable-estatico').is(':hidden')) {
-                $(this).val(''); // Limpiar el valor para que no se envíe
-            }
-        });
+    // --- 2. Control de Edición Manual ---
+    $targetInput.on('focus', function() {
+        // Al hacer focus, deshabilitamos permanentemente la autogeneración
+        isSlugManuallyEdited = true;
+    });
+    
+    // --- 3. Limpieza en Vivo (Edición Manual) ---
+    $targetInput.on('input', function() {
+        // Opcional: Si el usuario borra todo el slug y aún no ha hecho focus, 
+        // reactivamos temporalmente la autogeneración.
+        if ($(this).val() === '' && $sourceInput.val().length > 0) {
+             isSlugManuallyEdited = false;
+        }
+
+        // Usamos la limpieza SUAVE (cleanInputSlug) para permitir que el guion se escriba.
+        const cleanedValue = cleanInputSlug($(this).val());
+        $(this).val(cleanedValue);
     });
 
+    // --- 4. Generación Inicial al Cargar (Si hay título y no hay slug) ---
+    if ($targetInput.val() === '' && $sourceInput.val() !== '') {
+        // Usamos la limpieza FINAL (finalizeSlug) para la inicialización
+        const initialSlug = finalizeSlug($sourceInput.val());
+        $targetInput.val(initialSlug);
+    }
+}
 
-    // Inicializar TinyMCE para el textarea explicativo WYSYIWYG
-    tinymce.init({
-        selector: 'textarea#explicativo, textarea#explicativoproductos',
-        height: 350,
-        plugins: [
-            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-            'insertdatetime', 'media', 'table', 'help', 'wordcount'
-        ],
-        toolbar: 'undo redo | blocks | ' +
-            'bold italic backcolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-        content_style: 'body { font-family:"Poppins",sans-serif; font-size:16px }'
-    });
-
-
+    // ++++++++++++++++++ MENEJO META TITLE Y META DESCRIPTION +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     document.addEventListener('DOMContentLoaded', function() {
         const titleInput = document.getElementById('MetaTitle');

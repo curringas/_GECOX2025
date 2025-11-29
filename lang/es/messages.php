@@ -23,5 +23,8 @@ return [
     'actualizado' => ' actualizado correctamente.',
     'eliminado' => ' eliminado correctamente.',
     'estas_seguro' => '¿Estás seguro de que deseas eliminar este elemento?',
+    'publicacion_updated' => 'Publicación actualizada correctamente.',
+    'publicacion_created' => 'Publicación creada correctamente.',
+    'publicacion_deleted' => 'Publicación eliminada correctamente.',
 
 ];
