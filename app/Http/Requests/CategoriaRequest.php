@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Models\Categoria;
-
+use Illuminate\Support\Str;
 
 class CategoriaRequest extends FormRequest
 {
@@ -19,98 +19,104 @@ class CategoriaRequest extends FormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Genera un slug/Url único a partir de $text. Si existe, añade sufijo -1, -2, ...
      */
-
-    private function comprobarSiExisteSlug($text, $id = null)
+    private function comprobarSiExisteSlug(string $text, $id = null): string
     {
-        $url = $originalUrl;
+        $base = Str::slug(trim($text ?: ''), '-');
+        if ($base === '') {
+            $base = 'categoria';
+        }
+
         $suffix = '';
         $count = 1;
 
-        // 2. Lógica del Slug-Sufijo
         do {
-            $finalUrl = $url . $suffix;
+            $finalUrl = $base . $suffix;
 
-            // Comprobamos si la URL final YA existe en la base de datos
             $query = Categoria::where('Url', $finalUrl);
-            
-            // Si estamos en edición ($id no es null), excluimos el registro actual.
+
             if ($id) {
-                $query->where('Identificador', '!=', $id); 
+                $query->where('Identificador', '!=', $id);
             }
 
             $exists = $query->exists();
 
-            // Si existe, incrementamos el sufijo.
             if ($exists) {
                 $suffix = '-' . $count++;
             }
         } while ($exists);
+
         return $finalUrl;
     }
-     
-    public function prepareForValidation()
+
+    protected function prepareForValidation()
     {
         $originalUrl = $this->input('Url');
-        $id = $this->input('Identificador'); // Será null en creación, ID en edición.
-        $finalUrl=comprobarSiExisteSlug($originalUrl,$id)
-        
-        
+        $id = $this->input('Identificador'); // null en creación, id en edición
+
+        // Si no se pasa Url, generamos a partir de la etiqueta
+        if (empty($originalUrl)) {
+            $originalUrl = $this->input('Etiqueta', '');
+        }
+
+        $finalUrl = $this->comprobarSiExisteSlug($originalUrl, $id);
 
         $this->merge([
             'Url' => $finalUrl,
-            'Etiqueta' => trim($this->Etiqueta),
-            'Menu' => $this->has('Menu') ? $this->Menu : -1,
-            'Padre' => $this->Padre=="---" ? null : $this->Padre,
+            'Etiqueta' => trim($this->input('Etiqueta', '')),
+            'Menu' => $this->has('Menu') ? $this->input('Menu') : -1,
+            'Padre' => ($this->input('Padre') === '---') ? null : $this->input('Padre'),
         ]);
     }
 
-
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
     public function rules(): array
-    {    
+    {
         $id = $this->input('Identificador');
 
-        // 0 Con publicaciones
-        // 1 Enlace a página estática
-        // 2 Etiqueta
-        // 3 Enlace externo
-
-        if ($this->Tipo == 2) {
-            // Etiqueta
+        // Normalizar campos según Tipo
+        if ($this->input('Tipo') == 2) {
             $this->merge([
                 'SoloEtiqueta' => 1,
                 'Externo' => null,
                 'Estatico' => null,
                 'Url' => null,
             ]);
-        } elseif ($this->Tipo == 3) {
-            // 3 Enlace externo
+        } elseif ($this->input('Tipo') == 3) {
             $this->merge([
                 'SoloEtiqueta' => 0,
                 'Estatico' => null,
                 'Url' => null,
             ]);
-        }elseif ($this->Tipo == 1) {
-            // 1 Enlace a página estática
+        } elseif ($this->input('Tipo') == 1) {
             $this->merge([
                 'SoloEtiqueta' => 0,
                 'Externo' => null,
             ]);
         } else {
-            // Con publicaciones
             $this->merge([
                 'SoloEtiqueta' => 0,
                 'Externo' => null,
                 'Estatico' => null,
-                'Url' => trim($this->Url)
+                'Url' => trim($this->input('Url', ''))
             ]);
         }
+
         return [
             'Etiqueta' => 'required|string',
-            'Url' => 'required|string',
+            'Url' => [
+                Rule::requiredIf(function () {
+                    return in_array($this->input('Tipo'), [0, 1]);
+                }),
+                'nullable',
+                'string',
+                Rule::unique('P0114_pagina', 'Url')->ignore($id, 'Identificador'),
+            ],
             'Titulo' => 'required|string',
             'Padre' => 'nullable|integer',
             'Privacidad' => 'required|integer',
@@ -118,8 +124,6 @@ class CategoriaRequest extends FormRequest
             'Explicativo' => 'nullable|string',
             'ExplicativoProductos' => 'nullable|string',
             'SoloEtiqueta' => 'required|boolean',
-            'Url' => 'required_if:Tipo,0,1|unique:P0114_pagina,Url,' . $id . ',Identificador',
-
             'Externo' => 'required_if:Tipo,3',
             'Estatico' => [
                 'nullable',
