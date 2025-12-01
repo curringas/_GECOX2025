@@ -22,4 +22,7 @@ ALTER TABLE `P0114_documentoenpublicacion`
      `Publicacion`,
      `Orden`
    );
-   
+  
+  ALTER TABLE `P0114_banner` CHANGE `Codigo` `Codigo` TEXT CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL;
+ALTER TABLE `P0114_bannerenpagina` CHANGE `Posicion` `Posicion` SMALLINT(6) NOT NULL DEFAULT '0' COMMENT '0 pequeño, 1 mediano, 2 grande';
+ALTER TABLE `P0114_banner` CHANGE `Tipo` `Tipo` TINYINT(1) NULL DEFAULT NULL COMMENT '0 pequeño, 1 mediano, 2 grande';

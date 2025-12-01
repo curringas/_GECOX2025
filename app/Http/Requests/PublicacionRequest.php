@@ -85,9 +85,10 @@ class PublicacionRequest extends FormRequest
             'MetaTitle' => 'nullable|string',
             'MetaDescription' => 'nullable|string',
             'Creador' => 'required|string',
+            'imagenes' => ['nullable', 'array'],
+            'imagenes.*' => ['image', 'mimes:' . implode(',', config('gecox_imagenes.tipos')), 'max:' . config('gecox_imagenes.peso.0')],
             'documentos' => ['nullable', 'array'],
-            // 2 MB = 2048 KB. La regla 'max' de archivos usa kilobytes (KB).
-            'documentos.*' => ['file', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,zip', 'max:2048'],
+            'documentos.*' => ['file', 'mimes:' . implode(',', config('gecox_documentos.tipos')), 'max:' . config('gecox_documentos.peso.0')],
         ];
     }
 }

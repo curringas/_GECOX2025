@@ -33,4 +33,14 @@ return [
     'Usuario' => 'User',
     'Usuarios' => 'Users',
 
+    'Categorias' => 'Categories',
+    'Categorias' => 'Categories',
+    'Crear_Categoria' => 'Create Category',
+    'Editar_Categoria' => 'Edit Category',
+
+    'Banners' => 'Banners',
+    'Banners' => 'Banners',
+    'Crear_Banner' => 'Create Banner',
+    'Editar_Banner' => 'Edit Banner',
+
 ];

@@ -31,7 +31,7 @@
                                 </div>
                             </div>
                             <h4 class="mt-5">Aun no ha llegado el momento</h4>
-                            <p class="text-muted">Muy pronto podrá disfrutar de la aplicación realizada por Taller Empresarial 2.0.</p>
+                            <p class="text-muted">Muy pronto podrá disfrutar de la aplicación realizada por Palabrea.</p>
 
                             <div class="row justify-content-center mt-5">
                                 <div class="col-md-8">

@@ -92,17 +92,7 @@ class PublicacionController extends Controller
             });
         }
     }
-
-        /**
-     * Aplica filtro por rol.
-     */
-    private function applyAutorFilter($query, Request $request)
-    {
-        if ($request->filled('autor')) {
-            $autor = $request->input('autor');
-            $query->where('Autor', 'like', "%{$autor}%");
-        }
-    }
+    
     private function applyCategoriaFilter($query, Request $request)
     {
         if ($request->filled('autor')) {
@@ -148,7 +138,8 @@ class PublicacionController extends Controller
     {
         $roles = \Spatie\Permission\Models\Role::all(); // O como obtengas los roles
         $permissions = \Spatie\Permission\Models\Permission::all(); // Si usas permisos
-        $categorias = $this->obtenterCategoriasValidasArbol();
+        $categoria= new Categoria();
+        $categorias = $categoria->obtenterCategoriasValidasArbol();
 
 
         return view('publicaciones.edit', [
@@ -165,7 +156,8 @@ class PublicacionController extends Controller
 
         $roles = ModelsRole::all();
         $permissions = ModelsPermission::all();
-        $categorias = $this->obtenterCategoriasValidasArbol();
+        $categoria= new Categoria();
+        $categorias = $categoria->obtenterCategoriasValidasArbol();
 
         return view('publicaciones.edit', compact('publicacion', 'categorias','roles', 'permissions'));
     }
@@ -213,86 +205,6 @@ class PublicacionController extends Controller
         return response()->json(null, 204);
     }
 
-
-
-
-    //Otras funciones del controlador...
-
-    private function obtenterCategoriasValidasArbol()
-    {
-        return Categoria::whereNull('Padre')
-            ->where('SoloEtiqueta', 0)
-            ->where(function ($query) {
-                $query->whereNull('Externo')
-                    ->orWhere('Externo', '');
-            })
-            ->where(function ($query) {
-                $query->whereNull('Estatico')
-                    ->orWhere('Estatico', '');
-            })
-            ->with('hijos.hijos')
-            ->orderBy('Orden')
-            ->get();
-    }
-    /*private function guardarImagenes($imagenesJson, $publicacion, $fecha)
-    {
-        // Crear carpeta destino según fecha (YYYYMM)
-        $fecha = \Carbon\Carbon::parse($publicacion->Fecha);
-        // === GUARDAR IMAGENES ===
-        $imagenes = json_decode($request->input('imagenes_json', '[]'), true);
-
-        if ($modificando) {
-            // Eliminar imágenes que ya no están
-            $imagenesActuales = ImagenEnPublicacion::where('Publicacion', $publicacion->Identificador)->get();
-            foreach ($imagenesActuales as $img) {
-                if (!in_array($img->Imagen, $imagenes)) {
-                    $filePath = "$ficherosPath/{$img->Imagen}";
-                    if (file_exists($filePath)) unlink($filePath);
-                    $img->delete();
-                }
-            }
-        }
-
-        $imagenes = json_decode($imagenesJson ?? '[]', true);
-        $orden = 0;
-
-        foreach ($imagenes as $img) {
-            if (empty($img['data'])) continue;
-
-            // Extraer extensión
-            preg_match('/data:image\/(\w+);base64,/', $img['data'], $matches);
-            $ext = $matches[1] ?? 'jpg';
-
-            $baseName = "imagen{$publicacion->Identificador}_{$orden}";
-            $folder = public_path("ficheros/{$fecha->format('Ym')}");
-            if (!file_exists($folder)) mkdir($folder, 0755, true);
-
-            $pathOriginal = "{$folder}/{$baseName}_original.{$ext}";
-            $pathPpal = "{$folder}/{$baseName}_ppal.{$ext}";
-            $pathPortada = "{$folder}/{$baseName}_portada.{$ext}";
-            $pathThumb = "{$folder}/{$baseName}_thumb.{$ext}";
-
-            $data = base64_decode(preg_replace('/^data:image\/\w+;base64,/', '', $img['data']));
-            file_put_contents($pathOriginal, $data);
-
-            $image = Image::make($pathOriginal);
-            $image->resize(1200, null, fn($c) => $c->aspectRatio()->upsize())->save($pathOriginal, 90);
-            $image->resize(800, null, fn($c) => $c->aspectRatio()->upsize())->save($pathPpal, 90);
-            $image->resize(400, null, fn($c) => $c->aspectRatio()->upsize())->save($pathPortada, 90);
-            Image::make($pathOriginal)->fit(120, 120)->save($pathThumb, 90);
-
-            \App\Models\ImagenEnPublicacion::create([
-                'Imagen' => "{$fecha->format('Ym')}/{$baseName}_ppal.{$ext}",
-                'Descripcion' => $img['name'] ?? null,
-                'Ancho' => 1200,
-                'Publicacion' => $publicacion->Identificador,
-                'Orden' => $orden,
-                'Repositorio' => 0,
-            ]);
-
-            $orden++;
-        }
-    }*/
 
     private function guardarImagenes(Request $request, $publicacion, bool $modificando = false, ImageManager $imageManager)
     {
@@ -415,28 +327,28 @@ class PublicacionController extends Controller
             // A. Original (Max 1200px)
             $pathOriginal = "{$folderName}/{$baseName}_original.{$ext}";
             $image1200 = clone $originalImageInstance;
-            $image1200->scaleDown(width: 1200, height: 1200); // Proporcional sin Upscaling (v3)
+            $image1200->scaleDown(width: config('gecox_imagenes.tamanos.original.0'), height: config('gecox_imagenes.tamanos.original.1')); // Proporcional sin Upscaling (v3)
             Storage::disk($disk)->put($pathOriginal, (string) $image1200->toJpeg(90)); 
 
 
             // B. Principal (800px)
             $pathPpal = "{$folderName}/{$baseName}_ppal.{$ext}";
             $image800 = clone $originalImageInstance;
-            $image800->scaleDown(width: 800, height: 800); // ¡Corregido a 800!
+            $image800->scaleDown(width: config('gecox_imagenes.tamanos.ppal.0'), height: config('gecox_imagenes.tamanos.ppal.1')); // ¡Corregido a 800!
             Storage::disk($disk)->put($pathPpal, (string) $image800->toJpeg(90));
             
             
             // C. Portada (400px)
             $pathPortada = "{$folderName}/{$baseName}_portada.{$ext}";
             $image400 = clone $originalImageInstance;
-            $image400->scaleDown(width: 400, height: 400); // ¡Corregido a 400!
+            $image400->scaleDown(width: config('gecox_imagenes.tamanos.portada.0'), height: config('gecox_imagenes.tamanos.portada.1')); // ¡Corregido a 400!
             Storage::disk($disk)->put($pathPortada, (string) $image400->toJpeg(90));
 
             
             // D. Thumbnail (120x120 crop)
             $pathThumb = "{$folderName}/{$baseName}_thumb.{$ext}";
             $thumbInstance = clone $originalImageInstance;
-            $thumbInstance->cover(120, 120); // Recorte cuadrado (v3)
+            $thumbInstance->cover(config('gecox_imagenes.tamanos.thumb.0'), config('gecox_imagenes.tamanos.thumb.1')); // Recorte cuadrado (v3)
             Storage::disk($disk)->put($pathThumb, (string) $thumbInstance->toJpeg(90));
             
             // 4.4 Guardar el registro en la base de datos

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BannerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,19 +24,26 @@ Route::middleware(['auth','active'])->group(function () {
     Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
     
     //Route::resource('publicaciones', App\Http\Controllers\PublicacionController::class);
+    //--- PUBLICACIONES ------------------------------
     Route::get('/publicacion/{id}/edit', [App\Http\Controllers\PublicacionController::class, 'edit'])->name('publicacion.edit');
     Route::patch('/publicacion', [App\Http\Controllers\PublicacionController::class, 'store'])->name('publicacion.store');
-    Route::put('/publicacion/{id}', [App\Http\Controllers\PublicacionController::class, 'update'])->name('publicacion.update');
     Route::get('/publicaciones/create', [App\Http\Controllers\PublicacionController::class, 'create'])->name('publicacion.create');
     Route::delete('/publicacion/{id}', [App\Http\Controllers\PublicacionController::class, 'destroy'])->name('publicacion.destroy');
     Route::get('/publicaciones', [App\Http\Controllers\PublicacionController::class, 'index'])->name('publicaciones.index');
 
-    //--- BACKEND ------------------------------
+    //--- BACKEND - BANNERS ------------------------------
+    Route::get('/banner/{id}/edit', [App\Http\Controllers\BannerController::class, 'edit'])->name('banner.edit');
+    Route::patch('/banner', [App\Http\Controllers\BannerController::class, 'store'])->name('banners.store');
+    Route::get('/banners/create', [App\Http\Controllers\BannerController::class, 'create'])->name('banners.create');
+    Route::delete('/banner/{id}', [App\Http\Controllers\BannerController::class, 'destroy'])->name('banner.destroy');
+    Route::get('/banners', [App\Http\Controllers\BannerController::class, 'index'])->name('banners.index');
+    Route::post('banners/reorder', [BannerController::class, 'reorder'])->name('banners.reorder');
+
+    //--- BACKEND - CATEGORIAS ------------------------------
     Route::resource('categorias', App\Http\Controllers\CategoriaController::class);
-    Route::post('/categorias/reorder', [App\Http\Controllers\CategoriaController::class, 'reorder'])
-    ->name('categorias.reorder');
     /*Route::post('/categoria/store', [App\Http\Controllers\CategoriaController::class, 'store'])
     ->name('categoria.store');*/
+    Route::post('/categorias/reorder', [App\Http\Controllers\CategoriaController::class, 'reorder'])->name('categorias.reorder');
     Route::get('/categoria/{id}', [App\Http\Controllers\CategoriaController::class, 'edit'])
     ->name('categorias.edit');
 

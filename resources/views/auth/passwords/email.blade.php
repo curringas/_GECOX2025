@@ -89,9 +89,9 @@
                                         <p class="mb-0">©
                                             <script>
                                                 document.write(new Date().getFullYear())
-                                            </script> TE 2.O. Crafted with <i
+                                            </script> 2025 Crafted with <i
                                                 class="mdi mdi-heart text-danger"></i> by
-                                            Taller Empresarial 2.0
+                                            Palabrea.
                                         </p>
                                     </div>
                                 </div>

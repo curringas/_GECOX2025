@@ -127,4 +127,5 @@ public function create()
         return Redirect::route('categorias.index')
             ->with('success', __('messages.categoria_deleted'));
     }
+
 }

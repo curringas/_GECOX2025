@@ -24,17 +24,6 @@
                     </a>                    
                 </li>
 
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="bx bx-file"></i>
-                        <span key="t-utility">Mantenimiento/Prox.</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="mantenimiento/maintenance" key="t-maintenance">@lang('translation.Maintenance')</a></li>
-                        <li><a href="mantenimiento/comingsoon" key="t-coming-soon">@lang('translation.Coming_Soon')</a></li>
-                    </ul>
-                </li>
-
 
                 <li>
                     <a href="/publicaciones" class="waves-effect">
@@ -46,9 +35,9 @@
 
                 <li class="menu-title" key="t-backend">@lang('translation.backend')</li>
                 <li>
-                    <a href="/customers" class="waves-effect">
+                    <a href="/banners" class="waves-effect">
                         <i class="bx bx-list-ul"></i>
-                        <span key="t-yajra-datatable">@lang('translation.yajra-datatable')</span>
+                        <span key="t-banners">@lang('titulos.Banners')</span>
                     </a>
                 </li>
                 <li>

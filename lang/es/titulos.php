@@ -38,4 +38,9 @@ return [
     'Crear_Categoria' => 'Crear Categoría',
     'Editar_Categoria' => 'Editar Categoría',
 
+    'Banners' => 'Banners',
+    'Banners' => 'Banners',
+    'Crear_Banner' => 'Crear Banner',
+    'Editar_Banner' => 'Editar Banner',
+
 ];

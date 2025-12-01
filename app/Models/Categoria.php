@@ -81,4 +81,32 @@ class Categoria extends Model
             'Publicacion'              // Clave foránea del otro modelo
         )->withPivot('Orden','Ultima');
     }
+
+    public function banners()
+    {
+        return $this->belongsToMany(
+            Publicacion::class,           // Modelo relacionado
+            'P0114_bannerenpagina',      // Nombre de la tabla pivote
+            'Pagina',            // Clave foránea de este modelo
+            'Banner'              // Clave foránea del otro modelo
+        )->withPivot('Posicion','Orden');
+    }
+
+
+    public function obtenterCategoriasValidasArbol()
+    {
+        return $this->whereNull('Padre')
+            ->where('SoloEtiqueta', 0)
+            ->where(function ($query) {
+                $query->whereNull('Externo')
+                    ->orWhere('Externo', '');
+            })
+            ->where(function ($query) {
+                $query->whereNull('Estatico')
+                    ->orWhere('Estatico', '');
+            })
+            ->with('hijos.hijos')
+            ->orderBy('Orden')
+            ->get();
+    }
 }

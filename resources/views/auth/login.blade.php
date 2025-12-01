@@ -97,8 +97,8 @@
                                 <div class="mt-4 mt-md-5 text-center">
                                     <p class="mb-0">© <script>
                                             document.write(new Date().getFullYear())
-                                        </script> TE2.0 Crafted with <i class="mdi mdi-heart text-danger"></i> by
-                                        Taller Empresarial 2.0.</p>
+                                        </script> XPT Crafted with <i class="mdi mdi-heart text-danger"></i> by
+                                        Palabrea.</p>
                                 </div>
                             </div>
 
