@@ -3,7 +3,7 @@
 return [
   
   "Menu" =>"Menú",
-  "Dashboards" =>"Inicio",
+  "Dashboards" =>"Portada",
   "Default" =>"Defecto",
   "Saas" =>"Saas",
   "Crypto" =>"Cripto",

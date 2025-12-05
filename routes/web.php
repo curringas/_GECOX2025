@@ -22,6 +22,20 @@ Route::middleware(['auth','active'])->group(function () {
 
     // Ruta principal
     Route::get('/', [App\Http\Controllers\HomeController::class, 'root'])->name('root');
+   // Actualizar detalles del usuario
+    Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
+    Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
+// Traducción de idioma
+    Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
+
+    // Home
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::post('banner/datos', [App\Http\Controllers\HomeController::class, 'ajaxDatosBanners'])->name('banner.datos');
+    Route::post('banner/guardar', [App\Http\Controllers\HomeController::class, 'ajaxGuardarBanner'])->name('banner.guardar');
+    Route::post('banner/eliminar', [App\Http\Controllers\HomeController::class, 'ajaxEliminarBanner'])->name('banner.eliminar');
+    // Del sistema
+    // Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
+   
     
     //Route::resource('publicaciones', App\Http\Controllers\PublicacionController::class);
     //--- PUBLICACIONES ------------------------------
@@ -60,24 +74,14 @@ Route::middleware(['auth','active'])->group(function () {
     Route::resource('permissions', App\Http\Controllers\PermissionController::class);
 
     /************************************************************************************************************************ */
-    // Actualizar detalles del usuario
-    Route::post('/update-profile/{id}', [App\Http\Controllers\HomeController::class, 'updateProfile'])->name('updateProfile');
-    Route::post('/update-password/{id}', [App\Http\Controllers\HomeController::class, 'updatePassword'])->name('updatePassword');
-
-    // Del sistema
-    // Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
-    Route::get('mantenimiento/maintenance', function() {
+     Route::get('mantenimiento/maintenance', function() {
         return view('mantenimiento.maintenance');
     })->name('mantenimiento');
     Route::get('mantenimiento/comingsoon', function() {
         return view('mantenimiento.comingsoon');
     })->name('comingsoon');
 
-    // Traducción de idioma
-    Route::get('index/{locale}', [App\Http\Controllers\HomeController::class, 'lang']);
-
-    // Home
-    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    
 });
 
 Auth::routes();
