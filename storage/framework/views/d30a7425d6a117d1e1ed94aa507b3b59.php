@@ -51,7 +51,7 @@
             </div>
         <?php endif; ?>
     <?php elseif($clase->BannerCodigoFuente): ?>
-        <?php echo e(substr($clase->BannerCodigoFuente,0,200)); ?>
+        <?php echo e(Str::limit($clase->BannerCodigoFuente,200)); ?>
 
     <?php elseif($clase->BannerUrl && !$clase->BannerImagen): ?>
         <?php if(strstr($clase->BannerUrl,"youtube") || strstr($clase->BannerUrl,"youtu.be")): ?>

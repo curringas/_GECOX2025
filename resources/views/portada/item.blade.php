@@ -51,7 +51,7 @@
             </div>
         @endif
     @elseif ($clase->BannerCodigoFuente)
-        {{ substr($clase->BannerCodigoFuente,0,200) }}
+        {{ Str::limit($clase->BannerCodigoFuente,200) }}
     @elseif ($clase->BannerUrl && !$clase->BannerImagen)
         @if (strstr($clase->BannerUrl,"youtube") || strstr($clase->BannerUrl,"youtu.be"))
             <!-- Extraer el ID del video de YouTube -->
