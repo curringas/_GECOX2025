@@ -119,6 +119,11 @@
     "file": "icons/bg-ico-hero.jpg",
     "src": "resources/images/crypto/bg-ico-hero.jpg"
   },
+  "resources/js/pages/gecox_portada.init.js": {
+    "file": "js/gecox_portada.init.js",
+    "isEntry": true,
+    "src": "resources/js/pages/gecox_portada.init.js"
+  },
   "resources/scss/app.scss": {
     "file": "css/app.min.css",
     "isEntry": true,

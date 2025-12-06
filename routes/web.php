@@ -33,6 +33,10 @@ Route::middleware(['auth','active'])->group(function () {
     Route::post('banner/datos', [App\Http\Controllers\HomeController::class, 'ajaxDatosBanners'])->name('banner.datos');
     Route::post('banner/guardar', [App\Http\Controllers\HomeController::class, 'ajaxGuardarBanner'])->name('banner.guardar');
     Route::post('banner/eliminar', [App\Http\Controllers\HomeController::class, 'ajaxEliminarBanner'])->name('banner.eliminar');
+    Route::post('noticia/datos', [App\Http\Controllers\HomeController::class, 'ajaxDatosBanners'])->name('noticia.datos');
+    Route::post('noticia/guardar', [App\Http\Controllers\HomeController::class, 'ajaxGuardarBanner'])->name('noticia.guardar');
+    Route::post('noticia/eliminar', [App\Http\Controllers\HomeController::class, 'ajaxEliminarBanner'])->name('noticia.eliminar');
+    Route::post('reordenar', [App\Http\Controllers\HomeController::class, 'ajaxReordenar'])->name('portada.reordenar');
     // Del sistema
     // Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
    

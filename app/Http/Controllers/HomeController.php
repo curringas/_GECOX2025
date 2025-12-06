@@ -13,6 +13,7 @@ use App\Models\PortadaIzquierda;
 use App\Models\PortadaCentral;
 use App\Models\PortadaDerecha;
 use App\Models\PortadaSlider;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
@@ -44,9 +45,9 @@ class HomeController extends Controller
     {
         $portada = Portada::first();
         $sliders = PortadaSlider::orderBy('Orden')->get();
-        $derechos = PortadaDerecha::orderBy('Orden')->get();
-        $centrales = PortadaCentral::orderBy('Orden')->get();
-        $izquierdos = PortadaIzquierda::orderBy('Orden')->get();
+        $derechos = PortadaDerecha::with(['publicacion','publicacion.imagenes'])->orderBy('Orden')->get();
+        $centrales = PortadaCentral::with(['publicacion','publicacion.imagenes'])->orderBy('Orden')->get();
+        $izquierdos = PortadaIzquierda::with(['publicacion','publicacion.imagenes'])->orderBy('Orden')->get();
         return view('index', compact('portada','sliders','derechos','centrales','izquierdos'));
     }
 
@@ -68,28 +69,28 @@ class HomeController extends Controller
         switch ($request->tabla){
             case 'portada_slider':
                 if ($request->has('orden')) {
-                    $portada = PortadaSlider::where('Orden', $request->orden)->first();
+                    $portada = PortadaSlider::find($request->id);
                 } else {
                     $portada = PortadaSlider::first();
                 }
                 break;
             case 'portada_derecha':
                 if ($request->has('orden')) {
-                    $portada = PortadaDerecha::where('Orden', $request->orden)->first();
+                    $portada = PortadaDerecha::find($request->id);
                 } else {
                     $portada = PortadaDerecha::first();
                 }
                 break;
             case 'portada_central':
                 if ($request->has('orden')) {
-                    $portada = PortadaCentral::where('Orden', $request->orden)->first();
+                    $portada = PortadaCentral::find($request->id);
                 } else {
                     $portada = PortadaCentral::first();
                 }
                 break;
             case 'portada_izquierda':
                 if ($request->has('orden')) {
-                    $portada = PortadaIzquierda::where('Orden', $request->orden)->first();
+                    $portada = PortadaIzquierda::find($request->id);
                 } else {
                     $portada = PortadaIzquierda::first();
                 }
@@ -125,39 +126,40 @@ class HomeController extends Controller
 
         switch ($request->bannerTabla){
             case 'portada_slider':
-                if ($request->has('bannerOrden') && $request->bannerOrden == 'nuevo') {
+                if ($request->has('bannerIdentificador') && $request->bannerIdentificador == 'nuevo') {
                     $portada = new PortadaSlider();
                     $maxOrden = PortadaSlider::max('Orden');
                     $portada->$campo_orden = $maxOrden ? $maxOrden + 1 : 1;
                 } else {
-                    $portada = PortadaSlider::where('Orden', $request->bannerOrden)->first();
+                    $portada = PortadaSlider::find($request->bannerIdentificador);
                 }
                 break;
             case 'portada_derecha':
-                if ($request->has('bannerOrden') && $request->bannerOrden == 'nuevo') {
+
+                if ($request->has('bannerIdentificador') && $request->bannerIdentificador == 'nuevo') {
                     $portada = new PortadaDerecha();
                     $maxOrden = PortadaDerecha::max('Orden');
                     $portada->$campo_orden = $maxOrden ? $maxOrden + 1 : 1;
                 } else {
-                    $portada = PortadaDerecha::where('Orden', $request->bannerOrden)->first();
+                    $portada = PortadaDerecha::find($request->bannerIdentificador);
                 }
                 break;
             case 'portada_central':
-                if ($request->has('bannerOrden') && $request->bannerOrden == 'nuevo') {
+                if ($request->has('bannerIdentificador') && $request->bannerIdentificador == 'nuevo') {
                     $portada = new PortadaCentral();
                     $maxOrden = PortadaCentral::max('Orden');
                     $portada->$campo_orden = $maxOrden ? $maxOrden + 1 : 1;
                 } else {
-                    $portada = PortadaCentral::where('Orden', $request->bannerOrden)->first();
+                    $portada = PortadaCentral::find($request->bannerIdentificador);
                 }
                 break;
             case 'portada_izquierda':
-                if ($request->has('bannerOrden') && $request->bannerOrden == 'nuevo') {
+                if ($request->has('bannerIdentificador') && $request->bannerIdentificador == 'nuevo') {
                     $portada = new PortadaIzquierda();
                     $maxOrden = PortadaIzquierda::max('Orden');
                     $portada->$campo_orden = $maxOrden ? $maxOrden + 1 : 1;
                 } else {
-                    $portada = PortadaIzquierda::where('Orden', $request->bannerOrden)->first();
+                    $portada = PortadaIzquierda::find($request->bannerIdentificador);
                 }
                 $portada = PortadaIzquierda::first();
                 break;
@@ -172,6 +174,7 @@ class HomeController extends Controller
             // Primero eliminamos la imagen que hubiera
             if ($portada->$campo_imagen) {
                 Storage::disk('public')->delete('banners/' . $portada->$campo_imagen);
+
                 $portada->$campo_imagen=null; 
             }
 
@@ -242,12 +245,13 @@ class HomeController extends Controller
         if ($portada->$campo_imagen) {
             Storage::disk('public')->delete('banners/' . $portada->$campo_imagen);
         }
-        
+
         if ($request->has('orden')) {
             // Si es una tabla con orden, eliminamos el registro completo
             $portada->delete();
             return response()->json(['success' => true, 'message' => 'Banner eliminado successfully.']);
         } else {
+            //Si es la tabla portada principal solo ponemos a null los campos
             // Limpiar los campos en la base de datos
             $portada->$campo_titulo = null;
             $portada->$campo_imagen = null;
@@ -257,6 +261,54 @@ class HomeController extends Controller
             $portada->save();
 
             return response()->json(['success' => true, 'message' => 'Banner eliminado successfully.']);
+        }
+    }
+
+    public function ajaxReordenar(Request $request)
+    {
+        if (!$request->has('tabla') || !$request->has('orden_ids')) {
+            return response()->json(['success' => false, 'message' => 'Parámetros insuficientes.']);
+        }
+
+        switch ($request->tabla){
+            case 'portada_slider':
+                $modelClass = PortadaSlider::class;
+                break;
+            case 'portada_derecha':
+                $modelClass = PortadaDerecha::class;
+                break;
+            case 'portada_central':
+                $modelClass = PortadaCentral::class;
+                break;
+            case 'portada_izquierda':
+                $modelClass = PortadaIzquierda::class;
+                break;
+        }
+        $ordenIds = $request->orden_ids; // Array de IDs en el nuevo orden
+        try {
+            DB::beginTransaction(); //Esto comienza una transacción para asegurar la integridad de los datos y todas las sentencias se ejecutan de una vez en el commit de abajo
+            
+            // Recorrer los IDs y actualizar el campo 'Orden' para que sea correlativo
+            foreach ($ordenIds as $orden => $id) {
+                // La posición del ID en el array (+1) es el nuevo valor de 'Orden' (1, 2, 3, ...)
+                $nuevoOrden = $orden + 1; 
+
+                $modelClass::where('Identificador', $id)
+                        ->update(['Orden' => $nuevoOrden]);
+            }
+            
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'Message' => 'El orden de los banners ha sido actualizado correctamente.',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el orden de los banners: ' . $e->getMessage(),
+            ], 500);
         }
     }
 

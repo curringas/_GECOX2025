@@ -1,5 +1,9 @@
 <?php $__env->startSection('title'); ?> <?php echo app('translator')->get('translation.Dashboards'); ?> <?php $__env->stopSection(); ?>
 
+<?php $__env->startSection('css'); ?>
+    <link rel="stylesheet" href="<?php echo e(URL::asset('build/libs/select2/css/select2.min.css')); ?>">
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('content'); ?>
 
 <?php $__env->startComponent('components.breadcrumb'); ?>
@@ -16,22 +20,24 @@
                         data-tabla="portada_slider" 
                         data-banner="Banner"  
                         data-orden="nuevo"
+                        data-id="nuevo"
                         class="btn btn-sm btn-primary position-absolute top-0 end-0 m-4"
                         data-bs-toggle="modal" 
                         data-bs-target="#banner">
-                    <i class="mdi mdi-pencil"></i> Nuevo banner
+                    <i class="mdi mdi-plus"></i> Nuevo banner
                 </button>
             </div>
-            <div class="card-body" style="overflow:hidden;">
+            <div class="card-body lista-ordenable" data-tabla="portada_slider" id="listaOrdenableBannersSobrecabecera" style="overflow:hidden;">
 
                 <?php $__currentLoopData = $sliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slider): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <div class="mb-4 position-relative">
+                    <div class="mb-4 position-relative" data-id="<?php echo e($slider->Identificador); ?>">
                         <!-- Botón editar arriba a la derecha -->
                         <div class="position-absolute top-0 end-0 m-2 d-flex gap-1">
                             
                             <button type="button" 
                                     data-tabla="portada_slider" 
                                     data-banner="Banner"  
+                                    data-id="<?php echo e($slider->Identificador); ?>" 
                                     data-orden="<?php echo e($slider->Orden); ?>" 
                                     class="btn btn-sm btn-primary"
                                     data-bs-toggle="modal" 
@@ -42,6 +48,7 @@
                             <button type="button" 
                                     data-tabla="portada_slider" 
                                     data-banner-eliminar="Banner" 
+                                    data-id="<?php echo e($slider->Identificador); ?>" 
                                     data-orden="<?php echo e($slider->Orden); ?>" 
                                     class="btn btn-sm btn-danger">
                                     <i class="mdi mdi-delete"></i>
@@ -129,172 +136,44 @@
 
     <!-- IZQUIERDA --->
     <div class="col-xl-6">
-        <div class="card overflow-hidden position-relative h-100" style="background: url('<?php echo e(URL::asset('images/1641266162.jpg')); ?>') center center / cover no-repeat; min-height: 220px;">
-            <!-- Botón editar arriba a la derecha -->
-            <button type="button" class="btn btn-sm btn-primary position-absolute top-0 end-0 m-2"
-                    data-bs-toggle="modal" data-bs-target="#modalEditarFondoIzquierda">
-                <i class="mdi mdi-pencil"></i> Editar
-            </button>
-            <div class="d-flex flex-column justify-content-end h-100 w-100" style="background: rgba(255,255,255,0.0);">
-                <div class="p-3 text-primary" style="background: rgba(255,255,255,0.7); border-radius: 0 0 12px 12px;">
-                    <h5 class="text-primary mb-1">Welcome Back !</h5>
-                    <p class="mb-0">Skote Dashboard</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal editar fondo izquierda -->
-    <div class="modal fade" id="modalEditarFondoIzquierda" tabindex="-1" aria-labelledby="modalEditarFondoIzquierdaLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalEditarFondoIzquierdaLabel">Editar fondo izquierda</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Aquí tu formulario de edición -->
-                    <form>
-                        <div class="mb-3">
-                            <label for="fondoTitulo" class="form-label">Título</label>
-                            <input type="text" class="form-control" id="fondoTitulo" value="Welcome Back !">
-                        </div>
-                        <div class="mb-3">
-                            <label for="fondoTexto" class="form-label">Texto</label>
-                            <textarea class="form-control" id="fondoTexto" rows="2">Skote Dashboard</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="fondoImagen" class="form-label">Imagen de fondo</label>
-                            <input type="file" class="form-control" id="fondoImagen">
-                        </div>
-                        <button type="submit" class="btn btn-success">Guardar cambios</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- CENTRO --->
-    <div class="col-xl-3">
-        <div class="card overflow-hidden position-relative p-3 d-flex align-items-center" style="min-height: 140px;">
-            <!-- Botón editar arriba a la derecha -->
-            <button type="button" class="btn btn-sm btn-primary position-absolute top-0 end-0 m-2"
-                    data-bs-toggle="modal" data-bs-target="#modalEditarNoticiaCentral">
-                <i class="mdi mdi-pencil"></i> Editar
-            </button>
-            <div class=" w-100 align-items-center">
-                <!-- Imagen de la noticia -->
-                <img src="<?php echo e(URL::asset('images/1641266162.jpg')); ?>"
-                     alt="Noticia" class="img-fluid rounded  me-3" style="width: 100px; height: 100px; object-fit: cover;">
-                <div class="mt-3">
-                    <h5 class="mb-2"><?php echo e($noticiaCentral->titulo ?? 'Título de la noticia'); ?></h5>
-                    <p>01/12/2025 | Redacción</p>
-                    <p class="mb-0 text-muted">Subdelegacion acogerá un acto institucional en el 47º Aniversario de la Constitución</p>
-                </div>
-            </div>
-        </div>
+        <?php echo $__env->make('portada.columna', ['items' => $izquierdos,'tabla' => 'portada_izquierda'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </div>
     
+    <!-- CENTRO --->
+    <div class="col-xl-3">
+        <?php echo $__env->make('portada.columna', ['items' => $centrales,'tabla' => 'portada_central'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+    </div>
+
 
     <!-- DERECHA --->
     <div class="col-xl-3">
-        <div class="card overflow-hidden position-relative p-3 d-flex align-items-center" style="min-height: 180px;">
-            <!-- Botón editar arriba a la derecha -->
-            <button type="button" class="btn btn-sm btn-primary position-absolute top-0 end-0 m-2"
-                    data-bs-toggle="modal" data-table="derecha" data-bs-target="#banner">
-                <i class="mdi mdi-pencil"></i> Banner
-            </button>
-            <!-- Botón editar arriba a la derecha -->
-            <button type="button" class="btn btn-sm btn-primary position-absolute top-0 end-15 m-2"
-                    data-bs-toggle="modal" data-table="derecha" data-bs-target="#banner">
-                <i class="mdi mdi-pencil"></i> Auto
-            </button>
-            <!-- Botón editar arriba a la derecha -->
-            <button type="button" class="btn btn-sm btn-primary position-absolute top-0 end-10 m-2"
-                    data-bs-toggle="modal" data-table="derecha" data-bs-target="#banner">
-                <i class="mdi mdi-pencil"></i> Noticia
-            </button>
-            <!-- Video de YouTube embebido -->
-            <div class="w-100 d-flex justify-content-center align-items-center" style="height:140px;">
-                <iframe width="100%" height="140"
-                    src="https://www.youtube.com/embed/<?php echo e($videoDerechaId ?? 'dQw4w9WgXcQ'); ?>"
-                    title="YouTube video" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
-            </div>
-        </div>
+        <?php echo $__env->make('portada.columna', ['items' => $derechos,'tabla' => 'portada_derecha'], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </div>
+    
 
     
 </div>
 
 
+<?php echo $__env->make('portada.modal-banner', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
-<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-<!-- Modal banner -->
-<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-    <div class="modal fade" id="banner" tabindex="-1" aria-labelledby="bannerLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="bannerLabel">Banner</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Aquí tu formulario de edición -->
-                    <form method="POST" action="<?php echo e(route('banner.guardar')); ?>" enctype="multipart/form-data">
-                        <?php echo csrf_field(); ?>
-                        <input type="hidden" id="bannerBanner" name="bannerBanner" value="">
-                        <input type="hidden" id="bannerTabla" name="bannerTabla" value="">
-                        <input type="hidden" id="bannerOrden" name="bannerOrden" value="">
-                        <div class="mb-3">
-                            <label for="bannerTitulo" class="form-label">Título</label>
-                            <input type="text" class="form-control" name="bannerTitulo" id="bannerTitulo" value="" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="bannerImagen" class="form-label">Imagen</label>
-                            <input type="file" class="form-control" name="bannerImagen" id="bannerImagen">
-                        </div>
-                        <div class="mb-3">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <label for="bannerUrl" class="form-label">Url de destino</label>
-                                    <input type="text" class="form-control" name="bannerUrl" id="bannerUrl">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="bannerDestino" class="form-label">Abrir en</label>
-                                    <select class="form-select" id="bannerDestino" name="bannerDestino">
-                                        <option value="_self">Misma ventana</option>
-                                        <option value="_blank">Nueva ventana</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="bannerCodigo" class="form-label">Código fuente <span class="text-warning">(Este código tendra preferencia sobre la imagen subida)</span></label>
-                            <textarea class="form-control" name="bannerCodigo" id="bannerCodigo" rows="4"></textarea>
-                        </div>
-                        <!-- Añade más campos según lo que quieras editar -->
-                        <button type="submit" class="btn btn-success">Guardar cambios</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<?php echo $__env->make('portada.modal-noticia', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
     <script src="<?php echo e(URL::asset('build/libs/jquery/jquery.min.js')); ?>"></script>
+    <script src="<?php echo e(URL::asset('build/libs/select2/js/select2.min.js')); ?>"></script>
+
     <!-- gecox_portada -->
     <script>
             window.csrfToken = "<?php echo e(csrf_token()); ?>";
             window.bannerDatosUrl = "<?php echo e(route('banner.datos')); ?>";
             window.bannerEliminarUrl = "<?php echo e(route('banner.eliminar')); ?>";
+            window.reordenarUrl = "<?php echo e(route('portada.reordenar')); ?>";
     </script>
-    <script src="<?php echo e(URL::asset('build/js/pages/gecox_portada.init.js')); ?>"></script>
+    <?php echo app('Illuminate\Foundation\Vite')('resources/js/pages/gecox_portada.init.js'); ?>
 
     
 <?php $__env->stopSection(); ?>

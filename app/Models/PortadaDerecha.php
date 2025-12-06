@@ -43,4 +43,9 @@ class PortadaDerecha extends Model
         'BannerCodigoFuente',
         'Orden',
     ];
+
+    //Relacion con la publicacion
+    public function publicacion(){
+        return $this->belongsTo(Publicacion::class, 'Publicacion', 'Identificador');
+    }
 }

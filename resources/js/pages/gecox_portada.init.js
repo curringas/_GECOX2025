@@ -1,6 +1,77 @@
 
+import Sortable from 'sortablejs';
+
+function ajaxGuardarOrden(tabla, orden) {
+    console.log('Guardando orden para tabla:', tabla, 'con orden:', orden);
+    $.ajax({
+        // Usaremos la URL que ya definiste globalmente
+        url: window.reordenarUrl,
+        method: 'POST',
+        data: {
+            _token: window.csrfToken,
+            tabla: tabla,
+            orden_ids: orden // Array de IDs ordenados
+        },
+        success: function (response) {
+            if (response.success) {
+                console.log('Orden guardado: ', response.Message);
+
+                // **** PASO CRÍTICO: SINCRONIZAR DATA-ORDEN EN EL FRONT-END ****
+                // Iteramos sobre los IDs recibidos en el mismo orden que fueron enviados.
+                // Como el backend los actualizará a 1, 2, 3...
+
+                orden.forEach(function (id, index) {
+                    var nuevoValorOrden = index + 1; // 0-indexed a 1-indexed (1, 2, 3...)
+
+                    // Buscamos el contenedor del banner por su data-id
+                    var $bannerContainer = $('[data-id="' + id + '"]');
+
+                    // Encontramos los botones dentro de ese contenedor y actualizamos su data-orden
+                    $bannerContainer.find('[data-orden]').attr('data-orden', nuevoValorOrden);
+                });
+
+            } else {
+                alert('Error al guardar el orden: ' + (response.message || 'Ha ocurrido un error inesperado.'));
+                // Si hay un error, lo ideal sería recargar o revertir, pero de momento con el alert basta.
+            }
+        },
+        error: function (xhr) {
+            alert('Error de conexión al reordenar.');
+        }
+    });
+}
+
 $(function() {
 
+    $('.select2').select2({ width: '100%' });
+
+    // ******************************************************************************
+    // ******** BANNER --- Hacemos ordenable cualquier lista con .lista-ordenable */
+    //******************************************************************************
+    $('.lista-ordenable').each(function(index, element) {
+        var listaContainer = element;
+        var tablaKey = $(listaContainer).data('tabla');
+        new Sortable(element, {
+            group: 'shared',
+            animation: 150,
+            onEnd: function (evt) {
+                // Si solo estás moviendo elementos DENTRO de la misma lista
+                if (evt.from === evt.to) { 
+                    
+                    // Obtener el nuevo orden de los IDs
+                    var nuevoOrden = [];
+                    $(listaContainer).children('div').each(function(i, el) {
+                        nuevoOrden.push($(el).data('id'));
+                    });
+
+                    // Llamada AJAX para guardar el nuevo orden
+                    ajaxGuardarOrden(tablaKey, nuevoOrden);
+                }
+            },
+        });
+    });
+
+    
 
     //******************************************************************************
     // ******** BANNER --- Abrimos el modal tipo banner y cargamos la infonrmacion que corresponda */
@@ -11,12 +82,14 @@ $(function() {
         var bannerKey = $(this).data('banner');
         var tablaKey = $(this).data('tabla');
         var ordenKey = $(this).data('orden');
+        var idKey = $(this).data('id');
 
         if (ordenKey === 'nuevo') {
             // Si es un nuevo banner, limpiamos los campos y abrimos el modal directamente
             var modal = $('#banner');
             modal.find('#bannerTabla').val(tablaKey);
             modal.find('#bannerBanner').val(bannerKey);
+            modal.find('#bannerIdentificador').val('nuevo');
             modal.find('#bannerOrden').val('nuevo');
             modal.find('#bannerTitulo').val('');
             modal.find('#bannerUrl').val('');
@@ -34,12 +107,14 @@ $(function() {
                 _token: window.csrfToken,
                 banner: bannerKey,
                 tabla: tablaKey,
-                orden: ordenKey
+                orden: ordenKey,
+                id: idKey
             },
             success: function(data) {
                 var modal = $('#banner');
                 modal.find('#bannerTabla').val(tablaKey);
                 modal.find('#bannerBanner').val(bannerKey);
+                modal.find('#bannerIdentificador').val(idKey);
                 modal.find('#bannerOrden').val(ordenKey);
                 modal.find('#bannerTitulo').val(data.titulo || '');
                 modal.find('#bannerUrl').val(data.url || '');
@@ -114,6 +189,7 @@ $(function() {
         var bannerKey = $(this).data('banner-eliminar');
         var tablaKey = $(this).data('tabla');
         var ordenKey = $(this).data('orden');
+        var idKey = $(this).data('id');
 
         if (confirm('¿Estás seguro de que deseas eliminar este banner?')) {
             $.ajax({
@@ -123,7 +199,8 @@ $(function() {
                     _token: window.csrfToken,
                     banner: bannerKey,
                     tabla: tablaKey,
-                    orden: ordenKey
+                    orden: ordenKey,
+                    id: idKey
                 },
                 success: function(response) {
                     if (response.success) {

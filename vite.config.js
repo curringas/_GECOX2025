@@ -31,6 +31,7 @@ export default vite.defineConfig({
                     'resources/scss/bootstrap.scss',
                     'resources/scss/icons.scss',
                     'resources/scss/app.scss',
+                    'resources/js/pages/gecox_portada.init.js',
                 ],
                 refresh: true,                
             }
