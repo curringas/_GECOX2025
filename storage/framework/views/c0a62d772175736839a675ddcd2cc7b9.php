@@ -47,7 +47,7 @@
 
                             <button type="button" 
                                     data-tabla="portada_slider" 
-                                    data-banner-eliminar="Banner" 
+                                    data-eliminar="Banner" 
                                     data-id="<?php echo e($slider->Identificador); ?>" 
                                     data-orden="<?php echo e($slider->Orden); ?>" 
                                     class="btn btn-sm btn-danger">
@@ -93,7 +93,7 @@
 
                 <button type="button" 
                         data-tabla="portada" 
-                        data-banner-eliminar="banner_cabecera" 
+                        data-eliminar="banner_cabecera" 
                         class="btn btn-sm btn-danger">
                          <i class="mdi mdi-delete"></i>
                 </button>
@@ -169,11 +169,13 @@
     <!-- gecox_portada -->
     <script>
             window.csrfToken = "<?php echo e(csrf_token()); ?>";
+            window.noticiaDatosUrl = "<?php echo e(route('noticia.datos')); ?>";
             window.bannerDatosUrl = "<?php echo e(route('banner.datos')); ?>";
-            window.bannerEliminarUrl = "<?php echo e(route('banner.eliminar')); ?>";
+            window.eliminarUrl = "<?php echo e(route('portada.eliminar')); ?>";
             window.reordenarUrl = "<?php echo e(route('portada.reordenar')); ?>";
+            window.publicacionBuscarUrl = "<?php echo e(route('publicacion.buscar')); ?>";
     </script>
-    <?php echo app('Illuminate\Foundation\Vite')('resources/js/pages/gecox_portada.init.js'); ?>
+    <?php echo app('Illuminate\Foundation\Vite')('resources/gecox/js/gecox_portada.init.js'); ?>
 
     
 <?php $__env->stopSection(); ?>

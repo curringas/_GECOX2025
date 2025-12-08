@@ -5,18 +5,27 @@
         
         <button type="button" 
                 data-tabla=<?php echo e($tabla); ?> 
-                data-banner="Banner"  
+                <?php if($clase->Publicacion): ?>
+                    data-noticia="1" 
+                <?php else: ?>
+                    data-banner="Banner" 
+                <?php endif; ?>  
                 data-id="<?php echo e($clase->Identificador); ?>" 
                 data-orden="<?php echo e($clase->Orden); ?>" 
                 class="btn btn-sm btn-primary"
                 data-bs-toggle="modal" 
-                data-bs-target="#banner">
+                data-bs-target="<?php echo e($clase->Publicacion ? '#noticia' : '#banner'); ?>">
             <i class="mdi mdi-pencil"></i> Editar
         </button>
 
         <button type="button" 
                 data-tabla=<?php echo e($tabla); ?> 
-                data-banner-eliminar="Banner" 
+
+                <?php if($clase->Publicacion): ?>
+                    data-eliminar="Noticia" 
+                <?php else: ?>
+                    data-eliminar="Banner" 
+                <?php endif; ?>  
                 data-id="<?php echo e($clase->Identificador); ?>" 
                 data-orden="<?php echo e($clase->Orden); ?>" 
                 class="btn btn-sm btn-danger">
@@ -26,12 +35,8 @@
     <?php if($clase->Publicacion): ?>
         
         <?php if($tabla == 'portada_izquierda' && $clase->Orden == 1): ?>
-            <div class="card overflow-hidden position-relative" style="background: url('<?php echo e(URL::asset('images/1641266162.jpg')); ?>') center center / cover no-repeat; min-height: 280px;">
-                <!-- Botón editar arriba a la derecha -->
-                <button type="button" class="btn btn-sm btn-primary position-absolute top-0 end-0 m-2"
-                        data-bs-toggle="modal" data-bs-target="#modalEditarFondoIzquierda">
-                    <i class="mdi mdi-pencil"></i> Editar
-                </button>
+            <div class="overflow-hidden" style="background: url('<?php echo e(URL::asset('images/1641266162.jpg')); ?>') center center / cover no-repeat; min-height: 280px;">
+              
                 <div class="d-flex flex-column justify-content-end h-100 w-100" style="background: rgba(255,255,255,0.0);">
                     <div class="p-3 text-primary" style="background: rgba(255,255,255,0.7); border-radius: 0 0 12px 12px;">
                         <h5 class="text-primary mb-1">Welcome Back !</h5>

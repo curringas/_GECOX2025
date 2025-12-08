@@ -15,16 +15,6 @@
                         <span key="t-dashboards">@lang('translation.Dashboards')</span>
                     </a>
                 </li>
-
-                <li>
-                    <a href="https://themesbrand.com/skote/layouts/index.html" target="_blank" class="waves-effect">
-                    <span class="badge rounded-pill bg-danger float-end" key="t-hot">@lang('translation.hot')</span>
-                        <i class="bx bx-layout"></i>
-                        <span key="t-layouts">@lang('translation.Layouts')</span>
-                    </a>                    
-                </li>
-
-
                 <li>
                     <a href="/publicaciones" class="waves-effect">
                         <i class="bx bx-file"></i>
@@ -72,26 +62,6 @@
                         <span key="t-authentication">@lang('translation.Permisos')</span>
                     </a>
                     
-                </li>
-
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow waves-effect">
-                        <i class="bx bx-share-alt"></i>
-                        <span key="t-multi-level">@lang('translation.Multi_Level')</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="true">
-                        <li><a href="javascript: void(0);" key="t-level-1-1">@lang('translation.Level_1.1')</a></li>
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow"
-                                key="t-level-1-2">@lang('translation.Level_1.2')</a>
-                            <ul class="sub-menu" aria-expanded="true">
-                                <li><a href="javascript: void(0);" key="t-level-2-1">@lang('translation.Level_2.1')</a>
-                                </li>
-                                <li><a href="javascript: void(0);" key="t-level-2-2">@lang('translation.Level_2.2')</a>
-                                </li>
-                            </ul>
-                        </li>
-                    </ul>
                 </li>
                 @endrole
 

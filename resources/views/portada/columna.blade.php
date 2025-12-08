@@ -2,21 +2,21 @@
             <div class="card-header position-relative">
                 <h4 class="card-title">&nbsp;</h4>
                 <div class="position-absolute top-0 end-0 m-2 d-flex gap-1">
-                <!-- Noticia automática -->
+                <!-- Noticia automática 
                 <button type="button"
                         data-tabla="{{ $tabla }}"
-                        data-banner="Banner"  
+                        data-auto="1"  
                         data-orden="nuevo"
                         data-id="nuevo"
                         class="btn btn-sm btn-primary"
                         data-bs-toggle="modal" 
                         data-bs-target="#auto">
                     <i class="mdi mdi-plus"></i> Auto
-                </button>
+                </button>-->
                 <!-- Noticia -->
                 <button type="button" 
                         data-tabla="{{ $tabla }}"
-                        data-banner="Banner"  
+                        data-noticia="1"  
                         data-orden="nuevo"
                         data-id="nuevo"
                         class="btn btn-sm btn-primary"

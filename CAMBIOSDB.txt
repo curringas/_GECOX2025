@@ -49,4 +49,7 @@ UPDATE `P0114_portada_izquierda` SET Publicacion=NULL WHERE Publicacion=0;
 UPDATE `P0114_portada_izquierda` SET Imagen=NULL WHERE Imagen=0;
 UPDATE `P0114_portada_izquierda` SET Automatico=NULL WHERE Automatico=0;
 
+ALTER TABLE `P0114_portada_slider` CHANGE `Orden` `Orden` INT(11) NULL;
+
+
 ## Crear relaciones con Publicacion y Publicacion->Identificador

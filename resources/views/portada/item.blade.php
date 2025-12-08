@@ -5,18 +5,27 @@
         
         <button type="button" 
                 data-tabla={{ $tabla }} 
-                data-banner="Banner"  
+                @if ($clase->Publicacion)
+                    data-noticia="1" {{-- Solo para en onclick que abre el modal de noticia --}}
+                @else
+                    data-banner="Banner" {{-- Nos sirve de prefijo para los campos de la tabla que sirven para el banner --}}
+                @endif  
                 data-id="{{ $clase->Identificador }}" 
                 data-orden="{{ $clase->Orden }}" 
                 class="btn btn-sm btn-primary"
                 data-bs-toggle="modal" 
-                data-bs-target="#banner">
+                data-bs-target="{{ $clase->Publicacion ? '#noticia' : '#banner' }}">
             <i class="mdi mdi-pencil"></i> Editar
         </button>
 
         <button type="button" 
                 data-tabla={{ $tabla }} 
-                data-banner-eliminar="Banner" 
+
+                @if ($clase->Publicacion)
+                    data-eliminar="Noticia" {{-- Solo para en onclick que abre el modal de noticia --}}
+                @else
+                    data-eliminar="Banner" {{-- Nos sirve de prefijo para los campos de la tabla que sirven para el banner --}}
+                @endif  
                 data-id="{{ $clase->Identificador }}" 
                 data-orden="{{ $clase->Orden }}" 
                 class="btn btn-sm btn-danger">
@@ -26,12 +35,8 @@
     @if ($clase->Publicacion)
         {{-- Si es la columna izquierda y el primer elemento se muestra diferente --}}
         @if ($tabla == 'portada_izquierda' && $clase->Orden == 1)
-            <div class="card overflow-hidden position-relative" style="background: url('{{ URL::asset('images/1641266162.jpg') }}') center center / cover no-repeat; min-height: 280px;">
-                <!-- Botón editar arriba a la derecha -->
-                <button type="button" class="btn btn-sm btn-primary position-absolute top-0 end-0 m-2"
-                        data-bs-toggle="modal" data-bs-target="#modalEditarFondoIzquierda">
-                    <i class="mdi mdi-pencil"></i> Editar
-                </button>
+            <div class="overflow-hidden" style="background: url('{{ URL::asset('images/1641266162.jpg') }}') center center / cover no-repeat; min-height: 280px;">
+              
                 <div class="d-flex flex-column justify-content-end h-100 w-100" style="background: rgba(255,255,255,0.0);">
                     <div class="p-3 text-primary" style="background: rgba(255,255,255,0.7); border-radius: 0 0 12px 12px;">
                         <h5 class="text-primary mb-1">Welcome Back !</h5>

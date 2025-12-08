@@ -13,9 +13,9 @@
                     <!-- Aquí tu formulario de edición -->
                     <form method="POST" action="<?php echo e(route('noticia.guardar')); ?>" enctype="multipart/form-data">
                         <?php echo csrf_field(); ?>
-                        <input type="hidden" id="portadaTabla" name="portadaTabla" value="">
-                        <input type="hidden" id="portadaOrden" name="portadaOrden" value="">
-                        <input type="hidden" id="portadaIdentificador" name="portadaIdentificador" value="">
+                        <input type="hidden" id="noticiaTabla" name="noticiaTabla" value="">
+                        <input type="hidden" id="noticiaOrden" name="noticiaOrden" value="">
+                        <input type="hidden" id="noticiaIdentificador" name="noticiaIdentificador" value="">
                         <div class="mb-3">
                             <label for="noticiaPublicacion" class="form-label">Selecciona un publicacion</label>
                             <select class="form-select select2" id="noticiaPublicacion" name="noticiaPublicacion" required>

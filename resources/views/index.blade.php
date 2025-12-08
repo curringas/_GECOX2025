@@ -49,7 +49,7 @@
 
                             <button type="button" 
                                     data-tabla="portada_slider" 
-                                    data-banner-eliminar="Banner" 
+                                    data-eliminar="Banner" 
                                     data-id="{{ $slider->Identificador }}" 
                                     data-orden="{{ $slider->Orden }}" 
                                     class="btn btn-sm btn-danger">
@@ -94,7 +94,7 @@
 
                 <button type="button" 
                         data-tabla="portada" 
-                        data-banner-eliminar="banner_cabecera" 
+                        data-eliminar="banner_cabecera" 
                         class="btn btn-sm btn-danger">
                          <i class="mdi mdi-delete"></i>
                 </button>
@@ -169,11 +169,13 @@
     <!-- gecox_portada -->
     <script>
             window.csrfToken = "{{ csrf_token() }}";
+            window.noticiaDatosUrl = "{{ route('noticia.datos') }}";
             window.bannerDatosUrl = "{{ route('banner.datos') }}";
-            window.bannerEliminarUrl = "{{ route('banner.eliminar') }}";
+            window.eliminarUrl = "{{ route('portada.eliminar') }}";
             window.reordenarUrl = "{{ route('portada.reordenar') }}";
+            window.publicacionBuscarUrl = "{{ route('publicacion.buscar') }}";
     </script>
-    @vite('resources/js/pages/gecox_portada.init.js')
+    @vite('resources/gecox/js/gecox_portada.init.js')
 
     
 @endsection

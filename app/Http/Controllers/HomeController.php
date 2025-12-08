@@ -13,6 +13,7 @@ use App\Models\PortadaIzquierda;
 use App\Models\PortadaCentral;
 use App\Models\PortadaDerecha;
 use App\Models\PortadaSlider;
+use App\Models\Publicacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -51,8 +52,91 @@ class HomeController extends Controller
         return view('index', compact('portada','sliders','derechos','centrales','izquierdos'));
     }
 
+    static function obtenterPortada($tabla)
+    {
+        $modelClass = null;
+        switch ($tabla){
+            case 'portada_slider':
+                    $modelClass = PortadaSlider::class ;
+                break;
+            case 'portada_derecha':
+                    $modelClass = PortadaDerecha::class ;
+                break;
+            case 'portada_central':
+                    $modelClass = PortadaCentral::class ;
+                break;
+            case 'portada_izquierda':
+                    $modelClass = PortadaIzquierda::class ;
+                break;
+            case 'portada':
+                    $modelClass = Portada::class ;
+                break;
+        }
+        return $modelClass;
+    }
 
-    public function ajaxDatosBanners(Request $request)
+    public function ajaxBuscarPublicaciones(Request $request)
+    {
+        // Obtener el término de búsqueda de Select2
+        $searchTerm = $request->get('term'); 
+
+        $publicaciones = Publicacion::select('Identificador', 'Titulo')
+            // Buscar por Título (o el campo que desees)
+            ->where('Titulo', 'LIKE', '%' . $searchTerm . '%') 
+            ->limit(10) // Limitar resultados para rendimiento
+            ->get();
+
+        $resultados = $publicaciones->map(function ($publicacion) {
+            return [
+                'id' => $publicacion->Identificador,
+                'text' => $publicacion->Titulo,
+            ];
+        });
+
+        // Select2 espera los resultados bajo la clave 'results'
+        return response()->json(['results' => $resultados]);
+    }
+
+    public function ajaxDatosNoticia(Request $request)
+    {
+
+        if (!$request->has('tabla') || !$request->has('id')) {
+            return response()->json(['success' => false, 'message' => 'Parámetros insuficientes.']);
+        }
+
+        //obtenemos el modelo izquieda centro o derecha
+        $modelo = $this->obtenterPortada($request->tabla);
+        $portada=$modelo::find($request->id);
+
+        return response()->json([
+            'publicacion' => $portada->Publicacion ?? null,
+            'titulo' => $portada->publicacion->Titulo
+        ]);
+    }
+
+    public function ajaxGuardarNoticia(Request $request)
+    {
+
+        if (!$request->has('noticiaTabla') || !$request->has('noticiaPublicacion')) {
+            return response()->json(['success' => false, 'message' => 'Parámetros insuficientes.']);
+        }
+
+        //obtenemos el modelo izquieda centro o derecha
+        $modelo = $this->obtenterPortada($request->noticiaTabla);
+        if ($request->has('noticiaIdentificador') && $request->noticiaIdentificador!="nuevo"){
+            $portada=$modelo::find($request->noticiaIdentificador);
+        }else{
+            $portada=new $modelo;
+        }
+        //dd($request->noticiaPublicacion);
+        $portada->Publicacion=$request->noticiaPublicacion;
+        $portada->save();
+        return response()->json(['success' => true, 'message' => 'Banner actualizado successfully.']);
+        
+    }
+    
+
+    public function ajaxDatosBanner(Request $request)
     {
 
         if (!$request->has('tabla') || !$request->has('banner')) {
@@ -65,38 +149,13 @@ class HomeController extends Controller
         $campo_url = $request->banner.'Url';
         $campo_destino = $request->banner.'Destino';
         $campo_codigo = $request->banner.'CodigoFuente';
+
         // Lógica para manejar diferentes tablas si es necesario
-        switch ($request->tabla){
-            case 'portada_slider':
-                if ($request->has('orden')) {
-                    $portada = PortadaSlider::find($request->id);
-                } else {
-                    $portada = PortadaSlider::first();
-                }
-                break;
-            case 'portada_derecha':
-                if ($request->has('orden')) {
-                    $portada = PortadaDerecha::find($request->id);
-                } else {
-                    $portada = PortadaDerecha::first();
-                }
-                break;
-            case 'portada_central':
-                if ($request->has('orden')) {
-                    $portada = PortadaCentral::find($request->id);
-                } else {
-                    $portada = PortadaCentral::first();
-                }
-                break;
-            case 'portada_izquierda':
-                if ($request->has('orden')) {
-                    $portada = PortadaIzquierda::find($request->id);
-                } else {
-                    $portada = PortadaIzquierda::first();
-                }
-                break;
-            default:
-                $portada = Portada::first();
+        $modelo = $this->obtenterPortada($request->tabla);
+        if ($request->has('orden')) {
+            $portada=$modelo::find($request->id);
+        } else {
+            $portada=$modelo::first();
         }
 
         return response()->json([
@@ -107,7 +166,6 @@ class HomeController extends Controller
             'codigo' => $portada->$campo_codigo ?? '',
             'orden' => $request->orden ?? '',
         ]);
-        return response()->json([]);
     }
 
     public function ajaxGuardarBanner(Request $request)
@@ -124,47 +182,11 @@ class HomeController extends Controller
         $campo_codigo = $request->bannerBanner.'CodigoFuente';
         $campo_orden = "Orden";
 
-        switch ($request->bannerTabla){
-            case 'portada_slider':
-                if ($request->has('bannerIdentificador') && $request->bannerIdentificador == 'nuevo') {
-                    $portada = new PortadaSlider();
-                    $maxOrden = PortadaSlider::max('Orden');
-                    $portada->$campo_orden = $maxOrden ? $maxOrden + 1 : 1;
-                } else {
-                    $portada = PortadaSlider::find($request->bannerIdentificador);
-                }
-                break;
-            case 'portada_derecha':
-
-                if ($request->has('bannerIdentificador') && $request->bannerIdentificador == 'nuevo') {
-                    $portada = new PortadaDerecha();
-                    $maxOrden = PortadaDerecha::max('Orden');
-                    $portada->$campo_orden = $maxOrden ? $maxOrden + 1 : 1;
-                } else {
-                    $portada = PortadaDerecha::find($request->bannerIdentificador);
-                }
-                break;
-            case 'portada_central':
-                if ($request->has('bannerIdentificador') && $request->bannerIdentificador == 'nuevo') {
-                    $portada = new PortadaCentral();
-                    $maxOrden = PortadaCentral::max('Orden');
-                    $portada->$campo_orden = $maxOrden ? $maxOrden + 1 : 1;
-                } else {
-                    $portada = PortadaCentral::find($request->bannerIdentificador);
-                }
-                break;
-            case 'portada_izquierda':
-                if ($request->has('bannerIdentificador') && $request->bannerIdentificador == 'nuevo') {
-                    $portada = new PortadaIzquierda();
-                    $maxOrden = PortadaIzquierda::max('Orden');
-                    $portada->$campo_orden = $maxOrden ? $maxOrden + 1 : 1;
-                } else {
-                    $portada = PortadaIzquierda::find($request->bannerIdentificador);
-                }
-                $portada = PortadaIzquierda::first();
-                break;
-            default:
-                $portada = Portada::first();
+        $modelo = $this->obtenterPortada($request->bannerTabla);
+        if ($request->has('bannerIdentificador') && $request->bannerIdentificador!="nuevo"){
+            $portada = $modelo::find($request->bannerIdentificador);
+        }else{
+            $portada=new $modelo;
         }
 
         //Guardo la imagen si la hay
@@ -195,71 +217,59 @@ class HomeController extends Controller
         return response()->json(['success' => true, 'message' => 'Banner actualizado successfully.']);
     }
 
-    public function ajaxEliminarBanner(Request $request)
+    //Eliminamos cualquier item de portada
+    public function ajaxEliminar(Request $request)
     {
-        if (!$request->has('tabla') || !$request->has('banner')) {
+        if (!$request->has('tabla') || !$request->has('eliminar')) {
             return response()->json(['success' => false, 'message' => 'Parámetros insuficientes.']);
         }
 
-        $campo_titulo = $request->banner.'Titulo';
-        $campo_imagen = $request->banner.'Imagen';
-        $campo_url = $request->banner.'Url';
-        $campo_destino = $request->banner.'Destino';
-        $campo_codigo = $request->banner.'CodigoFuente';
-        $campo_orden = "Orden";
-
-        switch ($request->tabla){
-            case 'portada_slider':
-                if ($request->has('orden')) {
-                    $portada = PortadaSlider::where('Orden', $request->orden)->first();
-                } else {
-                    $portada = PortadaSlider::first();
-                }
-                break;
-            case 'portada_derecha':
-                if ($request->has('orden')) {
-                    $portada = PortadaDerecha::where('Orden', $request->orden)->first();
-                } else {
-                    $portada = PortadaDerecha::first();
-                }
-                break;
-            case 'portada_central':
-                if ($request->has('orden')) {
-                    $portada = PortadaCentral::where('Orden', $request->orden)->first();
-                } else {
-                    $portada = PortadaCentral::first();
-                }
-                break;
-            case 'portada_izquierda':
-                if ($request->has('orden')) {
-                    $portada = PortadaIzquierda::where('Orden', $request->orden)->first();
-                } else {
-                    $portada = PortadaIzquierda::first();
-                }
-                break;
-            default:
-                $portada = Portada::first();
+        $modelo = $this->obtenterPortada($request->tabla);
+        if ($request->has('id')){
+            $portada = $modelo::find($request->id);
+        }else{
+            $portada=new $modelo;
         }
 
-        // Eliminar imagen del disco si existe
-        if ($portada->$campo_imagen) {
-            Storage::disk('public')->delete('banners/' . $portada->$campo_imagen);
-        }
+        if ($request->eliminar=="Noticia"){
+            if ($request->has('id')){
+                //Sera uno de las tablas acumulativas de items (izda, central, slider o derecha)
+                $portada->delete();
+            }else{
+                //Sera de la tabla principal y solo hay que poner a null, no se elimina el registro que siempre hay uno
+                $portada->Principal=null;
+                $portada->save();
+            }
+            return response()->json(['success' => true, 'message' => 'Noticia eliminada successfully.']);
 
-        if ($request->has('orden')) {
-            // Si es una tabla con orden, eliminamos el registro completo
-            $portada->delete();
-            return response()->json(['success' => true, 'message' => 'Banner eliminado successfully.']);
-        } else {
-            //Si es la tabla portada principal solo ponemos a null los campos
-            // Limpiar los campos en la base de datos
-            $portada->$campo_titulo = null;
-            $portada->$campo_imagen = null;
-            $portada->$campo_url = null;
-            $portada->$campo_destino = null;
-            $portada->$campo_codigo = null;
-            $portada->save();
+        }else{
 
+            $campo_titulo = $request->banner.'Titulo';
+            $campo_imagen = $request->banner.'Imagen';
+            $campo_url = $request->banner.'Url';
+            $campo_destino = $request->banner.'Destino';
+            $campo_codigo = $request->banner.'CodigoFuente';
+            $campo_orden = "Orden";
+
+
+            // Eliminar imagen del disco si existe
+            if ($portada->$campo_imagen) {
+                Storage::disk('public')->delete('banners/' . $portada->$campo_imagen);
+            }
+
+           if ($request->has('id')){
+                // Si es una tabla con orden, eliminamos el registro completo
+                $portada->delete();
+            } else {
+                //Si es la tabla portada principal solo ponemos a null los campos
+                $portada->$campo_titulo = null;
+                $portada->$campo_imagen = null;
+                $portada->$campo_url = null;
+                $portada->$campo_destino = null;
+                $portada->$campo_codigo = null;
+                $portada->save();
+
+            }
             return response()->json(['success' => true, 'message' => 'Banner eliminado successfully.']);
         }
     }

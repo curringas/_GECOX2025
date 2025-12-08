@@ -30,13 +30,15 @@ Route::middleware(['auth','active'])->group(function () {
 
     // Home
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::post('banner/datos', [App\Http\Controllers\HomeController::class, 'ajaxDatosBanners'])->name('banner.datos');
+    Route::post('banner/datos', [App\Http\Controllers\HomeController::class, 'ajaxDatosBanner'])->name('banner.datos');
     Route::post('banner/guardar', [App\Http\Controllers\HomeController::class, 'ajaxGuardarBanner'])->name('banner.guardar');
-    Route::post('banner/eliminar', [App\Http\Controllers\HomeController::class, 'ajaxEliminarBanner'])->name('banner.eliminar');
-    Route::post('noticia/datos', [App\Http\Controllers\HomeController::class, 'ajaxDatosBanners'])->name('noticia.datos');
-    Route::post('noticia/guardar', [App\Http\Controllers\HomeController::class, 'ajaxGuardarBanner'])->name('noticia.guardar');
-    Route::post('noticia/eliminar', [App\Http\Controllers\HomeController::class, 'ajaxEliminarBanner'])->name('noticia.eliminar');
-    Route::post('reordenar', [App\Http\Controllers\HomeController::class, 'ajaxReordenar'])->name('portada.reordenar');
+    Route::post('noticia/datos', [App\Http\Controllers\HomeController::class, 'ajaxDatosNoticia'])->name('noticia.datos');
+    Route::post('noticia/guardar', [App\Http\Controllers\HomeController::class, 'ajaxGuardarNoticia'])->name('noticia.guardar');
+    Route::post('noticia/eliminar', [App\Http\Controllers\HomeController::class, 'ajaxEliminarNoticia'])->name('noticia.eliminar');
+    Route::post('reordenar', [App\Http\Controllers\HomeController::class, 'ajaxReordenar'])->name('portada.reordenar');    
+    Route::post('eliminar', [App\Http\Controllers\HomeController::class, 'ajaxEliminar'])->name('portada.eliminar');
+    Route::get('publicacion/buscar', [App\Http\Controllers\HomeController::class, 'ajaxBuscarPublicaciones'])->name('publicacion.buscar');
+
     // Del sistema
     // Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
    
