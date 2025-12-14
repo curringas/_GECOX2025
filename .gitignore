@@ -1,1 +1,29 @@
-node_modules
+/node_modules
+/vendor
+/public/hot
+/public/storage
+/public/build
+/storage/*.key
+/vendor
+
+# Archivos de la Aplicación
+.env
+.env.testing
+
+# Archivos de caché y sesión
+/bootstrap/cache/*.php
+
+# Logs
+/storage/logs/*.log
+
+# Archivos específicos de entornos de desarrollo (IDE, S.O.)
+.vscode/
+.idea/
+.DS_Store
+
+# Archivos de Docker/Vagrant (si los usas)
+Homestead.json
+Vagrantfile
+
+# Archivos generados por Vite (si usas otros entry points que no son public/build)
+# Si usas la configuración por defecto de Laravel/Vite, /public/build ya cubre esto.
