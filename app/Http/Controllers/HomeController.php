@@ -177,6 +177,7 @@ class HomeController extends Controller
 
         $campo_titulo = $request->bannerBanner.'Titulo';
         $campo_imagen = $request->bannerBanner.'Imagen';
+        $campo_imagenMovil = $request->bannerBanner.'ImagenMovil';
         $campo_url = $request->bannerBanner.'Url';
         $campo_destino = $request->bannerBanner.'Destino';
         $campo_codigo = $request->bannerBanner.'CodigoFuente';
@@ -206,6 +207,25 @@ class HomeController extends Controller
                 Storage::disk('public')->putFileAs('banners', $imageFile, $imageName);
                 $request->bannerImagen = 'banners/' . $imageName;
                 $portada->$campo_imagen = $request->bannerImagen;
+            }
+        } 
+        //Imagen para movil
+        $imageFileMovil = $request->file('bannerImagenMovil');
+        $removeImage = $request->input('removeBanner') === '1';
+        if ($imageFileMovil || $removeImage) {
+            // Primero eliminamos la imagen que hubiera
+            if ($portada->$campo_imagenMovil) {
+                Storage::disk('public')->delete('banners/' . $portada->$campo_imagenMovil);
+
+                $portada->$campo_imagenMovil=null; 
+            }
+
+            if ($imageFileMovil){
+                // Luego guardamos la nueva imagen
+                $imageName = $campo_imagenMovil . '_' . time() . '.' . $imageFileMovil->getClientOriginalExtension();
+                Storage::disk('public')->putFileAs('banners', $imageFileMovil, $imageName);
+                $request->bannerImagenMovil = 'banners/' . $imageName;
+                $portada->$campo_imagenMovil = $request->bannerImagenMovil;
             }
         } 
         $portada->$campo_titulo = $request->bannerTitulo;
@@ -244,17 +264,21 @@ class HomeController extends Controller
 
         }else{
 
-            $campo_titulo = $request->banner.'Titulo';
-            $campo_imagen = $request->banner.'Imagen';
-            $campo_url = $request->banner.'Url';
-            $campo_destino = $request->banner.'Destino';
-            $campo_codigo = $request->banner.'CodigoFuente';
+            $campo_titulo = $request->eliminar.'Titulo';
+            $campo_imagen = $request->eliminar.'Imagen';
+            $campo_imagenMovil = $request->eliminar.'ImagenMovil';
+            $campo_url = $request->eliminar.'Url';
+            $campo_destino = $request->eliminar.'Destino';
+            $campo_codigo = $request->eliminar.'CodigoFuente';
             $campo_orden = "Orden";
 
-
+            //dd($campo_imagen,$portada->$campo_imagen,$portada);
             // Eliminar imagen del disco si existe
             if ($portada->$campo_imagen) {
-                Storage::disk('public')->delete('banners/' . $portada->$campo_imagen);
+                Storage::disk('public')->delete($portada->$campo_imagen);
+            }
+            if ($portada->$campo_imagenMovil) {
+                Storage::disk('public')->delete($portada->$campo_imagenMovil);
             }
 
            if ($request->has('id')){
@@ -264,6 +288,7 @@ class HomeController extends Controller
                 //Si es la tabla portada principal solo ponemos a null los campos
                 $portada->$campo_titulo = null;
                 $portada->$campo_imagen = null;
+                $portada->$campo_imagenMovil = null;
                 $portada->$campo_url = null;
                 $portada->$campo_destino = null;
                 $portada->$campo_codigo = null;

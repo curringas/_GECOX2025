@@ -68,9 +68,10 @@ class BannerController extends Controller
                 })
                 ->addColumn('Banner', function ($row) {
                     if (!empty($row->Banner) && !empty($row->Identificador)) {
-                        return '<img src="'.asset('storage/banners/'.$row->Banner).'" style="max-height:40px" />';
+                        $url = route('banner.edit', $row->Identificador);
+                        return '<a href="' . $url . '"><img src="'.asset('storage/banners/'.$row->Banner).'" style="max-height:60px" /></a>';
                     }
-                    return '';
+                    return 'CODIGO';
                 })
                 ->editColumn('Tipo', function ($row) {
                     $tipos = config('gecox_banners.tipos', []);
@@ -82,7 +83,7 @@ class BannerController extends Controller
                 })
                 ->addColumn('Titulo', function ($row) {
                     $url = route('banner.edit', $row->Identificador);
-                    return '<a href="' . $url . '">' . e($row->Titulo) . '</a>';
+                    return '<strong><a href="' . $url . '">' . e($row->Titulo) . '</a></strong>';
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<form action="' .
@@ -181,6 +182,7 @@ class BannerController extends Controller
         
         $imageFile = $request->file('Banner');
         $removeImage = $request->input('remove_banner') === '1';
+        $imageFileMovil = $request->file('BannerMovil');
         
         // Obtener los IDs de las páginas (categorías) directamente del request sin validación
         // Asumimos que el input del formulario se llama 'categorias[]' o similar
@@ -191,6 +193,9 @@ class BannerController extends Controller
         // Quitar el objeto UploadedFile de $data antes de pasarlo a create/update
         if (array_key_exists('Banner', $data)) {
             unset($data['Banner']);
+        }
+        if (array_key_exists('BannerMovil', $data)) {
+            unset($data['BannerMovil']);
         }
 
         $banner = null;
@@ -208,10 +213,10 @@ class BannerController extends Controller
         }
 
         // 3. GESTIÓN DE LA IMAGEN EN EL DISCO Y LA DB
-        if ($imageFile || $removeImage) {
+        if ($imageFile || $imageFileMovil || $removeImage) {
             
             // A. Eliminar imagen antigua 
-            if ($banner->Banner) {
+            if (($imageFile || $removeImage) && $banner->Banner) {
                 Storage::disk('public')->delete('banners/' . $banner->Banner);
                 $banner->Banner = null; 
             }
@@ -224,10 +229,33 @@ class BannerController extends Controller
                 $imageFile->storeAs('banners', $filename, 'public');
                 $banner->Banner = $filename;
             }
+
+            //IMAGEN PARA MOVIL
+            if ($imageFileMovil || $removeImage) {
+            
+                // A. Eliminar imagen antigua 
+                if ($banner->BannerMovil) {
+                    Storage::disk('public')->delete('banners/' . $banner->Banner);
+                    $banner->BannerMovil = null; 
+                }
+
+                // B. Subir nueva imagen (si existe)
+                if ($imageFileMovil) {
+                    $extension = $imageFileMovil->getClientOriginalExtension();
+                    $filename = "banner_movil{$banner->Identificador}.{$extension}";
+                    
+                    $imageFileMovil->storeAs('banners', $filename, 'public');
+                    $banner->BannerMovil = $filename;
+                }
+                
+                // C. Guardar el modelo para persistir el nuevo/null nombre del archivo Banner
+                $banner->save(); 
+            }
             
             // C. Guardar el modelo para persistir el nuevo/null nombre del archivo Banner
             $banner->save(); 
         }
+
 
         // 4. SINCRONIZACIÓN DE RELACIONES CON POSICIÓN FIJA POR TIPO
         

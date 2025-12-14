@@ -57,6 +57,11 @@ class Portada extends Model
         'banner_pieUrl',
         'banner_pieDestino',
         'banner_pieCodigoFuente',
+        'banner_cabeceraImagenMovil',
+        'banner_pieImagenMovil',
+        'banner_izquierdaImagenMovil',
+        'banner_derechaImagenMovil',
+        'Intersticial_imagenMovil'
     ];
 
     // Opcionalmente, si prefieres no listar todos los campos, puedes usar $guarded

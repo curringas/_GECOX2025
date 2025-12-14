@@ -12,10 +12,16 @@
             </div>
 
             <div class="mb-3">
-                <label class="form-label">Nombre / fichero (Banner)</label>
+                <label class="form-label">Imagen (Banner)</label>
                 <input type="file" name="Banner" class="form-control mt-2" />
                 <input type="hidden" name="old_Banner" value="<?php echo e($banner->Banner ?? ''); ?>" />
                 <input type="hidden" name="remove_banner" id="remove_banner" value="0" />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">ImagenMovil (Banner para versión móvil)</label>
+                <input type="file" name="BannerMovil" class="form-control mt-2" />
+                <input type="hidden" name="old_BannerMovil" value="<?php echo e($banner->BannerMovil ?? ''); ?>" />
             </div>
 
             <div class="mb-3">
@@ -140,7 +146,9 @@ document.addEventListener('DOMContentLoaded', function(){
     btn.addEventListener('click', function(){
         if (!confirm('¿Eliminar la imagen actual?')) return;
         const oldInput = document.querySelector('input[name="old_Banner"]');
+        const oldInputMovil = document.querySelector('input[name="old_BannerMovil"]');
         if (oldInput) oldInput.value = '';
+        if (oldInputMovil) oldInputMovil.value = '';
         const removeInput = document.getElementById('remove_banner');
         if (removeInput) removeInput.value = '1';
         const preview = document.getElementById('current-banner-preview');

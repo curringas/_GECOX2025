@@ -42,6 +42,7 @@ class PortadaIzquierda extends Model
         'BannerDestino',
         'BannerCodigoFuente',
         'Orden',
+        'BannerImagenMovil',
     ];
 
     //Relacion con la publicacion

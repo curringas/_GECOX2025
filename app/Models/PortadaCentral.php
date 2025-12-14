@@ -42,6 +42,7 @@ class PortadaCentral extends Model
         'BannerDestino',
         'BannerCodigoFuente',
         'Orden',
+        'BannerImagenMovil',
     ];
 
 

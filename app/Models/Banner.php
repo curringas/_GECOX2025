@@ -21,6 +21,7 @@ class Banner extends Model
         'Fecha',
         'Target',
         'Codigo',
+        'BannerMovil'
     ];
 
     protected $guarded = [

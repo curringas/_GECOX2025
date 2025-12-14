@@ -26,6 +26,10 @@
                             <input type="file" class="form-control" name="bannerImagen" id="bannerImagen">
                         </div>
                         <div class="mb-3">
+                            <label for="bannerImagen" class="form-label">Imagen Movil</label>
+                            <input type="file" class="form-control" name="bannerImagenMovil" id="bannerImagenMovil">
+                        </div>
+                        <div class="mb-3">
                             <div class="row">
                                 <div class="col-md-8">
                                     <label for="bannerUrl" class="form-label">Url de destino</label>

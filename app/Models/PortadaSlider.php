@@ -42,6 +42,7 @@ class PortadaSlider extends Model
         'BannerDestino',
         'BannerCodigoFuente',
         'Orden',
+        'BannerImagenMovil',
     ];
 
 

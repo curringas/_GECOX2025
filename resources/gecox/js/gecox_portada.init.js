@@ -105,7 +105,6 @@ $(function() {
     //******************************************************************************
     $('[data-eliminar]').on('click', function(e) {
         e.preventDefault();
-
         var eliminarKey = $(this).data('eliminar');
         var tablaKey = $(this).data('tabla');
         var ordenKey = $(this).data('orden');

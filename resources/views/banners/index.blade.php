@@ -101,7 +101,7 @@
                 <th>Título</th>
                 <th>Tipo</th>
                 <th>Target</th>
-                <th>Acciones</th>
+                <th class="text-center">Acciones</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -158,14 +158,24 @@
                         }
                     },
                     { data: 'Banner', name: 'Banner' },
-                    { data: 'Fecha', name: 'Fecha' },
                     { data: 'Titulo', name: 'Titulo' },
+                    { data: 'Fecha', name: 'Fecha' },
                     { data: 'Tipo', name: 'Tipo' },
                     { data: 'Target', name: 'Target' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false }
+                    { 
+                        data: 'action', 
+                        name: 'action',  
+                        orderable: false, 
+                        searchable: false
+                    }
                 ],
                 columnDefs: [
-                    { targets: 0, visible: ($('#categoria-filter').val() && $('#tipo-filter').val() ? true : false), className: 'col-orden' }
+                    { targets: 0, visible: ($('#categoria-filter').val() && $('#tipo-filter').val() ? true : false), className: 'col-orden' },
+                    { 
+                        // 2. Centrar el contenido de las acciones
+                        "className": "text-center", 
+                        "targets": 6 
+                    },
                 ],
                 initComplete: function() {
                     adjustAndRecalc();

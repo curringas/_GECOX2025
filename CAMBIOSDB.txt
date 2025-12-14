@@ -53,3 +53,10 @@ ALTER TABLE `P0114_portada_slider` CHANGE `Orden` `Orden` INT(11) NULL;
 
 
 ## Crear relaciones con Publicacion y Publicacion->Identificador
+
+ALTER TABLE `P0114_portada` ADD `banner_cabeceraImagenMovil` VARCHAR(255) NULL AFTER `banner_pieCodigoFuente`, ADD `banner_izquierdaImagenMovil` VARCHAR(255) NULL AFTER `banner_cabeceraImagenMovil`, ADD `banner_derechaImagenMovil` VARCHAR(255) NULL AFTER `banner_izquierdaImagenMovil`, ADD `banner_pieImagenMovil` VARCHAR(255) NULL AFTER `banner_derechaImagenMovil`, ADD `Intersticial_imagenMovil` VARCHAR(255) NULL AFTER `banner_pieImagenMovil`;
+ALTER TABLE `P0114_portada_central` ADD `BannerImagenMovil` VARCHAR(255) NULL AFTER `Orden`;
+ALTER TABLE `P0114_portada_derecha` ADD `BannerImagenMovil` VARCHAR(255) NULL AFTER `Orden`;
+ALTER TABLE `P0114_portada_izquierda` ADD `BannerImagenMovil` VARCHAR(255) NULL AFTER `Orden`;
+ALTER TABLE `P0114_portada_slider` ADD `BannerImagenMovil` VARCHAR(255) NULL AFTER `Orden`;
+ALTER TABLE `P0114_banner` ADD `BannerMovil` VARCHAR(255) NULL AFTER `Codigo`;
