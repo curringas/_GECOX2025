@@ -54,7 +54,6 @@ class HomeController extends Controller
 
     static function obtenterPortada($tabla)
     {
-        dd($tabla);
         $modelClass = null;
         switch ($tabla){
             case 'portada_slider':
