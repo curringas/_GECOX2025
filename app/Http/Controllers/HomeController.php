@@ -195,7 +195,7 @@ class HomeController extends Controller
         $removeImage = $request->input('removeBanner') === '1';
         if ($imageFile || $removeImage) {
             // Primero eliminamos la imagen que hubiera
-            if ($portada->$campo_imagen) {
+            if ($portada->$campo_imagen!=null) {
                 Storage::disk('public')->delete('banners/' . $portada->$campo_imagen);
 
                 $portada->$campo_imagen=null; 
