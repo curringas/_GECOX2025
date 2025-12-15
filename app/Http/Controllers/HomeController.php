@@ -71,6 +71,8 @@ class HomeController extends Controller
             case 'portada':
                     $modelClass = Portada::class ;
                 break;
+                default:
+                return response()->json(['error' => false, 'message' => 'Modelo Portada no encontrada.']);
         }
         return $modelClass;
     }
@@ -123,10 +125,14 @@ class HomeController extends Controller
 
         //obtenemos el modelo izquieda centro o derecha
         $modelo = $this->obtenterPortada($request->noticiaTabla);
-        if ($request->has('noticiaIdentificador') && $request->noticiaIdentificador!="nuevo"){
+        if ($request->filled('noticiaIdentificador') && $request->noticiaIdentificador!="nuevo"){
             $portada=$modelo::find($request->noticiaIdentificador);
         }else{
-            $portada=new $modelo;
+            if ($request->noticiaIdentificador=="nuevo"){
+                $portada= new $modelo; 
+            }else{
+                $portada= $modelo::first();
+            }
         }
         //dd($request->noticiaPublicacion);
         $portada->Publicacion=$request->noticiaPublicacion;
@@ -182,12 +188,17 @@ class HomeController extends Controller
         $campo_destino = $request->bannerBanner.'Destino';
         $campo_codigo = $request->bannerBanner.'CodigoFuente';
         $campo_orden = "Orden";
-
+        
         $modelo = $this->obtenterPortada($request->bannerTabla);
-        if ($request->has('bannerIdentificador') && $request->bannerIdentificador!="nuevo"){
+        //dd($modelo);
+        if ($request->filled('bannerIdentificador') && $request->bannerIdentificador!="nuevo"){
             $portada = $modelo::find($request->bannerIdentificador);
         }else{
-            $portada=new $modelo;
+            if ($request->bannerIdentificador=="nuevo"){
+                $portada= new $modelo; 
+            }else{
+                $portada= $modelo::first();
+            }
         }
 
         //Guardo la imagen si la hay
@@ -195,6 +206,8 @@ class HomeController extends Controller
         $removeImage = $request->input('removeBanner') === '1';
         if ($imageFile || $removeImage) {
             // Primero eliminamos la imagen que hubiera
+
+            //dd($portada->$campo_imagen);
             if ($portada->$campo_imagen!=null) {
                 Storage::disk('public')->delete('banners/' . $portada->$campo_imagen);
 
@@ -248,9 +261,8 @@ class HomeController extends Controller
         if ($request->has('id')){
             $portada = $modelo::find($request->id);
         }else{
-            $portada=new $modelo;
+            $portada= $modelo::first();
         }
-
         if ($request->eliminar=="Noticia"){
             if ($request->has('id')){
                 //Sera uno de las tablas acumulativas de items (izda, central, slider o derecha)
@@ -285,6 +297,7 @@ class HomeController extends Controller
                 // Si es una tabla con orden, eliminamos el registro completo
                 $portada->delete();
             } else {
+
                 //Si es la tabla portada principal solo ponemos a null los campos
                 $portada->$campo_titulo = null;
                 $portada->$campo_imagen = null;
@@ -293,6 +306,8 @@ class HomeController extends Controller
                 $portada->$campo_destino = null;
                 $portada->$campo_codigo = null;
                 $portada->save();
+
+                //dd($portada);
 
             }
             return response()->json(['success' => true, 'message' => 'Banner eliminado successfully.']);

@@ -109,6 +109,8 @@
                     width="{{ config('gecox_portada.banners.cabecera.ancho', '728') }}"
                     height="{{ config('gecox_portada.banners.cabecera.alto', '90') }}"
                     class="img-fluid">
+            @else
+                <p>No hay banner asignado</p>
             @endif
         </div>
     </div>

@@ -109,6 +109,8 @@
                     width="<?php echo e(config('gecox_portada.banners.cabecera.ancho', '728')); ?>"
                     height="<?php echo e(config('gecox_portada.banners.cabecera.alto', '90')); ?>"
                     class="img-fluid">
+            <?php else: ?>
+                <p>No hay banner asignado</p>
             <?php endif; ?>
         </div>
     </div>
