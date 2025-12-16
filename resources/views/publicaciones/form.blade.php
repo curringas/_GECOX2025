@@ -252,20 +252,12 @@
                                     @php
                                         // Generamos la clave compuesta
                                         $compositeKey = $img->Publicacion . '|' . $img->Orden;
-                                        // Asumimos que $img->Imagen contiene la ruta relativa de la versión thumb
-                                        $imgUrl = Storage::disk('public')->url($img->Imagen); 
-                                        
-                                        // REEMPLAZAR $img->Imagen por la ruta de la versión _thumb.ext para la miniatura
-                                        // Si tu BD solo guarda la _ppal.ext, necesitamos reconstruir la ruta del thumbnail:
-                                        $basePath = pathinfo($img->Imagen, PATHINFO_DIRNAME) . '/' . pathinfo($img->Imagen, PATHINFO_FILENAME); // ej: ficheros/202511/imagen64193_0_ppal
-                                        $baseNameWithoutVersion = substr($basePath, 0, strrpos($basePath, '_')); // ej: ficheros/202511/imagen64193_0
-                                        $ext = pathinfo($img->Imagen, PATHINFO_EXTENSION);
-                                        $thumbUrl = asset("storage/{$baseNameWithoutVersion}_thumb.{$ext}");
+
                                     @endphp
                                     <div class="position-relative d-inline-block existing-img" 
                                         data-id="{{ $compositeKey }}" 
                                         style="width:120px">
-                                        <img src="{{ $thumbUrl }}" class="img-thumbnail" style="width:100%; height:100px; object-fit:cover;">
+                                        <img src="{{ $img->thumb_url }}" class="img-thumbnail" style="width:100%; height:100px; object-fit:cover;">
                                         <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1 delete-existing-img">&times;</button>
                                     </div>
                                 @endforeach

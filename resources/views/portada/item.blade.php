@@ -47,7 +47,10 @@
         @else
             <div class=" w-100 align-items-center">
                 <!-- Imagen de la noticia -->
-                <img src="{{ URL::asset('storage/'.$clase?->publicacion?->imagenes->first()->Imagen) }}"
+                @php
+                $img=$clase?->publicacion?->imagenes->first();
+                @endphp
+                <img src="{{ $img->thumb_url }}"
                     alt="Noticia" class="img-fluid rounded  me-3" style="width: 100px; height: 100px; object-fit: cover;">
                 <div class="mt-3">
                     <h5 class="mb-2">{{ $clase?->publicacion->Titulo ?? 'Título de la noticia' }}</h5>
