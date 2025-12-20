@@ -28,7 +28,7 @@ class BannerRequest extends FormRequest
         // Obtener configuración de forma segura y consistente
         $allowedMimes = implode(',', config('gecox_imagenes.tipos', ['jpeg', 'png', 'gif']));
         // Laravel espera el tamaño en KB para la regla 'max'
-        $maxSizeKB = config('gecox_banners.pesos.grande', 400); 
+        $maxSizeKB = config('gecox_banners.pesos.grande', 800); 
 
         return [
             'Identificador' => 'nullable|integer',

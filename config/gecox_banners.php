@@ -33,9 +33,9 @@ return [
         'alto_derecha' => null,
     ],
     'pesos' => [
-        'pequeno' => 150,    // Peso máximo en KB para banners pequeños
-        'mediano' => 190,  // Peso máximo en KB para banners medianos
-        'grande' => 400,   // Peso máximo en KB para banners grandes
+        'pequeno' => 250,    // Peso máximo en KB para banners pequeños
+        'mediano' => 390,  // Peso máximo en KB para banners medianos
+        'grande' => 800,   // Peso máximo en KB para banners grandes
     ],
     // Puedes añadir otras configuraciones relacionadas con banners aquí, como categorías por defecto, etc.
 ];
