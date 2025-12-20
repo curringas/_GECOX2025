@@ -358,7 +358,7 @@ class PublicacionController extends Controller
                 'Ancho' => 800, 
                 'Publicacion' => $publicacionId,
                 'Orden' => $orden,
-                'Repositorio' => 0,
+                'Repositorio' => null,
             ]);
 
             $orden++;

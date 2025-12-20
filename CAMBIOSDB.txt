@@ -1,3 +1,7 @@
+
+-> IMPORTAR PRIMERO LAS TABLAS DE LARAVEL
+
+
 +++++++++ CAMBIAR ORDEN EN CATEGORIAS ++++++++++++++++++++++++++
 SET @rownum = 0;
 UPDATE P0114_pagina
@@ -60,3 +64,5 @@ ALTER TABLE `P0114_portada_derecha` ADD `BannerImagenMovil` VARCHAR(255) NULL AF
 ALTER TABLE `P0114_portada_izquierda` ADD `BannerImagenMovil` VARCHAR(255) NULL AFTER `Orden`;
 ALTER TABLE `P0114_portada_slider` ADD `BannerImagenMovil` VARCHAR(255) NULL AFTER `Orden`;
 ALTER TABLE `P0114_banner` ADD `BannerMovil` VARCHAR(255) NULL AFTER `Codigo`;
+
+UPDATE `P0114_pagina` SET Padre = null WHERE Padre=-1
