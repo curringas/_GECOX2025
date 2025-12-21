@@ -147,8 +147,8 @@
                     'codigo'=>$portada->banner_izquierdaCodigoFuente,
                     'imagen' => $portada->banner_izquierdaImagen,
                     'titulo' => $portada->banner_izquierdaTitulo,
-                    'width'=>config('gecox_portada.banners.cabecera.ancho', '900'),
-                    'height'=>config('gecox_portada.banners.cabecera.alto', '150')]
+                    'width'=>null,
+                    'height'=>null]
                 )
             </div>
         </div>
