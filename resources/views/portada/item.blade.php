@@ -39,8 +39,8 @@
               
                 <div class="d-flex flex-column justify-content-end h-100 w-100" style="background: rgba(255,255,255,0.0);">
                     <div class="p-3 text-primary" style="background: rgba(255,255,255,0.7); border-radius: 0 0 12px 12px;">
-                        <h5 class="text-primary mb-1">Welcome Back !</h5>
-                        <p class="mb-0">Skote Dashboard</p>
+                        <h5 class="text-primary mb-1">{{ $clase?->publicacion->Titulo ?? 'Título de la noticia' }}</h5>
+                        <p class="mb-0">{{ $clase?->publicacion?->Fecha->format('d/m/Y')}} | {{ $clase?->publicacion?->Autor}}</p>
                     </div>
                 </div>
             </div>

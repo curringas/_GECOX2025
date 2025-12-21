@@ -110,7 +110,7 @@ $(function() {
         var ordenKey = $(this).data('orden');
         var idKey = $(this).data('id');
 
-        if (confirm('¿Estás seguro de que deseas eliminar este banner?')) {
+        if (confirm('¿Estás seguro de que deseas eliminar este item?')) {
             $.ajax({
                 url: window.eliminarUrl,
                 method: 'POST',

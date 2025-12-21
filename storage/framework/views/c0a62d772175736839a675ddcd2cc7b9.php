@@ -78,41 +78,14 @@
         </div>
     </div>
     <div class="col-xl-8 d-flex">
-        <div class="card overflow-hidden p-2 text-center" style="overflow:hidden;">
-            <!-- Botón editar arriba a la derecha -->
-            <div class="position-absolute top-0 end-0 m-2 d-flex gap-1">
-                
-                <button type="button" 
-                        data-tabla="portada" 
-                        data-banner="banner_cabecera" 
-                        class="btn btn-sm btn-primary"
-                        data-bs-toggle="modal" 
-                        data-bs-target="#banner">
-                    <i class="mdi mdi-pencil"></i> Editar
-                </button>
-
-                <button type="button" 
-                        data-tabla="portada" 
-                        data-eliminar="banner_cabecera" 
-                        class="btn btn-sm btn-danger">
-                         <i class="mdi mdi-delete"></i>
-                </button>
-            </div>
-
-            <?php if(isset($portada) && $portada->banner_cabeceraCodigoFuente): ?>
-                <?php echo e(str_replace(config('gecox_portada.banners.cabecera.ancho', '610'), config('gecox_portada.banners.cabecera.ancho', '728'), str_replace("105", "112", $portada->banner_cabeceraCodigoFuente))); ?>
-
-            <?php elseif(isset($portada) && $portada->banner_cabeceraImagen): ?>
-                <img src="<?php echo e(asset('storage/'.$portada->banner_cabeceraImagen)); ?>" 
-                    alt="<?php echo e($portada->banner_cabeceraTitulo); ?>"
-                    title="<?php echo e($portada->banner_cabeceraTitulo); ?>" 
-                    width="<?php echo e(config('gecox_portada.banners.cabecera.ancho', '728')); ?>"
-                    height="<?php echo e(config('gecox_portada.banners.cabecera.alto', '90')); ?>"
-                    class="img-fluid">
-            <?php else: ?>
-                <p>No hay banner asignado</p>
-            <?php endif; ?>
-        </div>
+        <?php echo $__env->make('portada.banner',['tabla'=>'portada',
+            'banner'=>'banner_cabecera',
+            'codigo'=>$portada->banner_cabeceraCodigoFuente,
+            'imagen' => $portada->banner_cabeceraImagen,
+            'titulo' => $portada->banner_cabeceraTitulo,
+            'width'=>config('gecox_portada.banners.cabecera.ancho', '728'),
+            'height'=>config('gecox_portada.banners.cabecera.alto', '90')]
+        , array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     </div>
 </div>
 
@@ -155,6 +128,37 @@
 
     
 </div>
+
+
+<!-- OTROS BANNERS -->
+<div class="row mb3">
+    <div class="col-xl-9">
+
+        <div class="card">
+            <div class="card-header position-relative">
+                <h4 class="card-title">Banner Entre Párrafos</h4>
+                
+            </div>
+            <div class="card-body" data-tabla="portada_slider" id="listaOrdenableBannersSobrecabecera" style="overflow:hidden;">
+
+                <?php echo $__env->make('portada.banner',['tabla'=>'portada',
+                    'banner'=>'banner_izquierda',
+                    'codigo'=>$portada->banner_izquierdaCodigoFuente,
+                    'imagen' => $portada->banner_izquierdaImagen,
+                    'titulo' => $portada->banner_izquierdaTitulo,
+                    'width'=>config('gecox_portada.banners.cabecera.ancho', '900'),
+                    'height'=>config('gecox_portada.banners.cabecera.alto', '150')]
+                , array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3">
+        <div class="card">
+        </div>
+    </div>
+</div>
+
+
 
 
 <?php echo $__env->make('portada.modal-banner', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>

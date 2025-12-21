@@ -41,6 +41,8 @@
 
                 @foreach($items as $item)
                     @include('portada.item', ['clase' => $item,'tabla' => $tabla])
+                    
+                    @if ($item->Publicacion)
                 @endforeach
             </div>
         </div>
