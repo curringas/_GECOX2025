@@ -65,6 +65,10 @@
                                     width="{{ config('gecox_portada.banners.slider.ancho', '1080') }}"
                                     height="{{ config('gecox_portada.banners.slider.alto', '150') }}"
                                     class="img-fluid">
+                            @elseif (isset($slider) && $slider->BannerImagenMovil)
+
+                                <p>{{$slider->BannerTitulo}}</p>
+                                <p>{{ $slider->BannerUrl }}</p>
                             @endif
                     </div>
                 @endforeach
