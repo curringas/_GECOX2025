@@ -40,7 +40,9 @@
             <div class="card-body lista-ordenable p-2" data-tabla="<?php echo e($tabla); ?>" id="lista_<?php echo e($tabla); ?>" style="overflow:hidden;">
 
                 <?php $__currentLoopData = $items; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+
                     <?php echo $__env->make('portada.item', ['clase' => $item,'tabla' => $tabla], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
+                
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
         </div><?php /**PATH /Users/curro/Documents/WEBSERVICES/_GECOX2025/resources/views/portada/columna.blade.php ENDPATH**/ ?>

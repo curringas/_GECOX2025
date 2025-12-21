@@ -40,9 +40,9 @@
             <div class="card-body lista-ordenable p-2" data-tabla="{{ $tabla }}" id="lista_{{ $tabla }}" style="overflow:hidden;">
 
                 @foreach($items as $item)
+
                     @include('portada.item', ['clase' => $item,'tabla' => $tabla])
-                    
-                    @if ($item->Publicacion)
+                
                 @endforeach
             </div>
         </div>
