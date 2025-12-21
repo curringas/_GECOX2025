@@ -334,7 +334,7 @@ class PublicacionController extends Controller
             // B. Principal (800px)
             $pathPpal = "{$folderName}/{$baseName}_ppal.{$ext}";
             $image800 = clone $originalImageInstance;
-            $image800->scaleDown(width: config('gecox_imagenes.tamanos.ppal.0'), height: config('gecox_imagenes.tamanos.ppal.1')); // ¡Corregido a 800!
+            $image800->scaleDown(width: config('gecox_imagenes.tamanos.principal.0'), height: config('gecox_imagenes.tamanos.principal.1')); // ¡Corregido a 800!
             Storage::disk($disk)->put($pathPpal, (string) $image800->toJpeg(90));
             
             
@@ -348,7 +348,7 @@ class PublicacionController extends Controller
             // D. Thumbnail (120x120 crop)
             $pathThumb = "{$folderName}/{$baseName}_thumb.{$ext}";
             $thumbInstance = clone $originalImageInstance;
-            $thumbInstance->cover(config('gecox_imagenes.tamanos.thumb.0'), config('gecox_imagenes.tamanos.thumb.1')); // Recorte cuadrado (v3)
+            $thumbInstance->cover(config('gecox_imagenes.tamanos.thumbnail.0'), config('gecox_imagenes.tamanos.thumbnail.1')); // Recorte cuadrado (v3)
             Storage::disk($disk)->put($pathThumb, (string) $thumbInstance->toJpeg(90));
             
             // 4.4 Guardar el registro en la base de datos
