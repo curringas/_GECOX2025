@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="utf-8" />
-        <title> <?php echo $__env->yieldContent('title'); ?> | Skote - Responsive Bootstrap 4 Admin Dashboard</title>
+        <title> <?php echo $__env->yieldContent('title'); ?> | Palabrea CMS GECOX 2025</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- CSRF Token -->
         <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">

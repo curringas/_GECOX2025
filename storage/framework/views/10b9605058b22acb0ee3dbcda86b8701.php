@@ -106,16 +106,6 @@ unset($__errorArgs, $__bag); ?>"
 
                         </div>
                         <div class="mb-3">
-                            <label for="dob" class="form-label"><?php echo app('translator')->get('translation.FechaNacimiento'); ?></label>
-                            <input type="text" id="duedate-input" class="form-control" placeholder="Select due date"
-                                name="dob" data-date-format="dd M, yyyy" data-provide="datepicker"
-                                data-date-autoclose="true"
-                                value="<?php echo e(old('dob', $user->dob ?? \Carbon\Carbon::now()->format('Y-m-d'))); ?>">
-                            <?php echo $errors->first('dob', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>'); ?>
-
-                        </div>
-
-                        <div class="mb-3">
                             <div class="form-check form-switch form-switch-lg mb-0" dir="ltr">
                                 <input class="form-check-input" type="checkbox" id="active-switch" name="activo"
                                     value="1" <?php echo e(old('activo', $user->activo ?? true) ? 'checked' : ''); ?>>
