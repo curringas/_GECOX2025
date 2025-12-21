@@ -67,4 +67,4 @@ ALTER TABLE `P0114_banner` ADD `BannerMovil` VARCHAR(255) NULL AFTER `Codigo`;
 
 UPDATE `P0114_pagina` SET Padre = null WHERE Padre=-1
 ALTER TABLE `users` CHANGE `dob` `dob` DATE NULL;
-ALTER TABLE `users` CHANGE `avatar` `avatar` VARCHAR(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT;
+ALTER TABLE `users` CHANGE `avatar` `avatar` TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL;
