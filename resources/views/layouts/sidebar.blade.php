@@ -22,7 +22,7 @@
                     </a>
                     
                 </li>
-
+                @role('Super-admin|Admin')
                 <li class="menu-title" key="t-backend">@lang('translation.backend')</li>
                 <li>
                     <a href="/banners" class="waves-effect">
@@ -37,6 +37,9 @@
                     </a>
                     
                 </li>
+                @endrole
+
+                @role('Super-admin|Admin')
 
                 <li class="menu-title" key="t-pages">@lang('translation.Administration')</li>
 
@@ -47,6 +50,8 @@
                     </a>
                     
                 </li>
+                @endrole
+
                 @role('Super-admin')
                 <li class="menu-title" key="t-pages">@lang('translation.Configuracion')</li>
 

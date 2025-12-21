@@ -135,8 +135,13 @@
                         name: 'email'
                     },
                     {
-                        data: 'dob',
-                        name: 'dob'
+                        data: 'created_at',
+                        name: 'creación',
+                        orderable: false,
+                        searchable: false,
+                        render: function(data) {
+                            return moment(data).format('DD/MM/YYYY');
+                        }
                     },
                     {
                         data: 'avatar',

@@ -54,7 +54,7 @@ class UserRequest extends FormRequest
         return [
             'name' => 'required|string',
             'email' => 'required|email',
-            'dob' => 'nullable|date_format:Y-m-d',
+            //'dob' => 'nullable|date_format:Y-m-d',
             'avatar' => 'nullable|image|mimes:jpeg,png,gif,jpg|max:2048',
             'newpassword' => 'nullable|string',
             'newpassword_confirmation' => 'nullable|string|same:newpassword',

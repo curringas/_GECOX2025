@@ -51,23 +51,14 @@
                         <div class="mb-3">
                             <label for="role" class="form-label">@lang('translation.Roles')*</label>
                             <select class="form-select" name="role" id="role" required>
-    <option value="">@lang('translation.Seleccione')</option>
-    @foreach ($roles as $role)
-        @if ($role->name === 'Super-admin')
-            @if (auth()->user() && auth()->user()->hasRole('Super-admin'))
-                <option value="{{ $role->name }}"
-                    {{ !empty($user) && $user->hasRole($role->name) ? 'selected' : '' }}>
-                    {{ $role->name }}
-                </option>
-            @endif
-        @else
-            <option value="{{ $role->name }}"
-                {{ !empty($user) && $user->hasRole($role->name) ? 'selected' : '' }}>
-                {{ $role->name }}
-            </option>
-        @endif
-    @endforeach
-</select>
+                                <option value="">@lang('translation.Seleccione')</option>
+                                @foreach ($roles as $role)
+                                        <option value="{{ $role->name }}"
+                                            {{ !empty($user) && $user->hasRole($role->name) ? 'selected' : '' }}>
+                                            {{ $role->name }}
+                                        </option>
+                                @endforeach
+                            </select>
                             {!! $errors->first('role', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                         </div>
                         <div class="mb-3">

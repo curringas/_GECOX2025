@@ -83,25 +83,15 @@ unset($__errorArgs, $__bag); ?>"
                         <div class="mb-3">
                             <label for="role" class="form-label"><?php echo app('translator')->get('translation.Roles'); ?>*</label>
                             <select class="form-select" name="role" id="role" required>
-    <option value=""><?php echo app('translator')->get('translation.Seleccione'); ?></option>
-    <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <?php if($role->name === 'Super-admin'): ?>
-            <?php if(auth()->user() && auth()->user()->hasRole('Super-admin')): ?>
-                <option value="<?php echo e($role->name); ?>"
-                    <?php echo e(!empty($user) && $user->hasRole($role->name) ? 'selected' : ''); ?>>
-                    <?php echo e($role->name); ?>
+                                <option value=""><?php echo app('translator')->get('translation.Seleccione'); ?></option>
+                                <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        <option value="<?php echo e($role->name); ?>"
+                                            <?php echo e(!empty($user) && $user->hasRole($role->name) ? 'selected' : ''); ?>>
+                                            <?php echo e($role->name); ?>
 
-                </option>
-            <?php endif; ?>
-        <?php else: ?>
-            <option value="<?php echo e($role->name); ?>"
-                <?php echo e(!empty($user) && $user->hasRole($role->name) ? 'selected' : ''); ?>>
-                <?php echo e($role->name); ?>
-
-            </option>
-        <?php endif; ?>
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-</select>
+                                        </option>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            </select>
                             <?php echo $errors->first('role', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>'); ?>
 
                         </div>

@@ -22,7 +22,7 @@
                     </a>
                     
                 </li>
-
+                <?php if (\Illuminate\Support\Facades\Blade::check('role', 'Super-admin|Admin')): ?>
                 <li class="menu-title" key="t-backend"><?php echo app('translator')->get('translation.backend'); ?></li>
                 <li>
                     <a href="/banners" class="waves-effect">
@@ -37,6 +37,9 @@
                     </a>
                     
                 </li>
+                <?php endif; ?>
+
+                <?php if (\Illuminate\Support\Facades\Blade::check('role', 'Super-admin|Admin')): ?>
 
                 <li class="menu-title" key="t-pages"><?php echo app('translator')->get('translation.Administration'); ?></li>
 
@@ -47,6 +50,8 @@
                     </a>
                     
                 </li>
+                <?php endif; ?>
+
                 <?php if (\Illuminate\Support\Facades\Blade::check('role', 'Super-admin')): ?>
                 <li class="menu-title" key="t-pages"><?php echo app('translator')->get('translation.Configuracion'); ?></li>
 

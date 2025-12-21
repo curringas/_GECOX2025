@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
@@ -20,7 +21,7 @@ class UserController extends Controller
 public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = User::query()->select(['id', 'name', 'email', 'dob', 'avatar', 'activo', 'created_at']);
+            $query = User::query()->select(['id', 'name', 'email', 'avatar', 'activo', 'created_at']);
 
             $this->applySearchFilter($query, $request);
             $this->applyRoleFilter($query, $request);
@@ -162,7 +163,34 @@ public function create()
      */
     public function store(UserRequest $request): RedirectResponse
     {
-        User::create($request->validated());
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->get('newpassword')),
+            'activo' => $request->activo]);
+
+        //Asignamos los roles y permisos        
+        $user->syncRoles($request->input('role', []));
+        $user->syncPermissions($request->input('permissions', []));
+        
+        //Preparo la imagen del avatar
+        if ($request->hasFile('avatar')) {
+
+            $avatar = $request->file('avatar');                    
+            $extension = $avatar->getClientOriginalExtension();        
+            
+            $imageName = "avatar_" . uniqid() . '.' . $extension; // Usamos la extensión real del archivo        
+            
+            $directory = public_path('storage/avatares');                    
+            if (!file_exists($directory)) {
+                mkdir($directory, 0777, true);
+            }        
+            
+            $avatar->move($directory, $imageName);
+
+            $user->avatar = $imageName;
+            $user->save();
+        }
 
         return Redirect::route('users.index')
             ->with('success', 'User created successfully.');
