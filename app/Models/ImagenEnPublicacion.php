@@ -60,6 +60,6 @@ class ImagenEnPublicacion extends Model
             $baseName = $filename; // Por seguridad, si no tiene guiones
         }
 
-        return asset("storage/{$dirname}/{$baseName}_thumb.{$extension}");
+        return asset("storage/{$dirname}/{$baseName}_portada.{$extension}");
     }
 }

@@ -64,6 +64,10 @@
                                     width="<?php echo e(config('gecox_portada.banners.slider.ancho', '1080')); ?>"
                                     height="<?php echo e(config('gecox_portada.banners.slider.alto', '150')); ?>"
                                     class="img-fluid">
+                            <?php elseif(isset($slider) && $slider->BannerImagenMovil): ?>
+
+                                <p><?php echo e($slider->BannerTitulo); ?></p>
+                                <p><?php echo e($slider->BannerUrl); ?></p>
                             <?php endif; ?>
                     </div>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

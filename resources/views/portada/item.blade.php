@@ -33,9 +33,12 @@
         </button>
     </div>
     @if ($clase->Publicacion)
+        @php
+            $img=$clase?->publicacion?->imagenes->first();
+        @endphp
         {{-- Si es la columna izquierda y el primer elemento se muestra diferente --}}
         @if ($tabla == 'portada_izquierda' && $clase->Orden == 1)
-            <div class="overflow-hidden" style="background: url('{{ URL::asset('images/1641266162.jpg') }}') center center / cover no-repeat; min-height: 280px;">
+            <div class="overflow-hidden" style="background: url('{{ $img->thumb_url }}') center center / cover no-repeat; min-height: 280px;">
               
                 <div class="d-flex flex-column justify-content-end h-100 w-100" style="background: rgba(255,255,255,0.0);">
                     <div class="p-3 text-primary" style="background: rgba(255,255,255,0.7); border-radius: 0 0 12px 12px;">
@@ -47,9 +50,7 @@
         @else
             <div class=" w-100 align-items-center">
                 <!-- Imagen de la noticia -->
-                @php
-                $img=$clase?->publicacion?->imagenes->first();
-                @endphp
+                
                 <img src="{{ $img->thumb_url }}"
                     alt="Noticia" class="img-fluid rounded  me-3" style="width: 100px; height: 100px; object-fit: cover;">
                 <div class="mt-3">

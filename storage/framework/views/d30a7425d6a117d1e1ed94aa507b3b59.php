@@ -33,9 +33,12 @@
         </button>
     </div>
     <?php if($clase->Publicacion): ?>
+        <?php
+            $img=$clase?->publicacion?->imagenes->first();
+        ?>
         
         <?php if($tabla == 'portada_izquierda' && $clase->Orden == 1): ?>
-            <div class="overflow-hidden" style="background: url('<?php echo e(URL::asset('images/1641266162.jpg')); ?>') center center / cover no-repeat; min-height: 280px;">
+            <div class="overflow-hidden" style="background: url('<?php echo e($img->thumb_url); ?>') center center / cover no-repeat; min-height: 280px;">
               
                 <div class="d-flex flex-column justify-content-end h-100 w-100" style="background: rgba(255,255,255,0.0);">
                     <div class="p-3 text-primary" style="background: rgba(255,255,255,0.7); border-radius: 0 0 12px 12px;">
@@ -47,9 +50,7 @@
         <?php else: ?>
             <div class=" w-100 align-items-center">
                 <!-- Imagen de la noticia -->
-                <?php
-                $img=$clase?->publicacion?->imagenes->first();
-                ?>
+                
                 <img src="<?php echo e($img->thumb_url); ?>"
                     alt="Noticia" class="img-fluid rounded  me-3" style="width: 100px; height: 100px; object-fit: cover;">
                 <div class="mt-3">
