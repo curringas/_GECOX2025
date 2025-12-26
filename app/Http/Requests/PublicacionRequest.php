@@ -82,7 +82,7 @@ class PublicacionRequest extends FormRequest
             'Logotipo' => $this->has('Logotipo') ? trim($this->Logotipo) : '',
             'Introduccion' => $this->has('Introduccion') ? trim($this->Introduccion) : '',
             'Autor' => $this->has('Autor') ? trim($this->Autor) : '',
-            'AutorTwitter' => $this->has('AutorTwitter') ? trim($this->Autor) : '',
+            'AutorTwitter' => $this->has('AutorTwitter') ? trim($this->AutorTwitter) : '',
             'Creador' => auth()->user()->email ?? 'system',
         ]);
     }
