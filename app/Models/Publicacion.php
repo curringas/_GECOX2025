@@ -14,7 +14,7 @@ class Publicacion extends Model
     protected $primaryKey = 'Identificador';
     public $incrementing = true;
     protected $keyType = 'int';
-    public $timestamps = false;
+    public $timestamps = true;
 
     protected $guarded = [
         'Identificador',
