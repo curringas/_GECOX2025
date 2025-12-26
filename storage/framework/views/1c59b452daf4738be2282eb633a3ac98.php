@@ -1,5 +1,5 @@
 <?php $__env->startSection('title'); ?>
-    <?php echo app('translator')->get('titulos.Publicacions'); ?>
+    <?php echo app('translator')->get('titulos.Publicaciones'); ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('css'); ?>
@@ -99,7 +99,7 @@
             });
 
             var table = $('.yajra-datatable').DataTable({
-                order: [[0, 'desc']],
+                order: [[6, 'desc']],
                 processing: true,
                 serverSide: true,
                 responsive: true,  
@@ -143,6 +143,11 @@
                         name: 'action',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'updated_at',
+                        name: 'updated_at',
+                        visible: false
                     },
                 ]
             });

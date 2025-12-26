@@ -44,6 +44,13 @@
                 <li class="menu-title" key="t-pages">@lang('translation.Administration')</li>
 
                 <li>
+                    <a href="/indexado/edit" class="waves-effect">
+                        <i class="bx bx-user-circle"></i>
+                        <span key="t-authentication">Indexado</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="/users" class="waves-effect">
                         <i class="bx bx-user-circle"></i>
                         <span key="t-authentication">@lang('translation.Users')</span>

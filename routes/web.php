@@ -73,6 +73,10 @@ Route::middleware(['auth','active'])->group(function () {
     Route::get('users/export', [App\Http\Controllers\UserController::class, 'export'])->name('users.export');
     Route::resource('users', App\Http\Controllers\UserController::class);
 
+    //--- ADMIN -----INDEXADO
+    Route::get('/indexado/edit', [App\Http\Controllers\IndexadoController::class, 'edit'])->name('indexado.edit');
+    Route::post('/indexado/update', [App\Http\Controllers\IndexadoController::class, 'update'])->name('indexado.update');
+    
     //--- SUPERADMIN ------------------------------
     // Todas las rutas de roles y permisos
     Route::get('/roles/get-permissions/{id}', [App\Http\Controllers\RoleController::class, 'getPermissions'])->name('roles.getPermissions');
