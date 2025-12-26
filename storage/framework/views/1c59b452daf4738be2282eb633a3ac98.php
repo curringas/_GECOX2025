@@ -22,24 +22,22 @@
     <?php echo $__env->renderComponent(); ?>
 
     <div class="datatable-filtros">
+        <input type="search" id="search-box" class="form-control" placeholder="Buscar..." style="max-width:250px;">
         <input type="text" id="date-filter" class="form-control" placeholder="Selecciona una fecha" autocomplete="off"
             style="max-width:180px;">
-        <input type="search" id="search-box" class="form-control" placeholder="Buscar..." style="max-width:180px;">
-        <select id="role-filter" class="form-select" style="max-width:180px;">
-    <option value="">Rol</option>
-    <?php $__currentLoopData = \Spatie\Permission\Models\Role::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-        <option value="<?php echo e($role->name); ?>"><?php echo e($role->name); ?></option>
-    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-</select>
+        
+        <select id="user-filter" class="form-select" style="max-width:180px;">
+            <option value="">Creado por</option>
+            <?php $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $user): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <option value="<?php echo e($user->email); ?>"><?php echo e($user->name); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </select>
         <div class="form-check form-switch form-switch-lg mb-0" dir="ltr">
-    <input class="form-check-input" type="checkbox" id="active-switch" checked>
-    <label class="form-check-label ms-2 mb-0" for="active-switch"><?php echo app('translator')->get('Activo'); ?></label>
-</div>
+            <input class="form-check-input" type="checkbox" id="active-switch" checked>
+            <label class="form-check-label ms-2 mb-0" for="active-switch"><?php echo app('translator')->get('Activo'); ?></label>
+        </div>
         <!-- Botón Exportar Excel -->
-        <a href="#" onclick="exportExcel(); return false;" class="btn btn-success end-0">
-            <i class="bx bx-download font-size-16 align-middle me-2"></i>
-            Exportar Excel
-        </a>
+        
         <a href="<?php echo e(route('publicacion.create')); ?>" class="btn btn-primary end-0 ms-0">
             <i class="bx bx-smile font-size-16 align-middle me-2"></i>
             <?php echo app('translator')->get('titulos.Crear_Publicacion'); ?>
@@ -109,7 +107,7 @@
                     url: "<?php echo e(route('publicaciones.index')); ?>",
                     data: function(d) {
                         d.search = $('#search-box').val();
-                        d.role = $('#role-filter').val();
+                        d.user = $('#user-filter').val();
                         d.active = $('#active-switch').prop('checked') ? 1 : 0;
                         d.date = $('#date-filter').val();
                     }
@@ -163,7 +161,7 @@
                 table.draw();
             });
 
-            $('#role-filter').on('change', function() {
+            $('#user-filter').on('change', function() {
                 table.draw();
             });
 
@@ -176,7 +174,7 @@
             // Obtén los valores de los filtros
             let params = new URLSearchParams({
                 search: $('#search-box').val(),
-                role: $('#role-filter').val(),
+                role: $('#user-filter').val(),
                 active: $('#active-switch').prop('checked') ? 1 : 0,
                 date: $('#date-filter').val()
             });

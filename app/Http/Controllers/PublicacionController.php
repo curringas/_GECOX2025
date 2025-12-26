@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\PublicacionRequest;
 use App\Models\DocumentoEnPublicacion;
 use App\Models\ImagenEnPublicacion;
+use App\Models\User;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +26,7 @@ class PublicacionController extends Controller
     {
         //dd($request->all());
         $categorias=Categoria::all();
+        $users=User::all();
         if ($request->ajax()) {
             $query = Publicacion::query()->select(['Identificador', 'Titulo', 'Autor', 'Fecha', 'FechaInicio','Activa','Visitas','updated_at'])->with('categorias') ;
 
@@ -32,6 +34,7 @@ class PublicacionController extends Controller
             $this->applyCategoriaFilter($query, $request);
             $this->applyActivaFilter($query, $request);
             $this->applyFechaFilter($query, $request);
+            $this->applyUserFilter($query, $request);
 
             return DataTables::of($query)
                 ->editColumn('Fecha', function ($row) {
@@ -78,7 +81,7 @@ class PublicacionController extends Controller
                 ->rawColumns(['Activa', 'action', 'Titulo'])
                 ->make(true);
         }
-        return view('publicaciones.index', compact('categorias'));
+        return view('publicaciones.index', compact('categorias', 'users'));
     }
 
     private function applySearchFilter($query, Request $request)
@@ -100,6 +103,13 @@ class PublicacionController extends Controller
             $query->whereHas('pagina', function ($q) use ($categoria) {
                 $q->where('Identificador', $categoria);
             });
+        }
+    }
+    private function applyUserFilter($query, Request $request)
+    {
+        if ($request->filled('user')) {
+            $user = $request->input('user');
+            $query->where('Creador', $user);
         }
     }
 
