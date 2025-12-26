@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Publicacion;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 
@@ -23,21 +25,56 @@ class PublicacionRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
 
+    private function comprobarSiExisteSlug(string $text, $id = null): string
+    {
+        $base = Str::slug(trim($text ?: ''), '-');
+        if ($base === '') {
+            $base = 'categoria';
+        }
+
+        $suffix = '';
+        $count = 1;
+
+        do {
+            $finalUrl = $base . $suffix;
+
+            $query = Publicacion::where('Url', $finalUrl);
+
+            if ($id) {
+                $query->where('Identificador', '!=', $id);
+            }
+
+            $exists = $query->exists();
+
+            if ($exists) {
+                $suffix = '-' . $count++;
+            }
+        } while ($exists);
+
+        return $finalUrl;
+    }
      
     public function prepareForValidation()
     {
-       /* $this->merge([
-            'Etiqueta' => trim($this->Etiqueta),
-            'Menu' => $this->has('Menu') ? $this->Menu : -1,
-            'Padre' => $this->Padre=="---" ? null : $this->Padre,
-        ]);*/
+        //dd('preparing validation in PublicacionRequest',$this->all());
+        //preparando el SLUG o url , no puede haber 2 iguales
+        $originalUrl = $this->input('Url');
+        $id = $this->input('Identificador'); // null en creación, id en edición
+
+        // Si no se pasa Url, generamos a partir de la etiqueta
+        if (empty($originalUrl)) {
+            $originalUrl = $this->input('Etiqueta', '');
+        }
+
+        $finalUrl = $this->comprobarSiExisteSlug($originalUrl, $id);
+
         $this->merge([
             'Activa' => $this->has('Activa') ? 1 : 0,
             'Video' => $this->has('Video') ? trim($this->Video) : '',
-            'GaleriaURL' => $this->has('GaleriaURL') ? trim($this->Video) : '',
+            'GaleriaURL' => $this->has('GaleriaURL') ? trim($this->GaleriaURL) : '',
             'Keywords' => $this->has('Keywords') ? trim($this->Keywords) : '',
             'AutorEmail' => $this->has('AutorEmail') ? trim($this->AutorEmail) : '',
-            'Url' => trim($this->Url),
+            'Url' => $finalUrl,
             'LlevaComentarios' => $this->has('LlevaComentarios') ? 1 : 0,
             'Email' => $this->has('Email') ? trim($this->Email) : '',
             'Lugar' => $this->has('Lugar') ? trim($this->Lugar) : '',

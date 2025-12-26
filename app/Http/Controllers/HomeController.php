@@ -85,6 +85,7 @@ class HomeController extends Controller
         $publicaciones = Publicacion::select('Identificador', 'Titulo')
             // Buscar por Título (o el campo que desees)
             ->where('Titulo', 'LIKE', '%' . $searchTerm . '%') 
+            ->orderBy('Fecha', 'desc')
             ->limit(10) // Limitar resultados para rendimiento
             ->get();
 
