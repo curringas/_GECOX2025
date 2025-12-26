@@ -86,22 +86,6 @@ endif;
 unset($__errorArgs, $__bag); ?>
                 </div>
 
-    
-                <div class="mb-3 hideable-solo-etiqueta">
-                    <label for="Introduccion" class="form-label">Contenido principal</label>
-                    <textarea id="Introduccion" class="form-control" rows="3" name="Introduccion" placeholder="Introduce una descripción corta para la parte superior de la sección">
-                        <?php echo e(old('Introduccion', $publicacion->Introduccion ?? '')); ?>
-
-                    </textarea>
-                </div>
-                <div class="mb-3 hideable-solo-etiqueta">
-                    <label for="Contenido" class="form-label">Contenido extenso</label>
-                    <textarea id="Contenido" class="form-control" rows="3" name="Contenido" placeholder="Introduce una descripción larga para la parte inferior de la sección">
-                        <?php echo e(old('Contenido', $publicacion->Contenido ?? '')); ?>
-
-                    </textarea>
-                </div>
-
                 
                 <div class="p-3 mb-3 background-seo hideable-solo-etiqueta">
                     <h4 class="font-size-16 mb-3">Opciones posicionamiento SEO</h4>
@@ -124,6 +108,24 @@ unset($__errorArgs, $__bag); ?>
                         </small>
                     </div>
                 </div>
+
+    
+                <div class="mb-3 hideable-solo-etiqueta">
+                    <label for="Introduccion" class="form-label">Contenido principal</label>
+                    <textarea id="Introduccion" class="form-control" rows="3" name="Introduccion" placeholder="Introduce una descripción corta para la parte superior de la sección">
+                        <?php echo e(old('Introduccion', $publicacion->Introduccion ?? '')); ?>
+
+                    </textarea>
+                </div>
+                <div class="mb-3 hideable-solo-etiqueta">
+                    <label for="Contenido" class="form-label">Contenido extenso</label>
+                    <textarea id="Contenido" class="form-control" rows="3" name="Contenido" placeholder="Introduce una descripción larga para la parte inferior de la sección">
+                        <?php echo e(old('Contenido', $publicacion->Contenido ?? '')); ?>
+
+                    </textarea>
+                </div>
+
+                
 
                 
                 <div class="col-12 d-flex justify-content-end mt-3">
