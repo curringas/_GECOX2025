@@ -26,7 +26,7 @@ class PublicacionController extends Controller
         //dd($request->all());
         $categorias=Categoria::all();
         if ($request->ajax()) {
-            $query = Publicacion::query()->select(['Identificador', 'Titulo', 'Autor', 'Fecha', 'FechaInicio','Activa','updated_at'])->with('categorias') ;
+            $query = Publicacion::query()->select(['Identificador', 'Titulo', 'Autor', 'Fecha', 'FechaInicio','Activa','Visitas','updated_at'])->with('categorias') ;
 
             $this->applySearchFilter($query, $request);
             $this->applyCategoriaFilter($query, $request);

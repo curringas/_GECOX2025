@@ -55,6 +55,7 @@
                 <th>@lang('Titulo')</th>
                 <th>@lang('Categorias')</th>
                 <th>@lang('Autor')</th>
+                <th class="text-end">@lang('Visitas')</th>
                 <th>@lang('Activa')</th>
                 <th>@lang('Acciones')</th>
             </tr>
@@ -101,7 +102,7 @@
             });
 
             var table = $('.yajra-datatable').DataTable({
-                order: [[6, 'desc']],
+                order: [[7, 'desc']],
                 processing: true,
                 serverSide: true,
                 responsive: true,  
@@ -135,6 +136,11 @@
                     {
                         data: 'Autor',
                         name: 'Autor'
+                    },
+                    {
+                        data: 'Visitas',
+                        name: 'Visitas',
+                        className: 'text-end'
                     },
                     {
                         data: 'Activa',

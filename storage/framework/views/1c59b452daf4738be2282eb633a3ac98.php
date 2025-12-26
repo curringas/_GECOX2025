@@ -53,6 +53,7 @@
                 <th><?php echo app('translator')->get('Titulo'); ?></th>
                 <th><?php echo app('translator')->get('Categorias'); ?></th>
                 <th><?php echo app('translator')->get('Autor'); ?></th>
+                <th class="text-end"><?php echo app('translator')->get('Visitas'); ?></th>
                 <th><?php echo app('translator')->get('Activa'); ?></th>
                 <th><?php echo app('translator')->get('Acciones'); ?></th>
             </tr>
@@ -99,7 +100,7 @@
             });
 
             var table = $('.yajra-datatable').DataTable({
-                order: [[6, 'desc']],
+                order: [[7, 'desc']],
                 processing: true,
                 serverSide: true,
                 responsive: true,  
@@ -133,6 +134,11 @@
                     {
                         data: 'Autor',
                         name: 'Autor'
+                    },
+                    {
+                        data: 'Visitas',
+                        name: 'Visitas',
+                        className: 'text-end'
                     },
                     {
                         data: 'Activa',
