@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    @lang('titulos.Editar_Usuario')
+    @lang('titulos.Editar_Publicacion')
 @endsection
 
 @section('css')
@@ -18,7 +18,7 @@
             Backend
         @endslot
         @slot('title')
-            @lang('titulos.Editar_Usuario')
+            @lang('titulos.Editar_Publicacion')
         @endslot
     @endcomponent
 

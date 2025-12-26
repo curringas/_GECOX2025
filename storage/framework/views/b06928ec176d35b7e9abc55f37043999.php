@@ -1,5 +1,5 @@
 <?php $__env->startSection('title'); ?>
-    <?php echo app('translator')->get('titulos.Editar_Usuario'); ?>
+    <?php echo app('translator')->get('titulos.Editar_Publicacion'); ?>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('css'); ?>
@@ -16,7 +16,7 @@
             Backend
         <?php $__env->endSlot(); ?>
         <?php $__env->slot('title'); ?>
-            <?php echo app('translator')->get('titulos.Editar_Usuario'); ?>
+            <?php echo app('translator')->get('titulos.Editar_Publicacion'); ?>
         <?php $__env->endSlot(); ?>
     <?php echo $__env->renderComponent(); ?>
 
