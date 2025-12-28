@@ -375,15 +375,21 @@ unset($__errorArgs, $__bag); ?>
                 <div class="row mb-3">
 
                     <div class="col-md-12">
-                        <label for="GaleriaURL" class="form-label">Galería externa (URL)
-                            <i class="fa fa-info-circle text-info"
+                        <label for="GaleriaURL" class="form-label">Galería externa (widget)</label>
+                        <br>
+                        Facebook: <i class="fa fa-info-circle text-info"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
-                                title="Facebook (hasta 100 fotos): https://www.facebook.com/media/set/?set=a.[NUM.ALBUM].[NUM].[NUM.USUARIO]&type=3<hr>
-                                            Flickr (hasta 20 fotos): https://www.flickr.com/photos/[USUARIO]/sets/[NUM.ALBUM]/<hr>
-                                            Google+ (antiguo): https://plus.google.com/u/2/photos/[NUM.USUARIO]/albums/[NUM.ALBUM]">
-                            </i>
-                        </label>
+                                title="<ol>
+                                                <li>Haz click en link</li>
+                                                <li>Pega la url de la galeria en el campo HREF</li>
+                                                <li>Deja vacio el campo WIDTH</li>
+                                                <li>Haz click en OBTENER CODIGO</li>
+                                                <li>Copia el codigo y pégalo en este campo</li>
+                                            </ol">
+                            </i> =>
+                            <span class="text-muted"><a href="https://developers.facebook.com/docs/plugins/embedded-posts" style="text-decoration: underline">Generar código</a></span>
+                            <br><br>
                         <textarea name="GaleriaURL" id="GaleriaURL" rows="4"
                             class="form-control <?php $__errorArgs = ['GaleriaURL'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
