@@ -288,7 +288,7 @@
                             </i>
                         </label>
                         <input type="text" name="GaleriaURL" id="GaleriaURL"
-                                value="{{ old('GaleriaURL', $publicacion->GaleriaUR ?? '') }}"
+                                value="{{ old('GaleriaURL', $publicacion->GaleriaURL ?? '') }}"
                                 class="form-control @error('GaleriaURL') is-invalid @enderror">
                         @error('GaleriaURL')
                             <div class="invalid-feedback">{{ $message }}</div>

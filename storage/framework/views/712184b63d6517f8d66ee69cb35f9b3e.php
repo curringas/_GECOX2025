@@ -385,7 +385,7 @@ unset($__errorArgs, $__bag); ?>
                             </i>
                         </label>
                         <input type="text" name="GaleriaURL" id="GaleriaURL"
-                                value="<?php echo e(old('GaleriaURL', $publicacion->GaleriaUR ?? '')); ?>"
+                                value="<?php echo e(old('GaleriaURL', $publicacion->GaleriaURL ?? '')); ?>"
                                 class="form-control <?php $__errorArgs = ['GaleriaURL'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
