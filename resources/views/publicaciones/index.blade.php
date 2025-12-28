@@ -162,7 +162,7 @@
             });
 
 
-            $('#search-box').on('keyup', function() {
+            $('#search-box').on('input', function() {
                 table.draw();
             });
 
