@@ -283,9 +283,8 @@
                         Facebook: <i class="fa fa-info-circle text-info"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
-                                title="Facebook: https://developers.facebook.com/docs/plugins/embedded-posts<hr>
-                                            <ol>
-                                                <li>Haz click en la url anterior</li>
+                                title="<ol>
+                                                <li>Haz click en Generar código</li>
                                                 <li>Pega la url de la galeria en el campo HREF</li>
                                                 <li>Deja vacio el campo WIDTH</li>
                                                 <li>Haz click en OBTENER CODIGO</li>
