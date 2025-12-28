@@ -278,18 +278,16 @@
                 <div class="row mb-3">
 
                     <div class="col-md-12">
-                        <label for="GaleriaURL" class="form-label">Galería externa (URL)
+                        <label for="GaleriaURL" class="form-label">Galería externa (widget)
                             <i class="fa fa-info-circle text-info"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
-                                title="Facebook (hasta 100 fotos): https://www.facebook.com/media/set/?set=a.[NUM.ALBUM].[NUM].[NUM.USUARIO]&type=3<hr>
-                                            Flickr (hasta 20 fotos): https://www.flickr.com/photos/[USUARIO]/sets/[NUM.ALBUM]/<hr>
-                                            Google+ (antiguo): https://plus.google.com/u/2/photos/[NUM.USUARIO]/albums/[NUM.ALBUM]">
+                                title="Facebook ( fotos): https://developers.facebook.com/docs/plugins/embedded-posts<hr>
+                                            Usa esta url para pegar la galeria de fotos de Facebook y obtenter el codigo que insertar en la web.">
                             </i>
                         </label>
-                        <input type="text" name="GaleriaURL" id="GaleriaURL"
-                                value="{{ old('GaleriaURL', $publicacion->GaleriaURL ?? '') }}"
-                                class="form-control @error('GaleriaURL') is-invalid @enderror">
+                        <textarea name="GaleriaURL" id="GaleriaURL" rows="4"
+                            class="form-control @error('GaleriaURL') is-invalid @enderror">{{ old('GaleriaURL', $publicacion->GaleriaURL ?? '') }}</textarea>
                         @error('GaleriaURL')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
