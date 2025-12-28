@@ -278,20 +278,21 @@
                 <div class="row mb-3">
 
                     <div class="col-md-12">
-                        <label for="GaleriaURL" class="form-label">Galería externa (widget)
-                            <i class="fa fa-info-circle text-info"
+                        <label for="GaleriaURL" class="form-label">Galería externa (widget)</label>
+                        <br>
+                        Facebook: <i class="fa fa-info-circle text-info"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
-                                title="Facebook: https://developers.facebook.com/docs/plugins/embedded-posts<hr>
-                                            <ol>
-                                                <li>Haz click en la url anterior</li>
+                                title="<ol>
+                                                <li>Haz click en link</li>
                                                 <li>Pega la url de la galeria en el campo HREF</li>
                                                 <li>Deja vacio el campo WIDTH</li>
                                                 <li>Haz click en OBTENER CODIGO</li>
                                                 <li>Copia el codigo y pégalo en este campo</li>
                                             </ol">
-                            </i>
-                        </label>
+                            </i> =>
+                            <span class="text-muted"><a href="https://developers.facebook.com/docs/plugins/embedded-posts" style="text-decoration: underline">Generar código</a></span>
+                            <br><br>
                         <textarea name="GaleriaURL" id="GaleriaURL" rows="4"
                             class="form-control @error('GaleriaURL') is-invalid @enderror">{{ old('GaleriaURL', $publicacion->GaleriaURL ?? '') }}</textarea>
                         @error('GaleriaURL')
