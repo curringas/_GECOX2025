@@ -282,8 +282,14 @@
                             <i class="fa fa-info-circle text-info"
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
-                                title="Facebook ( fotos): https://developers.facebook.com/docs/plugins/embedded-posts<hr>
-                                            Usa esta url para pegar la galeria de fotos de Facebook y obtenter el codigo que insertar en la web.">
+                                title="Facebook: https://developers.facebook.com/docs/plugins/embedded-posts<hr>
+                                            <ol>
+                                                <li>Haz click en la url anterior</li>
+                                                <li>Pega la url de la galeria en el campo HREF</li>
+                                                <li>Deja vacio el campo WIDTH</li>
+                                                <li>Haz click en OBTENER CODIGO</li>
+                                                <li>Copia el codigo y pégalo en este campo</li>
+                                            </ol">
                             </i>
                         </label>
                         <textarea name="GaleriaURL" id="GaleriaURL" rows="4"
