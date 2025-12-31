@@ -211,8 +211,38 @@ class PublicacionController extends Controller
     public function destroy($id)
     {
         $publicacion = Publicacion::findOrFail($id);
+        $disk = 'public';
+
+        // Eliminar archivos físicos y registros de imágenes
+        foreach ($publicacion->imagenes as $imagen) {
+            $baseName = pathinfo($imagen->Imagen, PATHINFO_FILENAME);
+            $baseName = substr($baseName, 0, strrpos($baseName, '_'));
+            $ext = pathinfo($imagen->Imagen, PATHINFO_EXTENSION);
+            $folderName = dirname($imagen->Imagen);
+
+            Storage::disk($disk)->delete([
+                "{$folderName}/{$baseName}_original.{$ext}",
+                "{$folderName}/{$baseName}_ppal.{$ext}",
+                "{$folderName}/{$baseName}_portada.{$ext}",
+                "{$folderName}/{$baseName}_thumb.{$ext}",
+            ]);
+        }
+        $publicacion->imagenes()->delete();
+
+        // Eliminar archivos físicos y registros de documentos
+        foreach ($publicacion->documentos as $documento) {
+            Storage::disk($disk)->delete($documento->Documento);
+        }
+        $publicacion->documentos()->delete();
+
+        // Detach (no delete) de la relación many-to-many con categorías
+        $publicacion->categorias()->detach();
+
+        // Finalmente, eliminar la publicación
         $publicacion->delete();
-        return response()->json(null, 204);
+
+        return Redirect::route('publicaciones.index')
+            ->with('success', __('messages.publicacion_deleted'));
     }
 
 

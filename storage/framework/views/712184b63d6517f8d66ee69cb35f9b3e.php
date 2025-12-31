@@ -381,7 +381,7 @@ unset($__errorArgs, $__bag); ?>
                                 data-bs-toggle="tooltip"
                                 data-bs-placement="right"
                                 title="<ol>
-                                                <li>Haz click en link</li>
+                                                <li>Haz click en Generar código</li>
                                                 <li>Pega la url de la galeria en el campo HREF</li>
                                                 <li>Deja vacio el campo WIDTH</li>
                                                 <li>Haz click en OBTENER CODIGO</li>
