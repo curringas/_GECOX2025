@@ -97,8 +97,8 @@
             <tr>
                 <th>Orden</th> {{-- nueva columna visible sólo si filtro categoria --}}                
                 <th>Banner</th>
-                <th>Fecha</th>
                 <th>Título</th>
+                <th>Fecha</th>
                 <th>Tipo</th>
                 <th>Target</th>
                 <th class="text-center">Acciones</th>
