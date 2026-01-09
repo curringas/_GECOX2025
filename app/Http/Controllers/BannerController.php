@@ -317,5 +317,26 @@ class BannerController extends Controller
             return response()->json(['ok' => false, 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function destroy($id): RedirectResponse
+    {
+        $banner = Banner::findOrFail($id);
+
+        // Eliminar imagen del disco si existe
+        if ($banner->Banner) {
+            Storage::disk('public')->delete('banners/' . $banner->Banner);
+        }
+        if ($banner->BannerMovil) {
+            Storage::disk('public')->delete('banners/' . $banner->BannerMovil);
+        }
+
+        // Eliminar relaciones en la tabla pivot
+        $banner->categorias()->detach();
+
+        // Eliminar el registro de la base de datos
+        $banner->delete();
+
+        return redirect()->route('banners.index')->with('success', 'Banner eliminado correctamente.');
+    }
     
 }
