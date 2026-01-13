@@ -136,6 +136,7 @@ class CategoriaRequest extends FormRequest
             ],
             'MetaTitle' => 'nullable|string',
             'MetaDescription' => 'nullable|string',
+            'Bloques' => 'required|integer',
         ];
     }
 }

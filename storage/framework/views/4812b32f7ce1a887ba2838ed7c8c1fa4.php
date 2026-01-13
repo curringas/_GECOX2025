@@ -1,17 +1,17 @@
-<form method="POST" id="formCategoria" action="{{  route('categorias.store') }}"  role="form" enctype="multipart/form-data">
-    @csrf
-    <input type="hidden" name="Identificador" value="{{ isset($amodificar) ? $amodificar->Identificador : '' }}">
+<form method="POST" id="formCategoria" action="<?php echo e(route('categorias.store')); ?>"  role="form" enctype="multipart/form-data">
+    <?php echo csrf_field(); ?>
+    <input type="hidden" name="Identificador" value="<?php echo e(isset($amodificar) ? $amodificar->Identificador : ''); ?>">
     
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="etiqueta" class="form-label">Etiqueta* <span class="text-muted">(Nombre en el menú)</span></label>
-            <input type="text" name="Etiqueta" class="form-control bg-warning-subtle" value="{{ old('Etiqueta', $amodificar->Etiqueta ?? '') }}" id="Etiqueta" placeholder="Etiqueta" required>
+            <input type="text" name="Etiqueta" class="form-control bg-warning-subtle" value="<?php echo e(old('Etiqueta', $amodificar->Etiqueta ?? '')); ?>" id="Etiqueta" placeholder="Etiqueta" required>
             
         </div>
         <div class="col-md-6 mb-3">
             <label for="visible" class="form-label">Mostrar en el menú</label>
             <div class="form-check form-switch form-switch-lg mb-0" dir="ltr">
-                <input class="form-check-input" type="checkbox" id="active-switch" name="Menu" value="0" {{ old('Menu', $amodificar->Menu ?? 0) == 0 ? 'checked="checked"' : '' }}>
+                <input class="form-check-input" type="checkbox" id="active-switch" name="Menu" value="0" <?php echo e(old('Menu', $amodificar->Menu ?? 0) == 0 ? 'checked="checked"' : ''); ?>>
                 <label class="form-check-label ms-2 mb-0" for="active-switch">Visible</label>
             </div>
         </div>
@@ -20,7 +20,7 @@
 
         <div class="col-md-8 mb-3">
             <label for="tipo" class="form-label">Tipo</label>
-            @php
+            <?php
                 // Detectar tipo actual si estamos editando
                 $tipoActual = null;
 
@@ -38,24 +38,24 @@
 
                 // Tomar el valor del old() si hay validación fallida
                 $tipoSeleccionado = old('Tipo', $tipoActual);
-            @endphp
+            ?>
             <select class="form-select" name="Tipo" id="tipo">
-                <option value="0" {{ $tipoSeleccionado == 0 ? 'selected' : '' }}>Con publicaciones</option>
-                <option value="1" {{ $tipoSeleccionado == 1 ? 'selected' : '' }}>Estática (Sólo soporte técnico)</option>
-                <option value="2" {{ $tipoSeleccionado == 2 ? 'selected' : '' }}>Etiqueta (Contenedor de submenús)</option>
-                <option value="3" {{ $tipoSeleccionado == 3 ? 'selected' : '' }}>Enlace a web externa</option>
+                <option value="0" <?php echo e($tipoSeleccionado == 0 ? 'selected' : ''); ?>>Con publicaciones</option>
+                <option value="1" <?php echo e($tipoSeleccionado == 1 ? 'selected' : ''); ?>>Estática (Sólo soporte técnico)</option>
+                <option value="2" <?php echo e($tipoSeleccionado == 2 ? 'selected' : ''); ?>>Etiqueta (Contenedor de submenús)</option>
+                <option value="3" <?php echo e($tipoSeleccionado == 3 ? 'selected' : ''); ?>>Enlace a web externa</option>
             </select>
         </div>
         <div class="col-md-4 mb-3">
             <label for="bloques" class="form-label">Noticias por página</label>
             <select class="form-select" name="Bloques" id="bloques" required>
-                <option value="7" {{ old('Bloques', $amodificar->Bloques ?? 7) == 7 ? 'selected' : '' }}>
+                <option value="7" <?php echo e(old('Bloques', $amodificar->Bloques ?? 7) == 7 ? 'selected' : ''); ?>>
                     7
                 </option>
-                <option value="1" {{ old('Bloques', $amodificar->Bloques ?? 1) == 1 ? 'selected' : '' }}>
+                <option value="1" <?php echo e(old('Bloques', $amodificar->Bloques ?? 1) == 1 ? 'selected' : ''); ?>>
                     1
                 </option>
-                <option value="14" {{ old('Bloques', $amodificar->Bloques ?? 14) == 14 ? 'selected' : '' }}>
+                <option value="14" <?php echo e(old('Bloques', $amodificar->Bloques ?? 14) == 14 ? 'selected' : ''); ?>>
                     14
                 </option>
             </select>
@@ -65,49 +65,52 @@
         <div class="col-md-6 mb-3">
             <label for="etiqueta" class="form-label">Pertenece a</label>
             <select class="form-select" name="Padre" id="padre" required="">
-                <option value="---" {{ old('Padre', $amodificar->Padre ?? null) == null ? 'selected'  : '' }}>
+                <option value="---" <?php echo e(old('Padre', $amodificar->Padre ?? null) == null ? 'selected'  : ''); ?>>
                     Inicio
                 </option>
-                @foreach ($categorias as $categoria)
-                    <option value="{{ $categoria->Identificador }}" 
-                                        {{ old('Padre', $amodificar->Padre ?? '') == $categoria->Identificador  ? 'selected'  : '' }}>
-                        {{ $categoria->Etiqueta }}
+                <?php $__currentLoopData = $categorias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoria): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <option value="<?php echo e($categoria->Identificador); ?>" 
+                                        <?php echo e(old('Padre', $amodificar->Padre ?? '') == $categoria->Identificador  ? 'selected'  : ''); ?>>
+                        <?php echo e($categoria->Etiqueta); ?>
+
                     </option>
-                    @if ($categoria->hijos && $categoria->hijos->count())
-                        @foreach ($categoria->hijos as $hijo)
-                        <option value="{{ $hijo->Identificador }}"
-                                        {{ old('Padre', $amodificar->Padre ?? '') == $hijo->Identificador  ? 'selected' : '' }}>
-                                &nbsp;> {{ $hijo->Etiqueta }}
+                    <?php if($categoria->hijos && $categoria->hijos->count()): ?>
+                        <?php $__currentLoopData = $categoria->hijos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $hijo): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($hijo->Identificador); ?>"
+                                        <?php echo e(old('Padre', $amodificar->Padre ?? '') == $hijo->Identificador  ? 'selected' : ''); ?>>
+                                &nbsp;> <?php echo e($hijo->Etiqueta); ?>
+
                             </option>
-                            @if ($hijo->hijos && $hijo->hijos->count())
-                                @foreach ($hijo->hijos as $nieto)
-                                    <option value="{{ $nieto->Identificador }}" 
-                                        {{ old('Padre', $amodificar->Padre ?? '') == $nieto->Identificador  ? 'selected' : '' }}>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>> {{ $nieto->Etiqueta }}
+                            <?php if($hijo->hijos && $hijo->hijos->count()): ?>
+                                <?php $__currentLoopData = $hijo->hijos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $nieto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($nieto->Identificador); ?>" 
+                                        <?php echo e(old('Padre', $amodificar->Padre ?? '') == $nieto->Identificador  ? 'selected' : ''); ?>>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;>> <?php echo e($nieto->Etiqueta); ?>
+
                                     </option>
-                                @endforeach
-                            @endif
-                        @endforeach
-                    @endif
-                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                            <?php endif; ?>
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php endif; ?>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </select>
         </div>
         <div class="col-md-6 mb-3 hideable-solo-etiqueta">
             <label for="orden" class="form-label">Privacidad</label>
             <select class="form-select" name="Privacidad" id="privacidad" required="">
-                <option value="1" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 1 ? 'selected' : '' }}>
+                <option value="1" <?php echo e(old('Privacidad', $amodificar->Privacidad ?? '') == 1 ? 'selected' : ''); ?>>
                     Pública
                 </option>
-                <option value="2" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 2 ? 'selected' : '' }}>
+                <option value="2" <?php echo e(old('Privacidad', $amodificar->Privacidad ?? '') == 2 ? 'selected' : ''); ?>>
                     Nivel 2 - Registrados
                 </option>   
-                <option value="3" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 3 ? 'selected' : '' }}>
+                <option value="3" <?php echo e(old('Privacidad', $amodificar->Privacidad ?? '') == 3 ? 'selected' : ''); ?>>
                     Nivel 3 - Registrados ++
                 </option>   
-                <option value="4" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 4 ? 'selected' : '' }}>
+                <option value="4" <?php echo e(old('Privacidad', $amodificar->Privacidad ?? '') == 4 ? 'selected' : ''); ?>>
                     Nivel 4 - Registrados +++
                 </option>   
-                <option value="5" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 5 ? 'selected' : '' }}>
+                <option value="5" <?php echo e(old('Privacidad', $amodificar->Privacidad ?? '') == 5 ? 'selected' : ''); ?>>
                     Nivel 5 - Registrados ++++
                 </option>   
             </select>
@@ -115,61 +118,70 @@
     </div>
     <div class="mb-3 hideable-solo-etiqueta">
         <label for="titulo" class="form-label">Título <span class="text-muted">(Titulo h1 de la página obligatorio para publicaciones o estática)</span></label>
-        <input type="text" name="Titulo" class="form-control " value="{{ old('Titulo', $amodificar->Titulo ?? '') }}" id="titulo" placeholder="Titulo">
+        <input type="text" name="Titulo" class="form-control " value="<?php echo e(old('Titulo', $amodificar->Titulo ?? '')); ?>" id="titulo" placeholder="Titulo">
     </div>
     <div class="mb-3 hideable-solo-etiqueta">
         <label for="explicativo" class="form-label">Descripción superior</label>
         <textarea id="explicativo" class="form-control" rows="3" name="Explicativo" placeholder="Introduce una descripción corta para la parte superior de la sección">
-            {{ old('Explicativo', $amodificar->Explicativo ?? '') }}
+            <?php echo e(old('Explicativo', $amodificar->Explicativo ?? '')); ?>
+
         </textarea>
     </div>
     <div class="mb-3 hideable-solo-etiqueta">
         <label for="explicativoproductos" class="form-label">Descripción inferior</label>
         <textarea id="explicativoproductos" class="form-control" rows="3" name="ExplicativoProductos" placeholder="Introduce una descripción larga para la parte inferior de la sección">
-            {{ old('ExplicativoProductos', $amodificar->ExplicativoProductos ?? '') }}
+            <?php echo e(old('ExplicativoProductos', $amodificar->ExplicativoProductos ?? '')); ?>
+
         </textarea>
     </div>
     
     
     <div class="mb-3 hideable-link-external" style="display: none;">
         <label for="externo" class="form-label">Enlace externo</label>
-        <input type="text" name="Externo" class="form-control " value="{{ old('Externo', $amodificar->Externo ?? '') }}" id="externo" placeholder="https://">
-        @error('Externo')
-            <div class="text-danger small">{{ $message }}</div>
-        @enderror
+        <input type="text" name="Externo" class="form-control " value="<?php echo e(old('Externo', $amodificar->Externo ?? '')); ?>" id="externo" placeholder="https://">
+        <?php $__errorArgs = ['Externo'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+            <div class="text-danger small"><?php echo e($message); ?></div>
+        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
     </div>
     <div class="mb-3 hideable-link-external" style="display: none;">
         <label for="target" class="form-label">Abrir en</label>
         <select class="form-select" name="Target" id="target" required="">
-            <option value="0" {{ old('Target', $amodificar->Target ?? 0) == 0 ? 'selected' : '' }}>
+            <option value="0" <?php echo e(old('Target', $amodificar->Target ?? 0) == 0 ? 'selected' : ''); ?>>
                 En la misma ventana
             </option>
-            <option value="1" {{ old('Target', $amodificar->Target ?? 0) == 1 ? 'selected' : '' }}>
+            <option value="1" <?php echo e(old('Target', $amodificar->Target ?? 0) == 1 ? 'selected' : ''); ?>>
                 En una nueva ventana
             </option>
         </select>
     </div>
     <div class="mb-3 hideable-estatico" style="display: none;">
         <label for="estatico" class="form-label">Archivo estático</label>
-        <input type="text" name="Estatico" class="form-control " value="{{ old('Estatico', $amodificar->Estatico ?? '') }}" id="estatico" placeholder="archivo.html">
+        <input type="text" name="Estatico" class="form-control " value="<?php echo e(old('Estatico', $amodificar->Estatico ?? '')); ?>" id="estatico" placeholder="archivo.html">
     </div>
     
     <div class="p-3 mb-3 background-seo hideable-solo-etiqueta">
         <h4 class="font-size-16 mb-3">Opciones posicionamiento SEO</h4>
         <div class="mb-3">
             <label for="Url" class="form-label">Slug <span class="text-muted">(url de la noticia,parecida al titulo. Usa - en lugar de espacios)</span></label>
-            <input type="text" id="Url" class="form-control" value="{{ old('Url', $amodificar->Url ?? '') }}" placeholder="Url de la noticia" name="Url">
+            <input type="text" id="Url" class="form-control" value="<?php echo e(old('Url', $amodificar->Url ?? '')); ?>" placeholder="Url de la noticia" name="Url">
         </div>
         <div class="mb-3">
             <label for="title" class="form-label">Title <span class="text-muted">(60 carateres aprox.)</span></label>
-            <input type="text" id="MetaTitle" class="form-control" maxlength="70" value=" {{ $amodificar->MetaTitle ?? '' }}" placeholder="Introduce un titulo similar diferente" name="MetaTitle">
+            <input type="text" id="MetaTitle" class="form-control" maxlength="70" value=" <?php echo e($amodificar->MetaTitle ?? ''); ?>" placeholder="Introduce un titulo similar diferente" name="MetaTitle">
             <small class="text-muted position-absolute end-0 me-4" id="titleCount">
                 0 / 70
             </small>
         </div>
         <div class="mb-3">
             <label for="title" class="form-label">Description <span class="text-muted">(160 carateres aprox.)</span></label>
-            <textarea id="MetaDescription"  class="form-control" maxlength="200" rows="3" name="MetaDescription" placeholder="Introduce una descripción para motores de búsqueda">{{ $amodificar->MetaDescription ?? '' }}</textarea>
+            <textarea id="MetaDescription"  class="form-control" maxlength="200" rows="3" name="MetaDescription" placeholder="Introduce una descripción para motores de búsqueda"><?php echo e($amodificar->MetaDescription ?? ''); ?></textarea>
             <small class="text-muted position-absolute end-0 me-4" id="descCount">
                 0 / 170
             </small>
@@ -178,9 +190,9 @@
     <button type="submit" class="btn btn-primary">Guardar Categoría</button>
 </form>
 
-@section('script-bottom')
+<?php $__env->startSection('script-bottom'); ?>
 
-    <script src="{{ URL::asset('build/js/pages/xpt_seo.init.js') }}"></script>
+    <script src="<?php echo e(URL::asset('build/js/pages/xpt_seo.init.js')); ?>"></script>
 
 <script>
 
@@ -251,4 +263,4 @@ $(document).ready(function() {
     
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?><?php /**PATH /Users/curro/Developer/_GECOX2025/resources/views/categorias/partials/categoria-form.blade.php ENDPATH**/ ?>
