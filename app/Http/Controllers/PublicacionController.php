@@ -353,7 +353,7 @@ class PublicacionController extends Controller
             if (!$file->isValid()) continue; 
 
             // 4.1 Obtener descripción de los archivos nuevos
-            $currentDescription = $newDescriptions[$i] ?? pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $currentDescription = $newDescriptions[$i] ?? '';
 
             // 4.2 Preparación
             $ext = 'jpg'; // Salida unificada a JPEG
