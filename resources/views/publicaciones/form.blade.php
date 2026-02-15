@@ -28,7 +28,7 @@
                     </div>
                     <div class="form-check form-switch form-switch-lg mb-0" dir="ltr">
                         <label class="form-check-label ms-2 mb-0" for="active-switch">Visible</label>
-                        <input class="form-check-input" type="checkbox" id="active-switch" name="Activa" value="1" {{ old('Menu', $amodificar->Menu ?? 0) == 0 ? 'checked="checked"' : '' }}>
+                        <input class="form-check-input" type="checkbox" id="active-switch" name="Activa" value="1" {{ old('Activa', $publicacion->Activa ?? 1) == 1 ? 'checked="checked"' : '' }}>
                         
                     </div>
                 </div>

@@ -13,6 +13,9 @@
 # Archivos de caché y sesión
 /bootstrap/cache/*.php
 
+# views
+/storage/views/*.php
+
 # Logs
 /storage/logs/*.log
 
