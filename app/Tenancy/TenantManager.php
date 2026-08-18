@@ -4,10 +4,18 @@ namespace App\Tenancy;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\View;
 
 class TenantManager
 {
     private ?string $current = null;
+
+    private ?Tenant $tenant = null;
+
+    public function tenant(): ?Tenant
+    {
+        return $this->tenant;
+    }
 
     /** Devuelve la clave del tenant para un host, con fallback al default. */
     public function resolveFromHost(string $host): string
@@ -38,6 +46,12 @@ class TenantManager
 
         $this->configureDatabase($cfg['db']);
         $this->configureStorage($cfg['storage'] ?? '');
+
+        config(['session.cookie' => $tenant.'_session']);
+        config(['cache.prefix' => $tenant]);
+
+        $this->tenant = new Tenant($tenant, $cfg);
+        View::share('tenant', $this->tenant);
 
         $this->current = $tenant;
     }
