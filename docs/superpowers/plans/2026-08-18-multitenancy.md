@@ -1078,4 +1078,4 @@ Recordatorio (detalle en `docs/despliegue.md`), a ejecutar en el servidor cuando
 2. `.env` de producción con `TENANT_ENJUEGO_DB_*`.
 3. Crear `storage/app/public/tenants/granadaenjuego`.
 4. Front de granadaenjuego (repo aparte): desplegarlo y crear su **symlink** hacia esa carpeta de storage.
-5. Subir los logos reales a `public/images/tenants/{tenant}/`.
+5. Poner los logos en `resources/images/tenants/{tenant}/` y ejecutar `npm run build` (Vite los copia a `public/build/images/tenants/{tenant}/`).

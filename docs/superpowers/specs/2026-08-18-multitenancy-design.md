@@ -154,9 +154,11 @@ repo).
 
 ### 4. Branding por tenant (logo + nombre)
 
-- Logos por tenant en `public/images/tenants/{tenant}/` con el juego que usa la
-  plantilla: `logo-dark.png`, `logo-light.png`, `logo.svg`, `logo-light.svg`.
-  Fuera de Vite → se añade un tenant sin recompilar assets.
+- Logos por tenant en `resources/images/tenants/{tenant}/` con el juego que usa
+  la plantilla: `logo-dark.png`, `logo-light.png`, `logo.svg`, `logo-light.svg`.
+  Vite (`viteStaticCopy`) los copia a `public/build/images/tenants/{tenant}/` en
+  `npm run build`, igual que el resto de imágenes del panel. El helper de logo
+  apunta ahí y cae en `build/images/{file}` si el tenant no tiene el suyo.
 - `TenantManager` comparte a las vistas el tenant (nombre + helper de logo).
   Se sustituyen las referencias `build/images/logo-*` por el helper del tenant
   en: `auth/login`, `auth/register`, `auth/verify`, `auth/passwords/reset`,
@@ -196,7 +198,7 @@ repo).
 - `config/tenants.php`
 - `app/Tenancy/TenantManager.php`
 - `app/Http/Middleware/IdentifyTenant.php`
-- `public/images/tenants/{granadaesnoticia,granadaenjuego}/...` (logos)
+- `resources/images/tenants/{granadaesnoticia,granadaenjuego}/...` (logos; Vite los copia a `public/build/images/tenants/...`)
 - Tests: unit de `resolveFromHost`; feature de conmutación por `Host`.
 
 **Tocados**
