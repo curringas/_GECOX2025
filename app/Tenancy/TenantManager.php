@@ -3,6 +3,7 @@
 namespace App\Tenancy;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class TenantManager
 {
@@ -36,6 +37,7 @@ class TenantManager
         }
 
         $this->configureDatabase($cfg['db']);
+        $this->configureStorage($cfg['storage'] ?? '');
 
         $this->current = $tenant;
     }
@@ -53,5 +55,15 @@ class TenantManager
         config(['database.connections.tenant' => $conn]);
         config(['database.default' => 'tenant']);
         DB::purge('tenant');
+    }
+
+    private function configureStorage(string $prefix): void
+    {
+        $suffix = $prefix !== '' ? '/'.trim($prefix, '/') : '';
+
+        config(['filesystems.disks.public.root' => storage_path('app/public'.$suffix)]);
+        config(['filesystems.disks.public.url'  => rtrim(config('app.url'), '/').'/storage'.$suffix]);
+
+        Storage::forgetDisk('public'); // fuerza recrear el disco con la nueva config
     }
 }
