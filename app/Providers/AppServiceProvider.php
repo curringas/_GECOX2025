@@ -34,6 +34,8 @@ class AppServiceProvider extends ServiceProvider
             return new ImageManager($driverInstance);
         });
         // ================================
+
+        $this->app->singleton(\App\Tenancy\TenantManager::class);
     }
 
     /**
