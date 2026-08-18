@@ -2,7 +2,7 @@
 
 - **Fecha**: 2026-08-18
 - **Rama**: `feature/multitenant`
-- **Estado**: Diseño aprobado (pendiente de plan de implementación)
+- **Estado**: Implementado (código en `feature/multitenant`)
 
 ## Objetivo
 
