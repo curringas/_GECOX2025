@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
+use App\Tenancy\TenantManager;
 //para la gestión de imágenes
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver as GdDriver;
@@ -48,5 +49,10 @@ class AppServiceProvider extends ServiceProvider
         //
         Schema::defaultStringLength(191);
 
+        if ($this->app->runningInConsole()) {
+            $manager = $this->app->make(TenantManager::class);
+            $tenant = $manager->resolveFromConsole($_SERVER['argv'] ?? [], env('TENANT'));
+            $manager->configure($tenant);
+        }
     }
 }

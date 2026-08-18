@@ -36,6 +36,25 @@ class TenantManager
         return $this->current;
     }
 
+    public function resolveFromConsole(array $argv, ?string $envTenant): string
+    {
+        $picked = null;
+
+        foreach ($argv as $arg) {
+            if (str_starts_with($arg, '--tenant=')) {
+                $picked = substr($arg, strlen('--tenant='));
+                break;
+            }
+        }
+
+        $picked = $picked ?? ($envTenant ?: null);
+
+        if ($picked !== null && config("tenants.tenants.$picked") !== null) {
+            return $picked;
+        }
+        return config('tenants.default');
+    }
+
     public function configure(string $tenant): void
     {
         $cfg = config("tenants.tenants.$tenant");
