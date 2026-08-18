@@ -13,8 +13,8 @@
 # Archivos de caché y sesión
 /bootstrap/cache/*.php
 
-# views
-/storage/views/*.php
+# views compiladas (cache de Blade) — no versionar
+/storage/framework/views/*.php
 
 # Logs
 /storage/logs/*.log
