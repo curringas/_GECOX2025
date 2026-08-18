@@ -111,7 +111,7 @@
                             {!! $banner->Codigo !!}
                         @else
                             <a href="{{ $banner->URL ? $banner->URL : '#' }}" target="_blank">
-                                <img src="{{ asset('storage/banners/' . $banner->Banner) }}" alt="{{ $banner->Titulo }}" class="img-fluid" />
+                                <img src="{{ Storage::disk('public')->url('banners/' . $banner->Banner) }}" alt="{{ $banner->Titulo }}" class="img-fluid" />
                             </a>
                         @endif
                         <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1" id="delete-current-banner" title="Eliminar imagen">&times;</button>

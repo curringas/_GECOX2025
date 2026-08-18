@@ -69,7 +69,7 @@ class BannerController extends Controller
                 ->addColumn('Banner', function ($row) {
                     if (!empty($row->Banner) && !empty($row->Identificador)) {
                         $url = route('banner.edit', $row->Identificador);
-                        return '<a href="' . $url . '"><img src="'.asset('storage/banners/'.$row->Banner).'" style="max-height:60px" /></a>';
+                        return '<a href="' . $url . '"><img src="'.Storage::disk('public')->url('banners/'.$row->Banner).'" style="max-height:60px" /></a>';
                     }
                     return 'CODIGO';
                 })

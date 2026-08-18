@@ -3,6 +3,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class ImagenEnPublicacion extends Model
 {
@@ -42,7 +43,7 @@ class ImagenEnPublicacion extends Model
             } else {
                 // Fallback por si no hay publicación asociada: 
                 // Devuelve una imagen por defecto o la ruta tal cual
-                return asset('storage/img/default_thumb.jpg'); 
+                return Storage::disk('public')->url('img/default_thumb.jpg');
             }
         }
 

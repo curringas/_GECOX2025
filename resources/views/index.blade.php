@@ -59,7 +59,7 @@
                             @if ($slider->BannerCodigoFuente)
                                 {{ $slider->BannerCodigoFuente }}
                             @elseif (isset($slider) && $slider->BannerImagen)
-                                <img src="{{ asset('storage/'.$slider->BannerImagen) }}" 
+                                <img src="{{ Storage::disk('public')->url($slider->BannerImagen) }}" 
                                     alt="{{ $slider->BannerTitulo}}"
                                     title="{{ $slider->BannerTitulo}}" 
                                     width="{{ config('gecox_portada.banners.slider.ancho', '1080') }}"
