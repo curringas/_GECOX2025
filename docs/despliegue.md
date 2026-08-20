@@ -39,21 +39,40 @@ Existe configuración **SFTP** en `.vscode/sftp.json` con `uploadOnSave: false`
 emergencia**, no el flujo normal. La lista `ignore` de ese fichero excluye
 `.git`, `node_modules`, `*.md`, etc.
 
-## Acciones tras el pull — POR CONFIRMAR
+## Acciones tras el pull
 
-Falta documentar qué ejecuta Plesk **después** del `pull` (en Plesk: "Acciones
-de despliegue adicionales"). Conviene dejar claro si en cada despliegue se
-corre o no:
+Plesk tiene configuradas como **acciones de despliegue adicionales** (además de
+otras internas que no se ven en el panel):
 
-- [ ] `composer install --no-dev --optimize-autoloader`
-- [ ] `npm ci && npm run build` (o si los assets de `public/build` se
-      commitean ya compilados)
-- [ ] `php artisan migrate --force` (recordar: el esquema de negocio `P0114_*`
-      **no** está en migraciones; ver `database-schema.md`)
-- [ ] `php artisan storage:link` (idempotente)
-- [ ] `php artisan config:cache` / `route:cache` / `view:cache`
+```bash
+rm -f public/hot        # descarta el hot-file de Vite -> usa assets compilados
+npm run build           # compila assets y copia resources/{images,...} a public/build/
+php artisan storage:link
+```
 
-> Curro: rellena esta lista con lo que realmente tienes configurado en Plesk.
+Notas:
+
+- **`public/build` está en `.gitignore`** → los assets se compilan **en el
+  servidor** (`npm run build`). Por eso los logos por tenant
+  (`resources/images/tenants/...`) llegan solos a `public/build/...` sin pasos
+  manuales. (La feature no añadió dependencias npm nuevas; `npm run build` sin
+  `npm ci` basta si `node_modules` ya está.)
+- **No hay migraciones**: el esquema `P0114_*` no está en migraciones
+  (`database-schema.md`). Si cambia el esquema, se aplica a mano (`../CAMBIOSDB.txt`).
+- **No hay dependencias PHP nuevas** por multitenancy; las clases `app/Tenancy/*`
+  cargan por PSR-4 aunque no corra `composer install`.
+
+**Recomendado añadir** a las acciones (limpieza, por seguridad):
+
+```bash
+php artisan config:clear   # o config:cache si se cachea config (necesario al añadir vars TENANT_*)
+php artisan view:clear     # evita servir vistas Blade obsoletas
+php artisan cache:clear    # prefijo de caché por tenant (limpia caché de spatie)
+```
+
+> **Config cacheada**: si en producción se usa `php artisan config:cache`, hay
+> que **reconstruir la caché** tras cambiar el `.env` (nuevas vars `TENANT_*`);
+> si no se cachea, `config/tenants.php` se lee en cada request.
 
 ## Checklist antes de mergear a `main` (= desplegar)
 
@@ -65,11 +84,48 @@ corre o no:
 4. `.env` de producción actualizado en el servidor si la feature añade
    variables nuevas (p. ej. las de multitenancy).
 
-## Nota multitenancy (feature en curso)
+## Multitenancy (implementado)
 
-Cuando entre el multitenant, `admin.granadaenjuego.com` se servirá desde el
-**mismo vhost/código** (como `ServerAlias`, mismo docroot). Por tanto el
-despliegue sigue siendo **uno solo** (un push a `main` actualiza ambos
-dominios). Lo que cambia es la configuración del servidor (alias de dominio,
-variables `.env` de la segunda BD, carpeta de storage y symlink del segundo
-front), no el mecanismo de despliegue.
+Detalle completo en [`multitenancy.md`](multitenancy.md). El despliegue sigue
+siendo **uno solo**: `admin.granadaenjuego.com` se sirve desde el **mismo
+vhost/código** (alias del mismo docroot). Un push a `main` actualiza ambos
+dominios. Lo que cambia entre tenants es **configuración de servidor**, no el
+mecanismo de deploy.
+
+### Fase A — subir el código (no-op para granadaesnoticia)
+
+El cambio está diseñado para **no alterar** granadaesnoticia: misma BD
+(`granadaen`, heredada de `DB_*`), mismo storage físico (prefijo `''`), mismas
+URLs. Único efecto visible: la cookie de sesión pasa a `granadaesnoticia_session`
+→ los admins **re-login una vez**.
+
+1. En el `.env` del servidor (opcional por el fallback, recomendado):
+   ```dotenv
+   TENANT_DEFAULT=granadaesnoticia
+   TENANT_ESNOTICIA_HOSTS=admin.granadaesnoticia.com
+   ```
+2. (Opcional) modo mantenimiento por IP (`IPS_PERMITIDAS_EN_MANTENIMIENTO`) para
+   verificar en prod sin exponer.
+3. Merge `feature/multitenant` → `main` → deploy.
+4. Post-deploy: las acciones de Plesk + los `artisan *:clear` recomendados arriba.
+5. Verificar: login, menú, publicaciones y **que el front sigue mostrando
+   imágenes** (symlink intacto).
+6. **Rollback**: `git revert` del merge en `main` → el webhook redespliega la
+   versión anterior. El cambio no toca datos ni ficheros de esnoticia.
+
+### Fase B — activar granadaenjuego (después, sin re-desplegar código)
+
+1. Crear/importar la BD `granadaenjuego` (ajustes de `../CAMBIOSDB.txt`).
+2. `.env` del servidor:
+   ```dotenv
+   TENANT_ENJUEGO_HOSTS=admin.granadaenjuego.com
+   TENANT_ENJUEGO_DB_DATABASE=granadaenjuego
+   TENANT_ENJUEGO_DB_USERNAME=...
+   TENANT_ENJUEGO_DB_PASSWORD=...
+   ```
+   y `php artisan config:clear` (o `config:cache`).
+3. Plesk: `admin.granadaenjuego.com` como alias del mismo vhost + DNS + **SSL**.
+4. Crear `storage/app/public/tenants/granadaenjuego/` (`banners/`, `ficheros/`,
+   `avatares/`) y el **symlink del front** de granadaenjuego hacia esa carpeta.
+5. Asegurar que `npm run build` corrió (logos del tenant en `public/build/`).
+6. Verificar `admin.granadaenjuego.com`.
