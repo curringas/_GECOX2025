@@ -9,8 +9,8 @@ return [
             'hosts' => array_values(array_filter(array_map('trim', explode(',',
                 (string) env('TENANT_ESNOTICIA_HOSTS', 'admin.granadaesnoticia.com'))))),
             'db' => [
-                'host'     => env('TENANT_ESNOTICIA_DB_HOST', '127.0.0.1'),
-                'port'     => env('TENANT_ESNOTICIA_DB_PORT', '3306'),
+                'host'     => env('TENANT_ESNOTICIA_DB_HOST', env('DB_HOST', '127.0.0.1')),
+                'port'     => env('TENANT_ESNOTICIA_DB_PORT', env('DB_PORT', '3306')),
                 'database' => env('TENANT_ESNOTICIA_DB_DATABASE', env('DB_DATABASE')),
                 'username' => env('TENANT_ESNOTICIA_DB_USERNAME', env('DB_USERNAME')),
                 'password' => env('TENANT_ESNOTICIA_DB_PASSWORD', env('DB_PASSWORD')),
@@ -24,8 +24,8 @@ return [
             'hosts' => array_values(array_filter(array_map('trim', explode(',',
                 (string) env('TENANT_ENJUEGO_HOSTS', 'admin.granadaenjuego.com'))))),
             'db' => [
-                'host'     => env('TENANT_ENJUEGO_DB_HOST', '127.0.0.1'),
-                'port'     => env('TENANT_ENJUEGO_DB_PORT', '3306'),
+                'host'     => env('TENANT_ENJUEGO_DB_HOST', env('DB_HOST', '127.0.0.1')),
+                'port'     => env('TENANT_ENJUEGO_DB_PORT', env('DB_PORT', '3306')),
                 'database' => env('TENANT_ENJUEGO_DB_DATABASE'),
                 'username' => env('TENANT_ENJUEGO_DB_USERNAME'),
                 'password' => env('TENANT_ENJUEGO_DB_PASSWORD'),
