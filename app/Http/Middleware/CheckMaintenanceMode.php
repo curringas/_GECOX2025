@@ -4,25 +4,20 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class CheckMaintenanceMode
 {
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * Modo mantenimiento propio con lista de IPs permitidas.
+     * Se activa con MODO_MANTENIMIENTO=true en el .env; las IPs que pueden
+     * seguir usando el panel van en IPS_PERMITIDAS_EN_MANTENIMIENTO.
+     * Ver config/mantenimiento.php.
      */
     public function handle(Request $request, Closure $next)
     {
-        $allowedIps = explode(',', env('IPS_PERMITIDAS_EN_MANTENIMIENTO', ''));
-
-        // Puedes usar una variable de entorno también si quieres:
-        // $allowedIp = env('MY_DEV_IP', '127.0.0.1');
-        // dd($request->ip(), $allowedIps);
-        /*if (!in_array($request->ip(), $allowedIps)) {
-            return response()->view('mantenimiento.maintenance'); // Vista personalizada
-        }*/
+        if (config('mantenimiento.activo') && ! in_array($request->ip(), config('mantenimiento.ips', []), true)) {
+            return response()->view('mantenimiento.maintenance', [], 503);
+        }
 
         return $next($request);
     }
