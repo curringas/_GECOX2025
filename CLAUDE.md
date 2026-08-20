@@ -25,7 +25,10 @@ El **front público** es un proyecto aparte (PHP plano), no este repo. Ver
 - **PHP 8.2+ / Laravel 11**, MySQL.
 - **Auth**: Laravel Auth con verificación de email; roles y permisos con
   **spatie/laravel-permission**. Middleware `active` (CheckActive) para
-  bloquear usuarios. Modo mantenimiento propio con lista de IPs permitidas.
+  bloquear usuarios. **Modo mantenimiento propio por IP** (`MODO_MANTENIMIENTO`
+  + `IPS_PERMITIDAS_EN_MANTENIMIENTO` en `.env`, `config/mantenimiento.php`);
+  **no** es el `artisan down` de la pestaña Plesk. Detalle en
+  [`docs/despliegue.md`](docs/despliegue.md).
 - **Tablas de datos**: **yajra/laravel-datatables** (server-side).
 - **Imágenes**: **intervention/image** (redimensionado de publicaciones).
 - **Exportación**: **maatwebsite/excel**.

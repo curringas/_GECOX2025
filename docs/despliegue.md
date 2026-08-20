@@ -84,6 +84,32 @@ php artisan cache:clear    # prefijo de caché por tenant (limpia caché de spat
 4. `.env` de producción actualizado en el servidor si la feature añade
    variables nuevas (p. ej. las de multitenancy).
 
+## Modo mantenimiento
+
+Hay **dos** mantenimientos distintos, no los confundas:
+
+- **Toggle de la pestaña Laravel de Plesk** = `php artisan down` nativo →
+  bloquea a **todos** (incluido tú). Laravel 11 ya no tiene `--allow=IP`; su
+  equivalente es `--secret` (enlace de acceso). **No** uses este toggle si
+  quieres poder entrar tú.
+- **Modo mantenimiento propio por IP** (recomendado para ventanas de deploy) —
+  implementado en `app/Http/Middleware/CheckMaintenanceMode.php` +
+  `config/mantenimiento.php`. Se controla desde el `.env`:
+
+  ```dotenv
+  MODO_MANTENIMIENTO=true
+  IPS_PERMITIDAS_EN_MANTENIMIENTO=TU.IP.PUBLICA,otra.ip   # sin puerto
+  ```
+
+  Con eso el público ve `mantenimiento.maintenance` (503) y solo pasan esas IPs.
+  Para levantar: `MODO_MANTENIMIENTO=false`. Si cacheas config, reconstruye la
+  caché tras editar el `.env`.
+
+  Requiere que **`TrustProxies`** confíe en el proxy (`$proxies = '*'`, ya
+  configurado) para que `$request->ip()` sea la IP real del cliente detrás de
+  Plesk. Averigua tu IP pública en, p. ej., `https://ifconfig.me`. Si te
+  equivocas de IP, recupera el acceso poniendo `MODO_MANTENIMIENTO=false`.
+
 ## Multitenancy (implementado)
 
 Detalle completo en [`multitenancy.md`](multitenancy.md). El despliegue sigue
@@ -104,8 +130,8 @@ URLs. Único efecto visible: la cookie de sesión pasa a `granadaesnoticia_sessi
    TENANT_DEFAULT=granadaesnoticia
    TENANT_ESNOTICIA_HOSTS=admin.granadaesnoticia.com
    ```
-2. (Opcional) modo mantenimiento por IP (`IPS_PERMITIDAS_EN_MANTENIMIENTO`) para
-   verificar en prod sin exponer.
+2. (Opcional) **modo mantenimiento propio por IP** para verificar en prod sin
+   exponer (ver "Modo mantenimiento" más abajo).
 3. Merge `feature/multitenant` → `main` → deploy.
 4. Post-deploy: las acciones de Plesk + los `artisan *:clear` recomendados arriba.
 5. Verificar: login, menú, publicaciones y **que el front sigue mostrando
