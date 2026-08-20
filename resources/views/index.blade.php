@@ -59,7 +59,7 @@
                             @if ($slider->BannerCodigoFuente)
                                 {{ $slider->BannerCodigoFuente }}
                             @elseif (isset($slider) && $slider->BannerImagen)
-                                <img src="{{ asset('storage/'.$slider->BannerImagen) }}" 
+                                <img src="{{ Storage::disk('public')->url($slider->BannerImagen) }}" 
                                     alt="{{ $slider->BannerTitulo}}"
                                     title="{{ $slider->BannerTitulo}}" 
                                     width="{{ config('gecox_portada.banners.slider.ancho', '1080') }}"
@@ -79,7 +79,7 @@
 <div class="row">
     <div class="col-xl-4 d-flex">
         <div class="card overflow-hidden p-2 text-center w-100">
-            <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" class="img-fluid" width="291" height="90">
+            <img src="{{ $tenant->logo('logo-light.png') }}" alt="" class="img-fluid" width="291" height="90">
         </div>
     </div>
     <div class="col-xl-8 d-flex">

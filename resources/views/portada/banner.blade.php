@@ -21,7 +21,7 @@
     @if (isset($portada) && $codigo)
         {{ str_replace(config('gecox_portada.banners.cabecera.ancho', '610'), config('gecox_portada.banners.cabecera.ancho', '728'), str_replace("105", "112", $codigo)) }}
     @elseif (isset($portada) && $imagen)
-        <img src="{{ asset('storage/'.$imagen) }}" 
+        <img src="{{ Storage::disk('public')->url($imagen) }}" 
             alt="{{ $titulo}}"
             title="{{ $titulo}}" 
             width="{{ $width }}"

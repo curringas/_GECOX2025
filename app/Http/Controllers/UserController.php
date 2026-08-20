@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\UserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
@@ -31,7 +32,7 @@ public function index(Request $request)
             return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('avatar', function ($row) {
-                    return $row->avatar ? '<img src="' . asset('storage/avatares/' . $row->avatar) . '" width="40" height="40" class="rounded-circle"/>' : '';
+                    return $row->avatar ? '<img src="' . Storage::disk('public')->url('avatares/' . $row->avatar) . '" width="40" height="40" class="rounded-circle"/>' : '';
                 })
                 ->addColumn('activo', function ($row) {
                     return $row->activo ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>';
@@ -181,7 +182,7 @@ public function create()
             
             $imageName = "avatar_" . uniqid() . '.' . $extension; // Usamos la extensión real del archivo        
             
-            $directory = public_path('storage/avatares');                    
+            $directory = Storage::disk('public')->path('avatares');
             if (!file_exists($directory)) {
                 mkdir($directory, 0777, true);
             }        
@@ -240,7 +241,7 @@ public function create()
             
             $imageName = "avatar_" . uniqid() . '.' . $extension; // Usamos la extensión real del archivo        
             
-            $directory = public_path('storage/avatares');                    
+            $directory = Storage::disk('public')->path('avatares');
             if (!file_exists($directory)) {
                 mkdir($directory, 0777, true);
             }        

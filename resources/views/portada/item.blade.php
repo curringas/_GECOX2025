@@ -80,7 +80,7 @@
         @endif
     
     @elseif ($clase->BannerImagen)
-        <img src="{{ asset('storage/'.$clase->BannerImagen) }}" 
+        <img src="{{ Storage::disk('public')->url($clase->BannerImagen) }}" 
             alt="{{ $clase->BannerTitulo}}"
             title="{{ $clase->BannerTitulo}}" 
             width="{{ config('gecox_portada.banners.{$clase}.ancho', '1080') }}"

@@ -103,7 +103,7 @@
                                     <div class="avatar-lg">
                                         <div class="avatar-title bg-light rounded-circle">
                                             @if (!empty($user) && $user->avatar)
-                                                <img src="{{ URL::asset('storage/avatares/' . $user->avatar) }}"
+                                                <img src="{{ Storage::disk('public')->url('avatares/' . $user->avatar) }}"
                                                     id="projectlogo-img" class="avatar-md h-auto rounded-circle">
                                             @else
                                                 <img src="{{ URL::asset('build/images/default-avatar.png') }}"

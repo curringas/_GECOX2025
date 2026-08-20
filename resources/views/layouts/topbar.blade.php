@@ -5,19 +5,19 @@
             <div class="navbar-brand-box">
                 <a href="index" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="{{ URL::asset('build/images/logo.svg') }}" alt="" height="22">
+                        <img src="{{ $tenant->logo('logo.svg') }}" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="45">
+                        <img src="{{ $tenant->logo('logo-dark.png') }}" alt="" height="45">
                     </span>
                 </a>
 
                 <a href="index" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{ URL::asset('build/images/logo-light.svg') }}" alt="" height="45">
+                        <img src="{{ $tenant->logo('logo-light.svg') }}" alt="" height="45">
                     </span>
                     <span class="logo-lg">
-                        <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="45">
+                        <img src="{{ $tenant->logo('logo-light.png') }}" alt="" height="45">
                     </span>
                 </a>
             </div>
@@ -142,7 +142,7 @@
                 <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                     data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <img class="rounded-circle header-profile-user"
-                        src="{{ isset(Auth::user()->avatar) ? URL::asset('storage/avatares/'.Auth::user()->avatar) : asset('build/images/users/avatar-1.png') }}"
+                        src="{{ isset(Auth::user()->avatar) ? Storage::disk('public')->url('avatares/'.Auth::user()->avatar) : asset('build/images/users/avatar-1.png') }}"
                         alt="Header Avatar">
                     <span class="d-none d-xl-inline-block ms-1"
                         key="t-henry">{{ ucfirst(Auth::user()->name) }}</span>

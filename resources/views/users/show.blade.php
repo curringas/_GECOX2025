@@ -61,7 +61,7 @@
                                     </div>
                                     <div class="avatar-lg">
                                         <div class="avatar-title bg-light rounded-circle">
-                                            <img src="{{ URL::asset('storage/avatares/'.$user->avatar) }}" id="projectlogo-img" class="avatar-md h-auto rounded-circle">
+                                            <img src="{{ Storage::disk('public')->url('avatares/'.$user->avatar) }}" id="projectlogo-img" class="avatar-md h-auto rounded-circle">
                                         </div>
                                     </div>
                                 </div>
