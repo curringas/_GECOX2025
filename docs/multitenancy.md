@@ -69,7 +69,10 @@ TENANT_ENJUEGO_DB_PASSWORD=
 - Un único symlink `public/storage` sirve a ambos (esnoticia en raíz, enjuego en
   la subcarpeta). `php artisan storage:link` basta.
 - Las subidas usan `Storage::disk('public')->url(...)` / `->path(...)` (no
-  `asset('storage/...')`), para que respeten el prefijo del tenant activo.
+  `asset('storage/...')`), para que respeten el prefijo del tenant activo. La
+  `url` del disco se configura **relativa** (`/storage[/prefijo]`), así el
+  navegador la resuelve contra el host actual (como `asset()`) y **no depende de
+  `APP_URL`** — cada tenant sirve sus imágenes desde su propio dominio.
 
 ## Logos y branding
 

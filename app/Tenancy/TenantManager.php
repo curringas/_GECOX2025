@@ -95,7 +95,10 @@ class TenantManager
         $suffix = $prefix !== '' ? '/'.trim($prefix, '/') : '';
 
         config(['filesystems.disks.public.root' => storage_path('app/public'.$suffix)]);
-        config(['filesystems.disks.public.url'  => rtrim(config('app.url'), '/').'/storage'.$suffix]);
+        // URL RELATIVA (/storage[/prefijo]): el navegador la resuelve contra el host
+        // actual, igual que hacía asset('storage/...'). Así no depende de APP_URL y
+        // cada tenant sirve sus imágenes desde su propio dominio.
+        config(['filesystems.disks.public.url'  => '/storage'.$suffix]);
 
         Storage::forgetDisk('public'); // fuerza recrear el disco con la nueva config
     }

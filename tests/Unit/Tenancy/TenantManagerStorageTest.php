@@ -28,8 +28,8 @@ class TenantManagerStorageTest extends TestCase
         (new TenantManager())->configure('actual');
 
         $this->assertSame(storage_path('app/public'), config('filesystems.disks.public.root'));
-        // URL retrocompatible: igual que asset('storage/...') de hoy
-        $this->assertSame('https://admin.example.com/storage/banners/x.jpg',
+        // URL relativa al host actual (retrocompatible con asset('storage/...'))
+        $this->assertSame('/storage/banners/x.jpg',
             Storage::disk('public')->url('banners/x.jpg'));
     }
 
@@ -39,7 +39,7 @@ class TenantManagerStorageTest extends TestCase
         (new TenantManager())->configure('nuevo');
 
         $this->assertSame(storage_path('app/public/tenants/nuevo'), config('filesystems.disks.public.root'));
-        $this->assertSame('https://admin.example.com/storage/tenants/nuevo/banners/x.jpg',
+        $this->assertSame('/storage/tenants/nuevo/banners/x.jpg',
             Storage::disk('public')->url('banners/x.jpg'));
     }
 }
