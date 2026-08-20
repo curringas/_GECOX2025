@@ -10,13 +10,9 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
-     * '*' confía en el proxy inverso de Plesk (nginx/apache en el mismo servidor)
-     * para que `$request->ip()` devuelva la IP real del cliente vía X-Forwarded-For.
-     * Necesario para el filtrado por IP del modo mantenimiento (config/mantenimiento.php).
-     *
      * @var array|string|null
      */
-    protected $proxies = '*';
+    protected $proxies;
 
     /**
      * The headers that should be used to detect proxies.

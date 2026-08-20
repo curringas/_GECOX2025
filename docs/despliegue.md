@@ -105,10 +105,15 @@ Hay **dos** mantenimientos distintos, no los confundas:
   Para levantar: `MODO_MANTENIMIENTO=false`. Si cacheas config, reconstruye la
   caché tras editar el `.env`.
 
-  Requiere que **`TrustProxies`** confíe en el proxy (`$proxies = '*'`, ya
-  configurado) para que `$request->ip()` sea la IP real del cliente detrás de
-  Plesk. Averigua tu IP pública en, p. ej., `https://ifconfig.me`. Si te
-  equivocas de IP, recupera el acceso poniendo `MODO_MANTENIMIENTO=false`.
+  El middleware lee la **IP real** del cliente de la cabecera `X-Forwarded-For`
+  (la que pone el proxy de Plesk) y, si no hay proxy, de `REMOTE_ADDR`. **No**
+  cambia la config global de `TrustProxies`, así que el resto de producción se
+  comporta igual que hoy. Averigua tu IP pública en `https://ifconfig.me`. Si te
+  equivocas de IP, recuperas el acceso poniendo `MODO_MANTENIMIENTO=false`.
+
+  > Nota: al leer `X-Forwarded-For` directamente, esta lista de IPs es una
+  > cortesía para la ventana de despliegue, no un control de seguridad (la
+  > cabecera es teóricamente falsificable). Suficiente para su propósito.
 
 ## Multitenancy (implementado)
 

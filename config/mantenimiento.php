@@ -6,8 +6,9 @@ return [
      * cuando 'activo' = true, el público ve la vista mantenimiento.maintenance (503)
      * y solo pasan las IPs listadas en 'ips'. Se controla desde el .env.
      *
-     * OJO: para que la IP del cliente se detecte bien detrás del proxy de Plesk,
-     * TrustProxies debe confiar en el proxy (ver app/Http/Middleware/TrustProxies.php).
+     * La IP real del cliente se lee dentro del middleware (X-Forwarded-For si
+     * viene del proxy de Plesk, o REMOTE_ADDR si no), sin tocar la config global
+     * de TrustProxies.
      */
     'activo' => (bool) env('MODO_MANTENIMIENTO', false),
 

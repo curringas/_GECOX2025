@@ -32,4 +32,22 @@ class MaintenanceModeTest extends TestCase
         config(['mantenimiento.activo' => true, 'mantenimiento.ips' => ['1.2.3.4']]);
         $this->assertSame(200, $this->handle('1.2.3.4')->getStatusCode());
     }
+
+    public function test_usa_la_ip_real_de_x_forwarded_for(): void
+    {
+        // Detrás del proxy: REMOTE_ADDR es el proxy, la IP real va en X-Forwarded-For.
+        config(['mantenimiento.activo' => true, 'mantenimiento.ips' => ['80.102.160.22']]);
+
+        $mw = new CheckMaintenanceMode();
+        $req = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '127.0.0.1']);
+        $req->headers->set('X-Forwarded-For', '80.102.160.22, 127.0.0.1');
+        $passed = $mw->handle($req, fn ($r) => response('OK', 200));
+        $this->assertSame(200, $passed->getStatusCode());
+
+        // Un visitante cualquiera (otra IP en XFF) ve mantenimiento.
+        $req2 = Request::create('/', 'GET', [], [], [], ['REMOTE_ADDR' => '127.0.0.1']);
+        $req2->headers->set('X-Forwarded-For', '9.9.9.9, 127.0.0.1');
+        $blocked = $mw->handle($req2, fn ($r) => response('OK', 200));
+        $this->assertSame(503, $blocked->getStatusCode());
+    }
 }
