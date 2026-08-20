@@ -22,9 +22,9 @@
                         <div class="home-wrapper">
                             <div class="mb-5">
                                 <a href="index" class="d-block auth-logo">
-                                    <img src="{{ URL::asset('build/images/logo-dark.png') }}" alt="" height="45"
+                                    <img src="{{ $tenant->logo('logo-dark.png') }}" alt="{{ $tenant->name() }}" height="45"
                                         class="auth-logo-dark mx-auto">
-                                    <img src="{{ URL::asset('build/images/logo-light.png') }}" alt="" height="45"
+                                    <img src="{{ $tenant->logo('logo-light.png') }}" alt="{{ $tenant->name() }}" height="45"
                                         class="auth-logo-light mx-auto">
                                 </a>
                             </div>
@@ -37,7 +37,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <h3 class="mt-5">Aplicación en mantenimiento</h3>
+                            <h3 class="mt-5">{{ $tenant->name() }} está en mantenimiento</h3>
                             <p>Por favor, inténtelo de nuevo más tarde.</p>
 
                             <div class="row">

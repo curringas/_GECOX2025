@@ -101,7 +101,10 @@ Hay **dos** mantenimientos distintos, no los confundas:
   IPS_PERMITIDAS_EN_MANTENIMIENTO=TU.IP.PUBLICA,otra.ip   # sin puerto
   ```
 
-  Con eso el público ve `mantenimiento.maintenance` (503) y solo pasan esas IPs.
+  Con eso el público ve `mantenimiento.maintenance` (503, **con el branding del
+  tenant** —logo y nombre según el dominio—) y solo pasan esas IPs. Aplica a
+  **todas las rutas** (incluidas las protegidas por `auth`): `CheckMaintenanceMode`
+  está priorizado en `Kernel` para ganar antes que el middleware de autenticación.
   Para levantar: `MODO_MANTENIMIENTO=false`. Si cacheas config, reconstruye la
   caché tras editar el `.env`.
 
