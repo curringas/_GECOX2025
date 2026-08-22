@@ -30,3 +30,6 @@ Vagrantfile
 
 # Archivos generados por Vite (si usas otros entry points que no son public/build)
 # Si usas la configuración por defecto de Laravel/Vite, /public/build ya cubre esto.
+# PHPUnit
+.phpunit.result.cache
+/.phpunit.cache
