@@ -79,7 +79,7 @@
 <div class="row">
     <div class="col-xl-4 d-flex">
         <div class="card overflow-hidden p-2 text-center w-100">
-            <img src="{{ $tenant->logo('logo-light.png') }}" alt="" class="img-fluid" width="291" height="90">
+            <img src="{{ $tenant->logo('logo-dark.png') }}" alt="" class="img-fluid" width="291" height="90">
         </div>
     </div>
     <div class="col-xl-8 d-flex">
