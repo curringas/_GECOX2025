@@ -19,7 +19,7 @@
                             <h1 class="display-2 fw-medium">5<i class="bx bx-buoy bx-spin text-primary display-3"></i>0</h1>
                             <h4 class="text-uppercase">500</h4>
                             <div class="mt-5 text-center">
-                                <a class="btn btn-primary waves-effect waves-light" href="index">Volvel al Inicio</a>
+                                <a class="btn btn-primary waves-effect waves-light" href="/">Volvel al Inicio</a>
                             </div>
                         </div>
                     </div>
