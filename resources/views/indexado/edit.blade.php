@@ -75,6 +75,21 @@
                     <label for="Instagram" class="form-label">Instagram URL</label>
                     <input type="url" class="form-control" id="Instagram" name="Instagram" value="{{ old('Instagram', $indexado->Instagram) }}">
                 </div>
+
+                <div class="mb-3">
+                    <label for="Spotify" class="form-label">Spotify URL</label>
+                    <input type="url" class="form-control" id="Spotify" name="Spotify" value="{{ old('Spotify', $indexado->Spotify) }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="Rss" class="form-label">RSS URL</label>
+                    <input type="url" class="form-control" id="Rss" name="Rss" value="{{ old('Rss', $indexado->Rss) }}">
+                </div>
+
+                <div class="mb-3">
+                    <label for="Ivoox" class="form-label">iVoox URL</label>
+                    <input type="url" class="form-control" id="Ivoox" name="Ivoox" value="{{ old('Ivoox', $indexado->Ivoox) }}">
+                </div>
             </div>
         </div>
 
