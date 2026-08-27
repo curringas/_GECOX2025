@@ -114,7 +114,7 @@
                     <div class="col-md-7">
                         <label for="Autor" class="form-label">Autor</label>
                         <input type="text" name="Autor" id="Autor"
-                                value="{{ old('Autor', $publicacion->Autor ?? '') }}"
+                                value="{{ old('Autor', $publicacion ? ($publicacion->Autor ?? '') : (auth()->user()->name ?? '')) }}"
                                 class="form-control @error('Autor') is-invalid @enderror">
                         @error('Autor')
                             <div class="invalid-feedback">{{ $message }}</div>
