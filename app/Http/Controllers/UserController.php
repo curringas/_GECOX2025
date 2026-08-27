@@ -167,6 +167,7 @@ public function create()
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'twitter' => $request->twitter,
             'password' => Hash::make($request->get('newpassword')),
             'activo' => $request->activo]);
 

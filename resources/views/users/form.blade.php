@@ -20,6 +20,14 @@
                                 value="{{ old('email', $user?->email) }}" id="email" placeholder="Email" required>
                             {!! $errors->first('email', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
                         </div>
+                        <div class="mb-3">
+                            <label for="twitter" class="form-label">Twitter (URL)</label>
+                            <input type="url" name="twitter"
+                                class="form-control @error('twitter') is-invalid @enderror"
+                                value="{{ old('twitter', $user?->twitter) }}" id="twitter"
+                                placeholder="https://twitter.com/usuario">
+                            {!! $errors->first('twitter', '<div class="invalid-feedback" role="alert"><strong>:message</strong></div>') !!}
+                        </div>
                         @if (empty($user))
                             <div class="row">
                                 <div class="col-md-6">

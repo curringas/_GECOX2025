@@ -32,9 +32,14 @@
                             <b>Nombre:</b> {{ $user?->name }}                            
                         </div>
                         <div class="mb-3">
-                            <b>Email:</b>  {{ $user?->email }}                            
+                            <b>Email:</b>  {{ $user?->email }}
                         </div>
-                        
+                        @if ($user?->twitter)
+                        <div class="mb-3">
+                            <b>Twitter:</b> <a href="{{ $user->twitter }}" target="_blank" rel="noopener">{{ $user->twitter }}</a>
+                        </div>
+                        @endif
+
                         <div class="mb-3">
                             <b>Role:</b> {{ $user->roles[0]->name }}
                         </div>  
