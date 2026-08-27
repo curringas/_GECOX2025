@@ -132,13 +132,18 @@
                         @enderror
                     </div>
                 </div>
+                {{-- Al crear (sin $publicacion) precargamos autor con los datos del usuario validado --}}
+                @php
+                    $defTwitter = $publicacion ? ($publicacion->AutorTwitter ?? '') : (auth()->user()->twitter ?? '');
+                    $defEmail   = $publicacion ? ($publicacion->AutorEmail   ?? '') : (auth()->user()->email   ?? '');
+                @endphp
                 <div class="row mb-3">
 
                     {{-- AUTOR --}}
                     <div class="col-md-12">
                         <label for="AutorTwitter" class="form-label">Autor Twitter</label>
                         <input type="text" name="AutorTwitter" id="AutorTwitter"
-                                value="{{ old('AutorTwitter', $publicacion->AutorTwitter ?? '') }}"
+                                value="{{ old('AutorTwitter', $defTwitter) }}"
                                 class="form-control @error('AutorTwitter') is-invalid @enderror">
                         @error('AutorTwitter')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -151,9 +156,9 @@
                     <div class="col-md-12">
                         <label for="AutorEmail" class="form-label">Email</label>
                         <input type="email" name="AutorEmail" id="AutorEmail"
-                                value="{{ old('Fecha', $publicacion->AutorEmail ?? '') }}"
-                                class="form-control @error('Fecha') is-invalid @enderror">
-                        @error('Fecha')
+                                value="{{ old('AutorEmail', $defEmail) }}"
+                                class="form-control @error('AutorEmail') is-invalid @enderror">
+                        @error('AutorEmail')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
