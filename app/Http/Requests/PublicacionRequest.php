@@ -85,14 +85,56 @@ class PublicacionRequest extends FormRequest
             'AutorTwitter' => $this->has('AutorTwitter') ? trim($this->AutorTwitter) : '',
             'Creador' => auth()->user()->email ?? 'system',
         ]);
+
+        // Programación de visibilidad: en modo manual no puede haber fechas.
+        // En modo automático normalizamos las fechas (datetime-local usa el
+        // formato "Y-m-d\TH:i", que MySQL no acepta directamente).
+        $modo = $this->input('ModoActivacion', 'manual');
+
+        if ($modo !== 'automatica') {
+            $this->merge(['Activacion' => null, 'Desactivacion' => null]);
+        } else {
+            $this->merge([
+                'Activacion' => $this->filled('Activacion')
+                    ? Carbon::parse($this->input('Activacion'))->format('Y-m-d H:i:s') : null,
+                'Desactivacion' => $this->filled('Desactivacion')
+                    ? Carbon::parse($this->input('Desactivacion'))->format('Y-m-d H:i:s') : null,
+            ]);
+        }
     }
 
 
+    public function attributes(): array
+    {
+        return [
+            'Activacion' => 'fecha de activación',
+            'Desactivacion' => 'fecha de desactivación',
+        ];
+    }
+
     public function rules(): array
-    {    
+    {
         $id = $this->input('Identificador');
+        $esAutomatica = $this->input('ModoActivacion') === 'automatica';
+
+        // Ambas fechas son opcionales por separado (nullable permite dejar una
+        // vacía). En modo automático exigimos que haya AL MENOS una mediante
+        // required_without, que convive con nullable.
+        $reglasActivacion = ['nullable', 'date'];
+        $reglasDesactivacion = ['nullable', 'date'];
+        if ($esAutomatica) {
+            $reglasActivacion[] = 'required_without:Desactivacion';
+            $reglasDesactivacion[] = 'required_without:Activacion';
+        }
+        // La desactivación debe ser posterior a la activación solo si hay activación.
+        if ($this->filled('Activacion')) {
+            $reglasDesactivacion[] = 'after:Activacion';
+        }
 
         return [
+            'ModoActivacion' => 'required|in:manual,automatica',
+            'Activacion' => $reglasActivacion,
+            'Desactivacion' => $reglasDesactivacion,
             'Activa' => 'required|boolean',
             'Titulo' => 'required|string',
             'Url' => 'required|string',
@@ -106,8 +148,6 @@ class PublicacionRequest extends FormRequest
             'FechaSalida' => 'nullable|date',
             'Autor' => 'nullable|string',
             'Lugar' => 'nullable|string',
-            'Activacion' => 'nullable|date',
-            'Desactivacion' => 'nullable|date|after_or_equal:Activacion',
             'Notas' => 'nullable|string',
             'Logotipo' => 'nullable|string',
             'LugarTipo' => 'nullable|string',

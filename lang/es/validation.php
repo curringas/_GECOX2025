@@ -15,7 +15,7 @@ return [
 
     'accepted' => 'El :attribute debe aceptarse.',
     'active_url' => 'El :attribute is not a valid URL.',
-    'after' => 'La :attribute debe ser posterior after :date.',
+    'after' => 'El campo :attribute debe ser posterior a :date.',
     'after_or_equal' => 'El :attribute debe ser posterior o igual to :date.',
     'alpha' => 'El :attribute solo puede contenter caracteres.',
     'alpha_dash' => 'El :attribute may only contain letters, numbers, dashes and underscores.',
@@ -31,7 +31,7 @@ return [
     ],
     'boolean' => 'El :attribute field must be true or false.',
     'confirmed' => 'La :attribute de confirmación no coincide.',
-    'date' => 'El :attribute is not a valid date.',
+    'date' => 'El campo :attribute no es una fecha válida.',
     'date_equals' => 'El :attribute must be a date equal to :date.',
     'date_format' => 'El :attribute does not match the format :format.',
     'different' => 'El :attribute and :other must be different.',
@@ -102,7 +102,7 @@ return [
     'required_unless' => 'El :attribute field is required unless :other is in :values.',
     'required_with' => 'El :attribute field is required when :values is present.',
     'required_with_all' => 'El :attribute field is required when :values are present.',
-    'required_without' => 'El :attribute field is required when :values is not present.',
+    'required_without' => 'El campo :attribute es obligatorio cuando :values no está presente.',
     'required_without_all' => 'El :attribute field is required when none of :values are present.',
     'same' => 'El :attribute and :other debe coincidir.',
     'size' => [

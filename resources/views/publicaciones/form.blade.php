@@ -6,30 +6,65 @@
                 
                 <input type="hidden" name="Identificador" value="{{ $publicacion->Identificador ?? '' }}">
 
-                <div class="mb-3 justify-content-end d-flex align-items-center">
-                    <div class="col-md-4 me-3">
+                @php
+                    $tieneFechas = ($publicacion->Activacion ?? null) || ($publicacion->Desactivacion ?? null);
+                    $modoActivacion = old('ModoActivacion', $tieneFechas ? 'automatica' : 'manual');
+                    $valActivacion = old('Activacion', ($publicacion->Activacion ?? null)
+                        ? \Illuminate\Support\Carbon::parse($publicacion->Activacion)->format('Y-m-d\TH:i') : '');
+                    $valDesactivacion = old('Desactivacion', ($publicacion->Desactivacion ?? null)
+                        ? \Illuminate\Support\Carbon::parse($publicacion->Desactivacion)->format('Y-m-d\TH:i') : '');
+                @endphp
+
+                {{-- PRIVACIDAD + FORMA DE ACTIVACIÓN --}}
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="privacidad" class="form-label">Privacidad</label>
                         <select class="form-select" name="Privacidad" id="privacidad" required="">
-                            <option value="1" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 1 ? 'selected' : '' }}>
-                                Pública
-                            </option>
-                            <option value="2" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 2 ? 'selected' : '' }}>
-                                Nivel 2 - Registrados
-                            </option>   
-                            <option value="3" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 3 ? 'selected' : '' }}>
-                                Nivel 3 - Registrados ++
-                            </option>   
-                            <option value="4" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 4 ? 'selected' : '' }}>
-                                Nivel 4 - Registrados +++
-                            </option>   
-                            <option value="5" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 5 ? 'selected' : '' }}>
-                                Nivel 5 - Registrados ++++
-                            </option>   
+                            <option value="1" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 1 ? 'selected' : '' }}>Pública</option>
+                            <option value="2" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 2 ? 'selected' : '' }}>Nivel 2 - Registrados</option>
+                            <option value="3" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 3 ? 'selected' : '' }}>Nivel 3 - Registrados ++</option>
+                            <option value="4" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 4 ? 'selected' : '' }}>Nivel 4 - Registrados +++</option>
+                            <option value="5" {{ old('Privacidad', $amodificar->Privacidad ?? '') == 5 ? 'selected' : '' }}>Nivel 5 - Registrados ++++</option>
                         </select>
                     </div>
-                    <div class="form-check form-switch form-switch-lg mb-0" dir="ltr">
-                        <label class="form-check-label ms-2 mb-0" for="active-switch">Visible</label>
+                    <div class="col-md-6">
+                        <label for="modo-activacion" class="form-label">Forma de activación</label>
+                        <select class="form-select" name="ModoActivacion" id="modo-activacion">
+                            <option value="manual" {{ $modoActivacion === 'manual' ? 'selected' : '' }}>Manual (interruptor)</option>
+                            <option value="automatica" {{ $modoActivacion === 'automatica' ? 'selected' : '' }}>Automática (por fechas)</option>
+                        </select>
+                    </div>
+                </div>
+
+                {{-- ESTADO DE VISIBILIDAD (manual o automático según el select) --}}
+                <div class="mb-3 p-3 border rounded bg-light">
+                    {{-- Modo manual: switch Visible --}}
+                    <div class="form-check form-switch form-switch-lg mb-0" dir="ltr" id="bloque-manual">
                         <input class="form-check-input" type="checkbox" id="active-switch" name="Activa" value="1" {{ old('Activa', $publicacion->Activa ?? 1) == 1 ? 'checked="checked"' : '' }}>
-                        
+                        <label class="form-check-label ms-2 mb-0" for="active-switch">Publicación visible</label>
+                    </div>
+
+                    {{-- Modo automático: fechas de activación/desactivación --}}
+                    <div id="bloque-automatica">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="Activacion" class="form-label mb-1">Se activa el</label>
+                                <input type="datetime-local" class="form-control @error('Activacion') is-invalid @enderror"
+                                       id="Activacion" name="Activacion" value="{{ $valActivacion }}">
+                                @error('Activacion') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="Desactivacion" class="form-label mb-1">Se desactiva el</label>
+                                <input type="datetime-local" class="form-control @error('Desactivacion') is-invalid @enderror"
+                                       id="Desactivacion" name="Desactivacion" value="{{ $valDesactivacion }}">
+                                @error('Desactivacion') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                            </div>
+                        </div>
+                        <small class="text-muted d-block mt-2">
+                            <i class="mdi mdi-information-outline"></i>
+                            Indica al menos una fecha. La noticia se mostrará y/u ocultará sola en esos momentos.
+                            Deja vacío el campo que no necesites.
+                        </small>
                     </div>
                 </div>
 
@@ -404,5 +439,31 @@ Youtube<br>
             </div>
         </div>
     </div>
-    
+
 </div>
+
+<script>
+    (function () {
+        function initModoActivacion() {
+            var modo = document.getElementById('modo-activacion');
+            var bloqueManual = document.getElementById('bloque-manual');
+            var bloqueAutomatica = document.getElementById('bloque-automatica');
+            if (!modo || !bloqueManual || !bloqueAutomatica) return;
+
+            function aplicarModo() {
+                var esAutomatica = modo.value === 'automatica';
+                bloqueManual.style.display = esAutomatica ? 'none' : '';
+                bloqueAutomatica.style.display = esAutomatica ? '' : 'none';
+            }
+
+            modo.addEventListener('change', aplicarModo);
+            aplicarModo();
+        }
+
+        if (document.readyState !== 'loading') {
+            initModoActivacion();
+        } else {
+            document.addEventListener('DOMContentLoaded', initModoActivacion);
+        }
+    })();
+</script>

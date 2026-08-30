@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Publicacion;
 use App\Models\Categoria;
+use App\Support\ProgramacionPublicacion;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Requests\PublicacionRequest;
 use App\Models\DocumentoEnPublicacion;
@@ -28,7 +30,7 @@ class PublicacionController extends Controller
         $categorias=Categoria::all();
         $users=User::all();
         if ($request->ajax()) {
-            $query = Publicacion::query()->select(['Identificador', 'Titulo', 'Autor', 'Fecha', 'FechaInicio','Activa','Visitas','updated_at'])->with('categorias') ;
+            $query = Publicacion::query()->select(['Identificador', 'Titulo', 'Autor', 'Fecha', 'FechaInicio','Activa','Activacion','Visitas','updated_at'])->with('categorias') ;
 
             $this->applySearchFilter($query, $request);
             $this->applyCategoriaFilter($query, $request);
@@ -50,7 +52,17 @@ class PublicacionController extends Controller
                     return $row->categorias ? $etiquetas : 'Sin categoría';
                 })
                 ->addColumn('Activa', function ($row) {
-                    return $row->Activa ? '<span class="badge bg-success">Sí</span>' : '<span class="badge bg-danger">No</span>';
+                    if ($row->Activa) {
+                        return '<span class="badge bg-success">Sí</span>';
+                    }
+                    // Inactiva pero con activación programada: mostrar cuándo se activará.
+                    if (! empty($row->Activacion)) {
+                        $fecha = Carbon::parse($row->Activacion)->format('d/m/Y H:i');
+                        return '<span class="badge bg-warning text-dark" title="Se activará automáticamente">'
+                            . '<i class="mdi mdi-clock-outline"></i> ' . $fecha . '</span>';
+                    }
+                    // Inactiva de forma manual.
+                    return '<span class="badge bg-danger">No</span>';
                 })
                 ->addColumn('action', function ($row) {
                     
@@ -173,12 +185,42 @@ class PublicacionController extends Controller
     }
 
     /**
+     * Ajusta Activa/Activacion/Desactivacion según el modo de activación.
+     *
+     * Manual: se limpian las fechas y manda el switch Visible.
+     * Automática: la visibilidad se deriva de las fechas mediante la
+     * lógica de reconciliación (idempotente), no del switch.
+     */
+    private function aplicarProgramacion(array $data): array
+    {
+        if (($data['ModoActivacion'] ?? 'manual') !== 'automatica') {
+            $data['Activacion'] = null;
+            $data['Desactivacion'] = null;
+
+            return $data;
+        }
+
+        $estado = ProgramacionPublicacion::estado(
+            Carbon::now(),
+            ! empty($data['Activacion']) ? Carbon::parse($data['Activacion']) : null,
+            ! empty($data['Desactivacion']) ? Carbon::parse($data['Desactivacion']) : null,
+        );
+
+        $data['Activa'] = $estado['Activa'];
+        $data['Activacion'] = $estado['Activacion']?->format('Y-m-d H:i:s');
+        $data['Desactivacion'] = $estado['Desactivacion']?->format('Y-m-d H:i:s');
+
+        return $data;
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(PublicacionRequest $request , ImageManager $imageManager): RedirectResponse
     {
         $validatedData = $request->validated();
         //$validatedData['Activa'] = $request->has('Activa') ? 1 : 0;
+        $validatedData = $this->aplicarProgramacion($validatedData);
         $modificando = false;
 
         $categoriaIds = $request->input('categorias', []);
