@@ -57,7 +57,7 @@
                 <th>@lang('Categorias')</th>
                 <th>@lang('Autor')</th>
                 <th class="text-end">@lang('Visitas')</th>
-                <th>@lang('Activa')</th>
+                <th class="text-center">@lang('Activa')</th>
                 <th>@lang('Acciones')</th>
             </tr>
         </thead>
@@ -145,7 +145,8 @@
                     },
                     {
                         data: 'Activa',
-                        name: 'Activa'
+                        name: 'Activa',
+                        className: 'text-center'
                     },
                     {
                         data: 'action',

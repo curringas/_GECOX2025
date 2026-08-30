@@ -24,7 +24,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        // Activa/desactiva publicaciones según sus fechas programadas.
+        $schedule->command('publicaciones:aplicar-programacion')
+            ->everyMinute()
+            ->withoutOverlapping();
     }
 
     /**

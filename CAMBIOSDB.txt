@@ -79,3 +79,15 @@ ALTER TABLE `P0114_indexado` ADD `Spotify` VARCHAR(255) CHARACTER SET latin1 COL
 #ALTER TABLE `P0114_publicacion` CHANGE `GaleriaURL` `GaleriaURL` MEDIUMTEXT CHARACTER SET latin1 COLLATE latin1_spanish_ci NOT NULL;
 
 #ALTER TABLE `P0114_publicacion` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+#Programación de visibilidad (activación/desactivación automática de noticias)
+#Se limpian los valores heredados (fechas cero '0000-00-00') para que el
+#scheduler no active/desactive noticias por datos antiguos, y luego se pasan
+#Activacion/Desactivacion de DATE a DATETIME para permitir hora.
+#IMPORTANTE: primero el UPDATE a NULL y DESPUÉS el ALTER; convertir fechas cero
+#a DATETIME falla en modo SQL estricto. Ejecutar en la BD de CADA tenant.
+#Si el ALTER da "Invalid default value for 'Fecha'" (por el DEFAULT '0000-00-00'
+#de otras columnas bajo NO_ZERO_DATE), relaja el modo en la misma sesión antes:
+#   SET SESSION sql_mode='NO_ENGINE_SUBSTITUTION';
+UPDATE `P0114_publicacion` SET `Activacion` = NULL, `Desactivacion` = NULL;
+ALTER TABLE `P0114_publicacion` CHANGE `Activacion` `Activacion` DATETIME NULL DEFAULT NULL, CHANGE `Desactivacion` `Desactivacion` DATETIME NULL DEFAULT NULL;
