@@ -61,6 +61,9 @@ class ImagenEnPublicacion extends Model
             $baseName = $filename; // Por seguridad, si no tiene guiones
         }
 
-        return asset("storage/{$dirname}/{$baseName}_portada.{$extension}");
+        // Usamos el disco `public` (tenant-aware): el TenantManager ajusta su URL
+        // por tenant (p. ej. enjuego -> /storage/tenants/granadaenjuego). No
+        // hardcodear "/storage/" o se rompe en los tenants con subcarpeta.
+        return Storage::disk('public')->url("{$dirname}/{$baseName}_portada.{$extension}");
     }
 }
