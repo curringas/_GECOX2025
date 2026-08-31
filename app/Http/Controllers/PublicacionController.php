@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Publicacion;
 use App\Models\Categoria;
+use App\Support\EscrituraDisco;
 use App\Support\ProgramacionPublicacion;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -410,28 +411,28 @@ class PublicacionController extends Controller
             $pathOriginal = "{$folderName}/{$baseName}_original.{$ext}";
             $image1200 = clone $originalImageInstance;
             $image1200->scaleDown(width: config('gecox_imagenes.tamanos.original.0'), height: config('gecox_imagenes.tamanos.original.1')); // Proporcional sin Upscaling (v3)
-            Storage::disk($disk)->put($pathOriginal, (string) $image1200->toJpeg(90)); 
+            EscrituraDisco::guardar($disk, $pathOriginal, (string) $image1200->toJpeg(90));
 
 
             // B. Principal (800px)
             $pathPpal = "{$folderName}/{$baseName}_ppal.{$ext}";
             $image800 = clone $originalImageInstance;
             $image800->scaleDown(width: config('gecox_imagenes.tamanos.principal.0'), height: config('gecox_imagenes.tamanos.principal.1')); // ¡Corregido a 800!
-            Storage::disk($disk)->put($pathPpal, (string) $image800->toJpeg(90));
+            EscrituraDisco::guardar($disk, $pathPpal, (string) $image800->toJpeg(90));
             
             
             // C. Portada (400px)
             $pathPortada = "{$folderName}/{$baseName}_portada.{$ext}";
             $image400 = clone $originalImageInstance;
             $image400->scaleDown(width: config('gecox_imagenes.tamanos.portada.0'), height: config('gecox_imagenes.tamanos.portada.1')); // ¡Corregido a 400!
-            Storage::disk($disk)->put($pathPortada, (string) $image400->toJpeg(90));
+            EscrituraDisco::guardar($disk, $pathPortada, (string) $image400->toJpeg(90));
 
             
             // D. Thumbnail (120x120 crop)
             $pathThumb = "{$folderName}/{$baseName}_thumb.{$ext}";
             $thumbInstance = clone $originalImageInstance;
             $thumbInstance->cover(config('gecox_imagenes.tamanos.thumbnail.0'), config('gecox_imagenes.tamanos.thumbnail.1')); // Recorte cuadrado (v3)
-            Storage::disk($disk)->put($pathThumb, (string) $thumbInstance->toJpeg(90));
+            EscrituraDisco::guardar($disk, $pathThumb, (string) $thumbInstance->toJpeg(90));
             
             // 4.4 Guardar el registro en la base de datos
             ImagenEnPublicacion::create([
