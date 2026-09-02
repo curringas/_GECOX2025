@@ -17,6 +17,9 @@ return [
             ],
             'storage' => '',
             'logo'    => 'granadaesnoticia',
+            // URL publica del front y token para vaciar su cache (borrarcache.php).
+            'public_url'        => env('TENANT_ESNOTICIA_PUBLIC_URL', 'https://www.granadaesnoticia.com'),
+            'cache_purge_token' => env('TENANT_ESNOTICIA_CACHE_TOKEN'),
         ],
 
         'granadaenjuego' => [
@@ -32,6 +35,9 @@ return [
             ],
             'storage' => 'tenants/granadaenjuego',
             'logo'    => 'granadaenjuego',
+            // URL publica del front y token para vaciar su cache (borrarcache.php).
+            'public_url'        => env('TENANT_ENJUEGO_PUBLIC_URL', 'https://www.granadaenjuego.com'),
+            'cache_purge_token' => env('TENANT_ENJUEGO_CACHE_TOKEN'),
         ],
     ],
 ];

@@ -38,6 +38,8 @@ Route::middleware(['auth','active'])->group(function () {
     Route::post('reordenar', [App\Http\Controllers\HomeController::class, 'ajaxReordenar'])->name('portada.reordenar');    
     Route::post('eliminar', [App\Http\Controllers\HomeController::class, 'ajaxEliminar'])->name('portada.eliminar');
     Route::get('publicacion/buscar', [App\Http\Controllers\HomeController::class, 'ajaxBuscarPublicaciones'])->name('publicacion.buscar');
+    // Vaciar la cache del front del tenant actual (llama a borrarcache.php del sitio)
+    Route::post('cache/vaciar', [App\Http\Controllers\HomeController::class, 'ajaxVaciarCache'])->name('cache.vaciar');
 
     // Del sistema
     // Route::get('{any}', [App\Http\Controllers\HomeController::class, 'index'])->name('index');
