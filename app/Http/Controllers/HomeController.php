@@ -16,6 +16,8 @@ use App\Models\PortadaSlider;
 use App\Models\Publicacion;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Http;
+use App\Tenancy\TenantManager;
 
 class HomeController extends Controller
 {
@@ -50,6 +52,50 @@ class HomeController extends Controller
         $centrales = PortadaCentral::with(['publicacion','publicacion.imagenes'])->orderBy('Orden')->get();
         $izquierdos = PortadaIzquierda::with(['publicacion','publicacion.imagenes'])->orderBy('Orden')->get();
         return view('index', compact('portada','sliders','derechos','centrales','izquierdos'));
+    }
+
+    /**
+     * Vacia la cache del front del tenant actual llamando a su borrarcache.php.
+     * (Boton "Vaciar cache" del apartado Portada.)
+     */
+    public function ajaxVaciarCache(TenantManager $tenants)
+    {
+        $key = $tenants->current();
+        $cfg = config("tenants.tenants.$key");
+
+        $url   = $cfg['public_url'] ?? null;
+        $token = $cfg['cache_purge_token'] ?? null;
+
+        if (!$url || !$token) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Este sitio no tiene public_url / cache_purge_token configurado en config/tenants.php (.env).',
+            ]);
+        }
+
+        try {
+            $resp = Http::asForm()->timeout(10)->post(rtrim($url, '/') . '/borrarcache.php', [
+                'token' => $token,
+            ]);
+            $data = $resp->json();
+
+            if ($resp->ok() && is_array($data) && !empty($data['ok'])) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Cache vaciada (' . ($data['borrados'] ?? 0) . ' ficheros).',
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'El sitio respondio ' . $resp->status() . ' ' . (is_array($data) ? ($data['error'] ?? '') : ''),
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No se pudo contactar con el sitio: ' . $e->getMessage(),
+            ]);
+        }
     }
 
     static function obtenterPortada($tabla)

@@ -13,6 +13,13 @@
 @slot('title') Portada @endslot
 @endcomponent
 
+<div class="mb-3 text-end">
+    <button type="button" id="btnVaciarCache" class="btn btn-sm btn-outline-secondary">
+        <i class="mdi mdi-broom"></i> Vaciar caché del sitio
+    </button>
+    <span id="vaciarCacheMsg" class="ms-2 small align-middle"></span>
+</div>
+
 <div class="row">
     <div class="col-xl-12">
         <div class="card">
@@ -185,6 +192,34 @@
             window.eliminarUrl = "{{ route('portada.eliminar') }}";
             window.reordenarUrl = "{{ route('portada.reordenar') }}";
             window.publicacionBuscarUrl = "{{ route('publicacion.buscar') }}";
+            window.vaciarCacheUrl = "{{ route('cache.vaciar') }}";
+    </script>
+    <script>
+        // Boton "Vaciar cache del sitio"
+        document.addEventListener('DOMContentLoaded', function () {
+            var btn = document.getElementById('btnVaciarCache');
+            if (!btn) return;
+            var msg = document.getElementById('vaciarCacheMsg');
+            btn.addEventListener('click', function () {
+                btn.disabled = true;
+                msg.textContent = 'Vaciando…';
+                msg.className = 'ms-2 small align-middle text-muted';
+                fetch(window.vaciarCacheUrl, {
+                    method: 'POST',
+                    headers: { 'X-CSRF-TOKEN': window.csrfToken, 'Accept': 'application/json' }
+                })
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    msg.textContent = d.message || (d.success ? 'Caché vaciada.' : 'Error.');
+                    msg.className = 'ms-2 small align-middle ' + (d.success ? 'text-success' : 'text-danger');
+                })
+                .catch(function () {
+                    msg.textContent = 'Error de red al contactar con el servidor.';
+                    msg.className = 'ms-2 small align-middle text-danger';
+                })
+                .finally(function () { btn.disabled = false; });
+            });
+        });
     </script>
     @vite('resources/gecox/js/gecox_portada.init.js')
 
